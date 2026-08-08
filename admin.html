@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>INELT Admin</title>
+<style>
+  :root{--bg:#0A120E;--card:#0F1913;--border:rgba(255,255,255,.08);--text:#EDF3EF;--muted:#93A69B;--accent:#3FA579;--accent-strong:#2E8563;--danger:#E0778C;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;padding:24px;max-width:1100px;margin-inline:auto;}
+  h1{font-size:22px;margin-bottom:4px;}
+  .muted{color:var(--muted);font-size:13px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .stat .n{font-size:26px;font-weight:800;}
+  .stat .l{font-size:12px;color:var(--muted);}
+  section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
+  section h2{font-size:15px;margin:0 0 14px;}
+  input[type=file]{color:var(--text);}
+  button{padding:9px 16px;border-radius:10px;border:none;background:var(--accent-strong);color:#fff;font-weight:600;cursor:pointer;font-size:13px;}
+  button.secondary{background:transparent;border:1px solid var(--border);color:var(--text);}
+  button.danger{background:transparent;border:1px solid rgba(224,119,140,.4);color:var(--danger);}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);}
+  th{color:var(--muted);font-weight:600;font-size:12px;}
+  .row-actions{display:flex;gap:6px;}
+  select,input[type=text],textarea{background:#0A120E;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px;font-size:13px;}
+  #importResult{margin-top:12px;font-size:13px;white-space:pre-wrap;}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:rgba(63,165,121,.14);color:var(--accent);}
+</style>
+</head>
+<body>
+<h1>INELT — Admin Dashboard</h1>
+<p class="muted" id="whoami">checking access…</p>
+
+<div id="app" style="display:none">
+  <div class="grid" id="statsGrid"></div>
+
+  <section>
+    <h2>Bulk import questions</h2>
+    <p class="muted">Accepts .xlsx, .csv, or .json. Duplicates (same section + question + options) are skipped automatically.</p>
+    <input type="file" id="fileInput" accept=".xlsx,.csv,.json">
+    <button onclick="doImport()">Upload &amp; Import</button>
+    <div id="importResult"></div>
+  </section>
+
+  <section>
+    <h2>Question bank</h2>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+      <select id="sectionFilter" onchange="loadList()">
+        <option value="">All sections</option>
+        <option>Reading Comprehension</option>
+        <option>Grammar</option>
+        <option>Functions</option>
+        <option>Conversation</option>
+      </select>
+      <button class="secondary" onclick="ExamAPI.adminExportUrl('json')">Export JSON</button>
+      <button class="secondary" onclick="ExamAPI.adminExportUrl('csv')">Export CSV</button>
+    </div>
+    <table>
+      <thead><tr><th>Section</th><th>Question</th><th>Options</th><th>Correct</th><th></th></tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div style="margin-top:10px;display:flex;gap:8px;">
+      <button class="secondary" onclick="changePage(-1)">← Prev</button>
+      <button class="secondary" onclick="changePage(1)">Next →</button>
+      <span class="muted" id="pageLabel"></span>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script>
+let page = 1;
+
+async function init() {
+  const ok = await ExamAPI.requireAdminSession();
+  if (!ok) return;
+  try {
+    await loadStats();
+    document.getElementById('whoami').textContent = '';
+    document.getElementById('app').style.display = 'block';
+    loadList();
+  } catch (e) {
+    document.getElementById('whoami').textContent = 'Access denied — this account is not an admin.';
+  }
+}
+
+async function loadStats() {
+  const { total, by_section } = await ExamAPI.adminCount();
+  const g = document.getElementById('statsGrid');
+  g.innerHTML = `<div class="stat"><div class="n">${total}</div><div class="l">Total questions</div></div>` +
+    Object.entries(by_section).map(([s, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${s}</div></div>`).join('');
+}
+
+async function doImport() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return alert('Choose a file first');
+  const box = document.getElementById('importResult');
+  box.textContent = 'Importing…';
+  try {
+    const r = await ExamAPI.adminImport(file);
+    box.textContent = `✅ Imported: ${r.inserted}   ⏭ Duplicates skipped: ${r.duplicates}   ⚠️ Invalid rows: ${r.invalid_count}` +
+      (r.invalid_details?.length ? '\n\n' + r.invalid_details.map(d => `Row ${d.row}: ${d.reason}`).join('\n') : '');
+    await loadStats();
+    loadList();
+  } catch (e) {
+    box.textContent = 'Error: ' + e.message;
+  }
+}
+
+async function loadList() {
+  const section = document.getElementById('sectionFilter').value;
+  const { rows, total } = await ExamAPI.adminList({ section, page, pageSize: 20 });
+  document.getElementById('pageLabel').textContent = `Page ${page} · ${total} total`;
+  document.getElementById('tableBody').innerHTML = rows.map(q => `
+    <tr>
+      <td><span class="pill">${q.section}</span></td>
+      <td style="max-width:320px">${escapeHtml(q.question)}</td>
+      <td>${q.options.map((o,i)=>`${i===q.correct_answer?'✅':'▫️'} ${escapeHtml(o)}`).join('<br>')}</td>
+      <td>${q.correct_answer + 1}</td>
+      <td class="row-actions">
+        <button class="secondary" onclick="editQuestion('${q.id}')">Edit</button>
+        <button class="danger" onclick="deleteQuestion('${q.id}')">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+function changePage(delta) {
+  page = Math.max(1, page + delta);
+  loadList();
+}
+
+async function deleteQuestion(id) {
+  if (!confirm('Delete this question permanently?')) return;
+  await ExamAPI.adminDelete(id);
+  loadStats();
+  loadList();
+}
+
+async function editQuestion(id) {
+  const newQuestion = prompt('New question text (leave blank to cancel):');
+  if (!newQuestion) return;
+  await ExamAPI.adminUpdate(id, { question: newQuestion });
+  loadList();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+init();
+</script>
+</body>
+</html>

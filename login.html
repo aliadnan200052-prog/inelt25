@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول · INELT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A120E;
+    --surface:#0F1913;
+    --surface-2:#131F18;
+    --border:rgba(255,255,255,.08);
+    --border-soft:rgba(255,255,255,.05);
+    --text:#EDF3EF;
+    --muted:#8FA599;
+    --accent:#3FA579;
+    --accent-strong:#2E8563;
+    --accent-soft:rgba(63,165,121,.12);
+    --danger:#E0778C;
+    --font-ar:'IBM Plex Sans Arabic',system-ui,sans-serif;
+    --font-num:'Space Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-ar);
+    min-height:100vh;
+    display:flex;
+    overflow-x:hidden;
+  }
+
+  /* ── Layout shell: split screen on desktop, stacked on mobile ── */
+  .shell{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:100vh;
+    width:100%;
+  }
+  @media (max-width:860px){
+    .shell{grid-template-columns:1fr;}
+  }
+
+  /* ── Left: brand panel ── */
+  .brand-panel{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:56px 48px;
+    background:
+      radial-gradient(ellipse 620px 420px at 18% 12%, rgba(63,165,121,.16), transparent 60%),
+      radial-gradient(ellipse 500px 500px at 90% 88%, rgba(63,165,121,.08), transparent 60%),
+      var(--surface);
+    border-inline-end:1px solid var(--border);
+    overflow:hidden;
+  }
+  .brand-panel::before{
+    /* faint exam-paper dot grid — nods to the answer sheet */
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size:22px 22px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 70% at 30% 30%, #000 0%, transparent 75%);
+            mask-image:radial-gradient(ellipse 70% 70% at 30% 30%, #000 0%, transparent 75%);
+    pointer-events:none;
+  }
+  .brand-inner{position:relative; max-width:440px; margin-inline:auto;}
+  @media (max-width:860px){
+    .brand-panel{padding:40px 24px 24px;}
+    .brand-inner{max-width:100%;}
+  }
+
+  .brand-eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-num); font-weight:600; font-size:12.5px;
+    letter-spacing:.08em; color:var(--accent);
+    margin-bottom:22px;
+  }
+  .brand-mark{
+    width:20px; height:20px; flex-shrink:0;
+  }
+  .brand-mark circle{
+    stroke:var(--accent); stroke-width:1.6; fill:none;
+    stroke-dasharray:63; stroke-dashoffset:63;
+    animation:draw 1.1s .15s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .brand-mark path{
+    stroke:var(--accent); stroke-width:2; fill:none;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:12; stroke-dashoffset:12;
+    animation:draw .5s .9s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){
+    .brand-mark circle, .brand-mark path{animation:none; stroke-dashoffset:0;}
+  }
+
+  .brand-headline{
+    font-size:clamp(28px,4vw,38px);
+    font-weight:700;
+    line-height:1.35;
+    margin:0 0 16px;
+    letter-spacing:-.01em;
+  }
+  .brand-headline em{
+    color:var(--accent); font-style:normal;
+    background:linear-gradient(180deg, transparent 68%, rgba(63,165,121,.22) 68%);
+  }
+  .brand-desc{
+    color:var(--muted); font-size:15px; line-height:1.85;
+    margin:0 0 30px; max-width:38ch;
+  }
+
+  .brand-stats{display:flex; gap:10px; margin-bottom:34px;}
+  .stat-pill{
+    flex:1;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px 10px;
+    text-align:center;
+    transition:border-color .2s, transform .2s;
+  }
+  .stat-pill-value{font-family:var(--font-num); font-size:22px; font-weight:700;}
+  .stat-pill-label{font-size:11.5px; color:var(--muted); margin-top:3px;}
+
+  .brand-features{display:flex; flex-direction:column; gap:13px;}
+  .feature-row{display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--muted);}
+  .feature-check{
+    width:18px; height:18px; flex-shrink:0; border-radius:50%;
+    background:var(--accent-soft); display:flex; align-items:center; justify-content:center;
+  }
+  .feature-check svg{width:10px; height:10px; stroke:var(--accent); stroke-width:3;}
+
+  @media (max-width:860px){
+    .brand-headline{font-size:24px;}
+    .brand-desc{margin-bottom:22px; max-width:none;}
+    .brand-features{display:none;}
+    .brand-stats{margin-bottom:0;}
+  }
+
+  /* ── Right: form panel ── */
+  .form-panel{
+    display:flex; align-items:center; justify-content:center;
+    padding:48px 32px;
+  }
+  .form-card{width:100%; max-width:380px;}
+
+  .form-head{margin-bottom:28px;}
+  .form-title{font-size:22px; font-weight:700; margin:0 0 6px;}
+  .form-sub{color:var(--muted); font-size:13.5px; margin:0;}
+
+  .btn-google{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    background:#fff; color:#1f1f1f; border:none; border-radius:12px;
+    padding:13px; font-size:14.5px; font-weight:600; font-family:var(--font-ar);
+    cursor:pointer; transition:transform .15s, box-shadow .15s;
+  }
+  .btn-google:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.25);}
+  .btn-google:active{transform:translateY(0);}
+
+  .divider{
+    display:flex; align-items:center; gap:12px;
+    color:var(--muted); font-size:12px; margin:22px 0;
+  }
+  .divider::before, .divider::after{content:""; flex:1; height:1px; background:var(--border);}
+
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block; font-size:12.5px; color:var(--muted); margin-bottom:7px; font-weight:500;
+  }
+  .field-input-wrap{position:relative;}
+  .field-input-wrap svg{
+    position:absolute; inset-inline-start:14px; top:50%; transform:translateY(-50%);
+    width:16px; height:16px; stroke:var(--muted); pointer-events:none;
+  }
+  input{
+    width:100%; padding:12px 14px 12px 40px; border-radius:11px;
+    border:1px solid var(--border); background:var(--surface-2); color:var(--text);
+    font-size:14.5px; font-family:var(--font-ar);
+    transition:border-color .15s, background .15s;
+  }
+  [dir="rtl"] input{padding:12px 40px 12px 14px;}
+  [dir="rtl"] .field-input-wrap svg{inset-inline-start:auto; inset-inline-end:14px;}
+  input:focus{outline:none; border-color:var(--accent); background:var(--surface);}
+  input::placeholder{color:#5b6f65;}
+
+  .btn-primary{
+    width:100%; padding:13px; border-radius:12px; border:none;
+    background:var(--accent-strong); color:#fff; font-size:15px; font-weight:600;
+    font-family:var(--font-ar); cursor:pointer; margin-top:6px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s, transform .15s;
+  }
+  .btn-primary:hover{background:var(--accent);}
+  .btn-primary:active{transform:scale(.99);}
+  .btn-primary:disabled{opacity:.65; cursor:not-allowed;}
+
+  .spinner{
+    width:15px; height:15px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.35); border-top-color:#fff;
+    animation:spin .7s linear infinite; display:none;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .btn-primary.loading .spinner{display:inline-block;}
+  .btn-primary.loading .btn-label{opacity:.85;}
+
+  .error{
+    background:rgba(224,119,140,.1); border:1px solid rgba(224,119,140,.24);
+    color:var(--danger); border-radius:10px; padding:11px 13px; font-size:13px;
+    margin-top:14px; display:none; line-height:1.6;
+  }
+
+  .toggle{text-align:center; margin-top:22px; font-size:13.5px; color:var(--muted);}
+  .toggle a{color:var(--accent); cursor:pointer; text-decoration:none; font-weight:600;}
+  .toggle a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Brand panel -->
+  <div class="brand-panel">
+    <div class="brand-inner">
+      <div class="brand-eyebrow">
+        <svg class="brand-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l2.8 2.8L16.5 9"/></svg>
+        INELT
+      </div>
+      <h1 class="brand-headline">اختبر مستواك<br>في <em>اللغة الإنكليزية</em></h1>
+      <p class="brand-desc">الاختبار الوطني العراقي للغة الإنكليزية — تدرّب على أسئلة حقيقية وتتبّع تقدمك في كل محاولة.</p>
+
+      <div class="brand-stats">
+        <div class="stat-pill"><div class="stat-pill-value">40</div><div class="stat-pill-label">سؤال</div></div>
+        <div class="stat-pill"><div class="stat-pill-value">60</div><div class="stat-pill-label">دقيقة</div></div>
+        <div class="stat-pill"><div class="stat-pill-value">4</div><div class="stat-pill-label">أقسام</div></div>
+      </div>
+
+      <div class="brand-features">
+        <div class="feature-row">
+          <span class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          قواعد، مفردات، محادثة، واستيعاب قرائي
+        </div>
+        <div class="feature-row">
+          <span class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          نتيجة فورية بعد الانتهاء مباشرة
+        </div>
+        <div class="feature-row">
+          <span class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          حساب آمن خاص بك وحدك
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form panel -->
+  <div class="form-panel">
+    <div class="form-card">
+      <div class="form-head">
+        <h2 class="form-title" id="title">تسجيل الدخول</h2>
+        <p class="form-sub" id="subtitle">أهلاً بعودتك — أكمل حيث توقفت</p>
+      </div>
+
+      <button class="btn-google" onclick="ExamAPI.signInWithGoogle(getRedirect())">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.4-.1-2.8-.4-4.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3 16.3 3 9.7 7.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 36.5 26.9 37.5 24 37.5c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5.1C9.5 40.6 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.6 5.4C41.8 35.9 45 30.5 45 24c0-1.4-.1-2.8-.4-3.5z"/></svg>
+        الدخول باستخدام Google
+      </button>
+
+      <div class="divider">أو</div>
+
+      <form id="form" onsubmit="return false">
+        <div class="field">
+          <label>البريد الإلكتروني</label>
+          <div class="field-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <input type="email" id="email" required autocomplete="email" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="field">
+          <label>كلمة المرور</label>
+          <div class="field-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="password" required autocomplete="current-password" minlength="6" placeholder="••••••••">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn" onclick="submitForm()">
+          <span class="spinner"></span>
+          <span class="btn-label">دخول</span>
+        </button>
+      </form>
+
+      <div class="error" id="errorBox"></div>
+
+      <div class="toggle">
+        <span id="toggleText">ليس لديك حساب؟</span> <a id="toggleLink" onclick="toggleMode()">إنشاء حساب</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script>
+let mode = 'signin';
+
+// Where to send the user after logging in — /admin.html if that's where
+// they came from, otherwise the exam page.
+function getRedirect() {
+  const p = new URLSearchParams(location.search).get('redirect');
+  return p && p.startsWith('/') ? p : '/index.html';
+}
+
+function toggleMode() {
+  mode = mode === 'signin' ? 'signup' : 'signin';
+  document.getElementById('title').textContent = mode === 'signin' ? 'تسجيل الدخول' : 'إنشاء حساب';
+  document.getElementById('subtitle').textContent = mode === 'signin' ? 'أهلاً بعودتك — أكمل حيث توقفت' : 'أنشئ حسابك للبدء';
+  document.querySelector('.btn-label').textContent = mode === 'signin' ? 'دخول' : 'إنشاء حساب';
+  document.getElementById('toggleText').textContent = mode === 'signin' ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
+  document.getElementById('toggleLink').textContent = mode === 'signin' ? 'إنشاء حساب' : 'تسجيل الدخول';
+  document.getElementById('errorBox').style.display = 'none';
+}
+
+async function submitForm() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errorBox = document.getElementById('errorBox');
+  const btn = document.getElementById('submitBtn');
+  errorBox.style.display = 'none';
+  btn.classList.add('loading');
+  btn.disabled = true;
+  try {
+    if (mode === 'signin') {
+      await ExamAPI.signInWithPassword(email, password);
+    } else {
+      await ExamAPI.signUpWithPassword(email, password);
+      alert('تم إنشاء الحساب! يمكنك الآن تسجيل الدخول (قد تحتاج لتأكيد بريدك الإلكتروني أولاً حسب إعدادات المشروع).');
+      toggleMode();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      return;
+    }
+    window.location.href = getRedirect();
+  } catch (e) {
+    errorBox.textContent = e.message || 'حدث خطأ، حاول مرة أخرى';
+    errorBox.style.display = 'block';
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// Already signed in? Skip straight to where they were headed.
+(async () => {
+  const session = await ExamAPI.getSession();
+  if (session) window.location.href = getRedirect();
+})();
+</script>
+</body>
+</html>
