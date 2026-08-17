@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="INELT — الاختبار الوطني العراقي للغة الإنكليزية. تدرّب على أسئلة حقيقية في القراءة والقواعد والوظائف اللغوية والحوار، وتتبّع نتائجك.">
+<meta name="description" content="INELT — !الاختبار الوطني العراقي للغة الإنكليزية. تدرّب على أسئلة حقيقية في القطع الخارجية والقواعد والوظائف اللغوية والمحادثة، أختبر نفسك قبل لا ترروح للامتحان.">
 <meta name="theme-color" content="#246747">
 <title>INELT · Iraqi National English Exam</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23246747'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
@@ -2114,6 +2114,7 @@ async function startExam() {
   }
   document.getElementById('confirmPage').classList.add('hidden');
   document.getElementById('examPage').classList.remove('hidden');
+  if (btn) btn.disabled = false; // re-enable for next time (e.g. after a retry)
   started = true; sTime = new Date();
   renderQ(); renderGrid(); updateProg(); startTimer();
   window.scrollTo(0,0);
@@ -2436,6 +2437,8 @@ async function restartExam() {
     document.getElementById(id).classList.add('hidden'));
   document.getElementById('submitModal').classList.add('hidden');
   document.getElementById('confirmPage').classList.remove('hidden');
+  const startBtn = document.getElementById('btnStartExam');
+  if (startBtn) startBtn.disabled = false; // guard against it ever getting stuck
   document.getElementById('timerDisplay').textContent = '60:00';
   document.getElementById('timerBox').classList.remove('warn','danger');
   document.getElementById('autoSubmitNote').classList.add('hidden');
