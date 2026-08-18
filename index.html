@@ -9,118 +9,109 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23246747'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
    DESIGN TOKENS — INELT Premium / Deep Emerald
 ═══════════════════════════════════════════════ */
 :root {
-  /* Surface — charcoal emerald (dark mode of the INELT system) */
-  --surface-base: #0E1512;
-  --surface-raised: #141C18;
-  --surface-overlay: #19231E;
-  --surface-high: #223029;
-  --surface-glass: rgba(20,28,24,0.9);
+  /* Surface — deep charcoal-emerald dark mode */
+  --surface-base: #0A120E;
+  --surface-raised: #0F1913;
+  --surface-overlay: #152019;
+  --surface-high: #1C2A22;
+  --surface-glass: rgba(15,25,19,0.74);
 
-  /* Accent — Deep Emerald family */
-  --accent: #4E9B78;
-  --accent-strong: #3D8462;
-  --accent-dim: rgba(78,155,120,.12);
-  --accent-border: rgba(78,155,120,.26);
-  --accent-glow: rgba(78,155,120,.18);
-
-  /* Gold — premium accent, used sparingly */
-  --gold: #C99A4A;
-  --gold-dim: rgba(201,154,74,.12);
-  --gold-border: rgba(201,154,74,.3);
+  /* Accent — deep emerald green */
+  --accent: #3FA579;
+  --accent-strong: #2E8563;
+  --accent-dim: rgba(63,165,121,.14);
+  --accent-border: rgba(63,165,121,.28);
+  --accent-glow: rgba(63,165,121,.24);
 
   /* Semantic */
-  --success: #46AE81;
-  --success-dim: rgba(70,174,129,.12);
-  --success-border: rgba(70,174,129,.26);
-  --danger: #D9757A;
-  --danger-dim: rgba(217,117,122,.12);
-  --danger-border: rgba(217,117,122,.24);
-  --warn: #D6A55C;
-  --warn-dim: rgba(214,165,92,.1);
-  --warn-border: rgba(214,165,92,.24);
+  --success: #37B885;
+  --success-dim: rgba(55,184,133,.12);
+  --success-border: rgba(55,184,133,.26);
+  --danger: #E0778C;
+  --danger-dim: rgba(224,119,140,.12);
+  --danger-border: rgba(224,119,140,.24);
+  --warn: #E0B15E;
+  --warn-dim: rgba(224,177,94,.1);
+  --warn-border: rgba(224,177,94,.24);
 
   /* Text */
-  --text-primary: #EEF2EF;
-  --text-secondary: #9CAAA2;
-  --text-muted: #6B7972;
+  --text-primary: #EDF3EF;
+  --text-secondary: #93A69B;
+  --text-muted: #576459;
 
   /* Borders */
-  --border: rgba(255,255,255,.09);
-  --border-focus: rgba(78,155,120,.5);
+  --border: rgba(255,255,255,.08);
+  --border-focus: rgba(63,165,121,.5);
 
-  /* Radius — restrained, matches login */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 14px;
-  --r-xl: 16px;
-  --r-2xl: 20px;
+  /* Radius — 16–28px premium curve */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-2xl: 28px;
   --r-pill: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
-  --shadow-md: 0 6px 20px rgba(0,0,0,.42);
-  --shadow-lg: 0 16px 44px rgba(0,0,0,.5);
-  --shadow-xl: 0 28px 70px rgba(0,0,0,.55);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3);
+  --shadow-lg: 0 20px 56px rgba(0,0,0,.55), 0 4px 10px rgba(0,0,0,.3);
+  --shadow-xl: 0 36px 90px rgba(0,0,0,.6), 0 10px 20px rgba(0,0,0,.35);
 
   /* Motion */
-  --ease: cubic-bezier(.16,1,.3,1);
-  --ease-spring: cubic-bezier(.22,1.2,.4,1);
-  --dur-fast: 140ms;
-  --dur-base: 220ms;
-  --dur-slow: 380ms;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --ease-spring: cubic-bezier(.22,1.42,.5,1);
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
 
-  /* Fonts — single Inter-based system */
-  --font-arabic: 'Inter', 'Noto Sans Arabic', system-ui, sans-serif;
+  /* Fonts */
+  --font-arabic: 'IBM Plex Sans Arabic', system-ui, sans-serif;
   --font-latin: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Inter', system-ui, sans-serif;
-  --font-display: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Fraunces', 'Inter', serif;
 }
 
 [data-theme="light"] {
-  /* Primary light theme — Warm Off-White / Deep Emerald */
-  --surface-base: #F7F8F6;
+  /* Premium editorial light theme — off-white / emerald */
+  --surface-base: #FAF9F4;
   --surface-raised: #FFFFFF;
-  --surface-overlay: #F1F3F0;
-  --surface-high: #E9EDEA;
-  --surface-glass: rgba(255,255,255,0.9);
+  --surface-overlay: #F4F6F0;
+  --surface-high: #EBEEE6;
+  --surface-glass: rgba(255,255,255,0.78);
 
   --accent: #246747;
-  --accent-strong: #174936;
-  --accent-dim: #DCEDE5;
-  --accent-border: rgba(36,103,71,.22);
-  --accent-glow: rgba(36,103,71,.14);
+  --accent-strong: #1B4E36;
+  --accent-dim: rgba(36,103,71,.07);
+  --accent-border: rgba(36,103,71,.2);
+  --accent-glow: rgba(36,103,71,.16);
 
-  --gold: #C99A4A;
-  --gold-dim: #F6EEDF;
-  --gold-border: rgba(201,154,74,.34);
+  --success: #1E8F63;
+  --success-dim: rgba(30,143,99,.08);
+  --success-border: rgba(30,143,99,.22);
+  --danger: #AD3A50;
+  --danger-dim: rgba(173,58,80,.07);
+  --danger-border: rgba(173,58,80,.2);
+  --warn: #A0722A;
+  --warn-dim: rgba(160,114,42,.08);
+  --warn-border: rgba(160,114,42,.22);
 
-  --success: #2E7D5B;
-  --success-dim: #E2F1EA;
-  --success-border: rgba(46,125,91,.24);
-  --danger: #C94B4B;
-  --danger-dim: #FBF0F0;
-  --danger-border: rgba(201,75,75,.24);
-  --warn: #C58A32;
-  --warn-dim: #FAF2E4;
-  --warn-border: rgba(197,138,50,.26);
+  --text-primary: #17211C;
+  --text-secondary: #57655B;
+  --text-muted: #8A968D;
 
-  --text-primary: #1C2521;
-  --text-secondary: #68746E;
-  --text-muted: #9AA6A0;
+  --border: rgba(23,33,28,.09);
+  --border-focus: rgba(36,103,71,.42);
 
-  --border: #E3E8E5;
-  --border-focus: rgba(36,103,71,.45);
-
-  --shadow-sm: 0 1px 3px rgba(28,37,33,.06), 0 1px 2px rgba(28,37,33,.04);
-  --shadow-md: 0 6px 20px -8px rgba(28,37,33,.14);
-  --shadow-lg: 0 16px 40px -14px rgba(28,37,33,.16);
-  --shadow-xl: 0 28px 64px -20px rgba(28,37,33,.2);
+  --shadow-sm: 0 1px 2px rgba(23,33,28,.06), 0 1px 1px rgba(23,33,28,.04);
+  --shadow-md: 0 8px 24px rgba(23,33,28,.08), 0 2px 6px rgba(23,33,28,.04);
+  --shadow-lg: 0 20px 48px rgba(23,33,28,.1), 0 6px 14px rgba(23,33,28,.05);
+  --shadow-xl: 0 32px 80px rgba(23,33,28,.14), 0 10px 24px rgba(23,33,28,.06);
 }
 
 /* ═══════════════════════════════════════════════
@@ -1589,176 +1580,6 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--r-md);
-}
-
-/* ═══════════════════════════════════════════════
-   INELT DESIGN SYSTEM · refinement layer
-   (visual only — no structural or behavioural change)
-═══════════════════════════════════════════════ */
-body { font-size: 15px; letter-spacing: 0 }
-
-/* Quiet the ambient decoration — restraint over glow */
-.ambient-bg { display: none }
-
-/* Surfaces: crisp white cards on warm off-white, hairline borders */
-.card, .form-card, .confirm-card, .sidebar-panel, .question-card,
-.result-hero, .section-card, .review-question, .review-header,
-.modal-box, .history-item, .exam-tile, .score-fact {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: none;
-}
-.form-card, .confirm-card, .result-hero, .modal-box { box-shadow: var(--shadow-md) }
-.card::before, .form-card::before, .confirm-header::before, .question-card::before,
-.result-hero::before, .review-header::before, .modal-box::before,
-.page-confirm::before, .page-results::before { display: none }
-
-/* Header / navigation surfaces */
-.exam-header {
-  background: var(--surface-raised);
-  border-bottom: 1px solid var(--border);
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
-/* Typography hierarchy */
-.brand-headline, .form-title, .confirm-title, .result-title, .review-title, .modal-title {
-  font-family: var(--font-arabic);
-  font-weight: 700;
-  letter-spacing: -.02em;
-}
-.brand-headline em { font-style: normal; color: var(--gold) }
-.form-subtitle, .confirm-subtitle, .result-subtitle, .modal-desc { color: var(--text-secondary) }
-.section-label, .field-label, .sidebar-title, .progress-label {
-  font-weight: 600; letter-spacing: .01em; color: var(--text-secondary);
-}
-
-/* Buttons — clear primary / secondary / tertiary hierarchy */
-.btn {
-  border-radius: var(--r-md);
-  font-family: var(--font-arabic);
-  font-weight: 600;
-  letter-spacing: .01em;
-  transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease),
-              border-color var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
-}
-.btn:active { transform: translateY(1px) }
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: 1px solid transparent;
-  box-shadow: 0 1px 2px rgba(23,73,54,.2);
-  filter: none;
-}
-.btn-primary:hover { background: var(--accent-strong); box-shadow: 0 4px 14px -6px rgba(23,73,54,.5); transform: none; filter: none }
-.btn-primary:disabled { opacity: .5; box-shadow: none }
-.btn-ghost {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-}
-.btn-ghost:hover { background: var(--surface-overlay); border-color: var(--accent-border); color: var(--accent); transform: none }
-.btn-danger, .btn-success { border: 1px solid transparent; color: #fff }
-.btn-danger:hover, .btn-success:hover { filter: brightness(.94); transform: none }
-.btn-lg { border-radius: var(--r-md); padding: 14px 28px }
-
-.ctrl-btn {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: none;
-}
-.ctrl-btn:hover { color: var(--accent); border-color: var(--accent-border); background: var(--surface-overlay); transform: none }
-
-/* Inputs */
-.field-input {
-  border-radius: var(--r-md);
-  border: 1px solid var(--border);
-  background: #FBFCFB;
-  font-family: var(--font-arabic);
-  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
-}
-[data-theme="light"] .field-input { background: #FBFCFB }
-.field-input:hover { border-color: #CFD8D3 }
-.field-input:focus {
-  outline: none;
-  background: var(--surface-raised);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(36,103,71,.14);
-}
-.field-input.has-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(201,75,75,.12) }
-
-/* Badges & chips — flat, legible */
-.badge, .section-badge, .section-score-chip, .stat-pill, .brand-eyebrow {
-  border-radius: var(--r-pill);
-  font-weight: 600;
-  letter-spacing: .01em;
-}
-.badge-warn { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold) }
-
-/* Welcome brand panel — deep emerald, gold accent, no heavy gradients */
-.welcome-brand {
-  background: #10331F;
-  border: none;
-  border-radius: var(--r-xl);
-  color: #fff;
-}
-.welcome-brand::before {
-  display: block;
-  background: radial-gradient(ellipse 70% 55% at 25% 10%, rgba(36,103,71,.6) 0%, transparent 70%);
-}
-.brand-noise { opacity: .05 }
-.brand-eyebrow { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #DCEDE5 }
-.brand-eyebrow-dot { background: var(--gold) }
-.brand-logo-mark { background: var(--accent); border: none }
-.brand-desc { color: rgba(255,255,255,.64) }
-.stat-pill { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12) }
-.stat-pill:hover { background: rgba(255,255,255,.1); transform: none }
-.stat-pill-value { color: #fff }
-.stat-pill-label { color: rgba(255,255,255,.55) }
-
-/* Options / list rows */
-.option, .instruction-item, .review-option, .exam-tile, .history-item {
-  border-radius: var(--r-md);
-  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
-}
-.option { background: var(--surface-raised); border: 1px solid var(--border) }
-.option:hover { transform: none; border-color: var(--accent-border); background: var(--surface-overlay) }
-.option.selected { background: var(--accent-dim); border-color: var(--accent) }
-.option-key { border-radius: var(--r-sm) }
-.exam-tile:hover, .history-item:hover, .section-card:hover, .score-fact:hover { transform: none; border-color: var(--accent-border) }
-.review-question:hover { box-shadow: var(--shadow-sm) }
-
-/* History icon tiles — recolor away from mixed pastels */
-.icon-gold { background: var(--gold-dim) }
-.icon-blue { background: var(--surface-high) }
-.icon-green { background: var(--accent-dim) }
-.icon-purple { background: var(--gold-dim) }
-
-/* Progress + question grid */
-.progress-track, .section-bar { background: var(--surface-high) }
-.progress-fill { background: var(--accent) }
-.grid-cell { border-radius: var(--r-sm) }
-.grid-cell:hover { transform: none; border-color: var(--accent-border) }
-
-/* Modals */
-.modal-backdrop { background: rgba(28,37,33,.42); backdrop-filter: blur(2px) }
-.modal-box { border-radius: var(--r-xl) }
-
-/* Timer */
-.timer-wrap { border-radius: var(--r-md); background: var(--surface-overlay); border: 1px solid var(--border) }
-
-/* Focus visibility across the app */
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-
-/* Responsive polish */
-@media (max-width: 640px) {
-  body { font-size: 14.5px }
-  .btn-lg { padding: 13px 20px }
-  .card, .form-card, .confirm-card, .question-card, .modal-box { border-radius: var(--r-md) }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
