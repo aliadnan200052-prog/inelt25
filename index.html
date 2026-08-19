@@ -3,2516 +3,575 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="INELT — الاختبار الوطني العراقي للغة الإنكليزية. تدرّب على أسئلة حقيقية في القراءة والقواعد والوظائف اللغوية والحوار، وتتبّع نتائجك.">
-<meta name="theme-color" content="#246747">
-<title>INELT · Iraqi National English Exam</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23246747'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
+<title>تسجيل الدخول · INELT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════
-   DESIGN TOKENS — INELT Premium / Deep Emerald
-═══════════════════════════════════════════════ */
+/* =====================================================================
+   INELT · Design System v1  (established here, reused on every page)
+   Palette: Deep Emerald / Warm Off-White / White / Charcoal / Muted Gold
+   ===================================================================== */
 :root {
-  /* Surface — deep charcoal-emerald dark mode */
-  --surface-base: #0A120E;
-  --surface-raised: #0F1913;
-  --surface-overlay: #152019;
-  --surface-high: #1C2A22;
-  --surface-glass: rgba(15,25,19,0.74);
+  /* Brand */
+  --emerald:        #246747;
+  --emerald-dark:   #174936;
+  --emerald-deep:   #10331F;
+  --mint:           #DCEDE5;
+  --gold:           #C99A4A;
+  --gold-soft:      #F3E7D0;
 
-  /* Accent — deep emerald green */
-  --accent: #3FA579;
-  --accent-strong: #2E8563;
-  --accent-dim: rgba(63,165,121,.14);
-  --accent-border: rgba(63,165,121,.28);
-  --accent-glow: rgba(63,165,121,.24);
+  /* Neutrals */
+  --bg:             #F7F8F6;
+  --surface:        #FFFFFF;
+  --text:           #1C2521;
+  --text-2:         #68746E;
+  --border:         #E3E8E5;
 
   /* Semantic */
-  --success: #37B885;
-  --success-dim: rgba(55,184,133,.12);
-  --success-border: rgba(55,184,133,.26);
-  --danger: #E0778C;
-  --danger-dim: rgba(224,119,140,.12);
-  --danger-border: rgba(224,119,140,.24);
-  --warn: #E0B15E;
-  --warn-dim: rgba(224,177,94,.1);
-  --warn-border: rgba(224,177,94,.24);
+  --success:        #2E7D5B;
+  --error:          #C94B4B;
+  --error-bg:       #FBF0F0;
+  --error-border:   #F0D8D8;
+  --warning:        #C58A32;
 
-  /* Text */
-  --text-primary: #EDF3EF;
-  --text-secondary: #93A69B;
-  --text-muted: #576459;
+  /* Elevation — restrained */
+  --shadow-xs: 0 1px 2px rgba(28,37,33,0.05);
+  --shadow-sm: 0 1px 3px rgba(28,37,33,0.06), 0 1px 2px rgba(28,37,33,0.04);
+  --shadow-md: 0 6px 20px -8px rgba(28,37,33,0.14);
+  --ring:      0 0 0 3px rgba(36,103,71,0.14);
 
-  /* Borders */
-  --border: rgba(255,255,255,.08);
-  --border-focus: rgba(63,165,121,.5);
-
-  /* Radius — 16–28px premium curve */
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 16px;
-  --r-xl: 22px;
-  --r-2xl: 28px;
-  --r-pill: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.3);
-  --shadow-md: 0 8px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3);
-  --shadow-lg: 0 20px 56px rgba(0,0,0,.55), 0 4px 10px rgba(0,0,0,.3);
-  --shadow-xl: 0 36px 90px rgba(0,0,0,.6), 0 10px 20px rgba(0,0,0,.35);
+  /* Radius scale */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-pill: 999px;
 
   /* Motion */
-  --ease: cubic-bezier(.4,0,.2,1);
-  --ease-spring: cubic-bezier(.22,1.42,.5,1);
-  --dur-fast: 150ms;
-  --dur-base: 240ms;
-  --dur-slow: 420ms;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --base: 220ms;
 
-  /* Fonts */
-  --font-arabic: 'IBM Plex Sans Arabic', system-ui, sans-serif;
-  --font-latin: 'Inter', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
-  --font-display: 'Fraunces', 'Inter', serif;
+  /* Type */
+  --font: 'Inter', 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
 }
 
-[data-theme="light"] {
-  /* Premium editorial light theme — off-white / emerald */
-  --surface-base: #FAF9F4;
-  --surface-raised: #FFFFFF;
-  --surface-overlay: #F4F6F0;
-  --surface-high: #EBEEE6;
-  --surface-glass: rgba(255,255,255,0.78);
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  --accent: #246747;
-  --accent-strong: #1B4E36;
-  --accent-dim: rgba(36,103,71,.07);
-  --accent-border: rgba(36,103,71,.2);
-  --accent-glow: rgba(36,103,71,.16);
+html { scroll-behavior: smooth; }
 
-  --success: #1E8F63;
-  --success-dim: rgba(30,143,99,.08);
-  --success-border: rgba(30,143,99,.22);
-  --danger: #AD3A50;
-  --danger-dim: rgba(173,58,80,.07);
-  --danger-border: rgba(173,58,80,.2);
-  --warn: #A0722A;
-  --warn-dim: rgba(160,114,42,.08);
-  --warn-border: rgba(160,114,42,.22);
-
-  --text-primary: #17211C;
-  --text-secondary: #57655B;
-  --text-muted: #8A968D;
-
-  --border: rgba(23,33,28,.09);
-  --border-focus: rgba(36,103,71,.42);
-
-  --shadow-sm: 0 1px 2px rgba(23,33,28,.06), 0 1px 1px rgba(23,33,28,.04);
-  --shadow-md: 0 8px 24px rgba(23,33,28,.08), 0 2px 6px rgba(23,33,28,.04);
-  --shadow-lg: 0 20px 48px rgba(23,33,28,.1), 0 6px 14px rgba(23,33,28,.05);
-  --shadow-xl: 0 32px 80px rgba(23,33,28,.14), 0 10px 24px rgba(23,33,28,.06);
-}
-
-/* ═══════════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
-html { scroll-behavior:smooth }
 body {
-  font-family: var(--font-arabic);
-  background: var(--surface-base);
-  color: var(--text-primary);
-  min-height: 100vh;
+  font-family: var(--font);
   direction: rtl;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  transition: background var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease);
-  line-height: 1.6;
-  position: relative;
-}
-.hidden { display: none !important }
-.en {
-  font-family: var(--font-latin);
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-.mono {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
 }
 
-::selection { background: var(--accent-dim); color: var(--accent-strong) }
+.en { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
 
-/* Slim premium scrollbar */
-::-webkit-scrollbar { width: 10px; height: 10px }
-::-webkit-scrollbar-track { background: transparent }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--r-pill); border: 2px solid transparent; background-clip: padding-box }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-border); background-clip: padding-box }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Ambient background layer — soft emerald glow, blurred shapes */
-.ambient-bg {
-  position: fixed; inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.ambient-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: .5;
-  animation: blob-drift 22s ease-in-out infinite;
-}
-[data-theme="light"] .ambient-blob { opacity: .38 }
-.ambient-blob-1 {
-  width: 620px; height: 620px;
-  top: -220px; right: -160px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-}
-.ambient-blob-2 {
-  width: 520px; height: 520px;
-  bottom: -200px; left: -140px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  animation-delay: -11s;
-  animation-direction: reverse;
-}
-@keyframes blob-drift {
-  0%, 100% { transform: translate(0,0) scale(1) }
-  50% { transform: translate(-30px, 24px) scale(1.06) }
-}
-
-/* Everything else sits above the ambient layer */
-.page-welcome, .page-confirm, .page-exam, #examPage, .exam-header, .page-results, .page-review, .floating-controls, .modal-backdrop {
-  position: relative; z-index: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════════════════ */
-@keyframes fade-up { from { opacity:0; transform:translateY(22px) } to { opacity:1; transform:none } }
-@keyframes fade-in { from { opacity:0 } to { opacity:1 } }
-@keyframes scale-in { 0% { opacity:0; transform:scale(.94) } 60% { transform:scale(1.008) } 100% { opacity:1; transform:scale(1) } }
-@keyframes slide-right { from { opacity:0; transform:translateX(-18px) } to { opacity:1; transform:none } }
-@keyframes shimmer { 0% { background-position:-200% 0 } 100% { background-position:200% 0 } }
-@keyframes pulse-danger { 0%,100% { box-shadow:0 0 0 0 rgba(224,119,140,.35) } 70% { box-shadow:0 0 0 8px rgba(224,119,140,0) } }
-@keyframes ripple-out { to { transform:scale(4); opacity:0 } }
-@keyframes spin { to { transform:rotate(360deg) } }
-@keyframes dash-in { to { stroke-dashoffset:0 } }
-@keyframes count-bar { from { width:0 } }
-@keyframes breathe { 0%,100%{opacity:.55;transform:scale(1)} 50%{opacity:.9;transform:scale(1.05)} }
-
-/* ═══════════════════════════════════════════════
-   FLOATING CONTROLS
-═══════════════════════════════════════════════ */
-.floating-controls {
-  position: fixed;
-  top: 22px;
-  left: 22px;
-  z-index: 900;
-  display: flex;
-  gap: 8px;
-}
-.ctrl-btn {
-  width: 40px; height: 40px;
-  border-radius: var(--r-pill);
-  background: var(--surface-glass);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .85rem;
-  transition: all var(--dur-base) var(--ease);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: var(--shadow-sm);
-}
-.ctrl-btn:hover {
-  border-color: var(--accent-border);
-  color: var(--accent);
-  transform: scale(1.08) translateY(-1px);
-  box-shadow: 0 0 0 1px var(--accent-border), var(--shadow-md);
-}
-.ctrl-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-.ctrl-btn.active {
-  background: var(--accent-dim);
-  border-color: var(--accent-border);
-  color: var(--accent);
-}
-
-/* ═══════════════════════════════════════════════
-   SHARED COMPONENTS
-═══════════════════════════════════════════════ */
-
-/* Buttons */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: var(--r-md);
-  font-family: var(--font-arabic);
-  font-size: .9rem; font-weight: 600;
-  cursor: pointer;
-  transition: all var(--dur-base) var(--ease);
-  position: relative; overflow: hidden;
-  white-space: nowrap;
-  letter-spacing: -.01em;
-}
-.btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.btn:active { transform: scale(.97) }
-
-.btn-primary {
-  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-strong) 100%);
-  color: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,.35), 0 0 0 1px rgba(63,165,121,.18);
-}
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 22px var(--accent-glow), 0 0 0 1px rgba(63,165,121,.24);
-  filter: brightness(1.05);
-}
-.btn-primary:disabled { opacity:.38; cursor:not-allowed; transform:none; box-shadow:none; filter:none }
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover {
-  border-color: var(--accent-border);
-  color: var(--text-primary);
-  background: var(--surface-overlay);
-}
-.btn-ghost:disabled { opacity:.3; cursor:not-allowed }
-
-.btn-danger {
-  background: var(--danger);
-  color: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,.35);
-}
-.btn-danger:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(224,119,140,.28) }
-
-.btn-success {
-  background: var(--success);
-  color: #06231A;
-  box-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
-.btn-success:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 20px var(--success-border) }
-
-.btn-lg { padding: 15px 30px; font-size: .98rem; border-radius: var(--r-lg) }
-.btn-full { width: 100%; justify-content: center }
-
-.btn-icon {
-  width: 14px; height: 14px;
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Ripple */
-.ripple {
-  position: absolute; border-radius: 50%;
-  background: rgba(255,255,255,.2);
-  transform: scale(0);
-  animation: ripple-out .55s linear;
-  pointer-events: none;
-}
-
-/* Chip / Badge */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 11px;
-  border-radius: var(--r-pill);
-  font-size: .72rem; font-weight: 600;
-  letter-spacing: .02em;
-}
-.badge-accent { background: var(--accent-dim); border: 1px solid var(--accent-border); color: var(--accent) }
-.badge-success { background: var(--success-dim); border: 1px solid var(--success-border); color: var(--success) }
-.badge-danger { background: var(--danger-dim); border: 1px solid var(--danger-border); color: var(--danger) }
-.badge-warn { background: var(--warn-dim); border: 1px solid var(--warn-border); color: var(--warn) }
-.badge-muted { background: var(--surface-overlay); border: 1px solid var(--border); color: var(--text-muted) }
-
-/* Card */
-.card {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-sm);
-}
-
-/* Divider */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0;
-}
-
-/* ═══════════════════════════════════════════════
-   PAGE 1 — WELCOME / REGISTRATION
-═══════════════════════════════════════════════ */
-.page-welcome {
-  min-height: 100vh;
+/* ===== Shell ===== */
+.app-shell {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 100vh;
+  width: 100%;
+}
+@media (max-width: 980px) { .app-shell { grid-template-columns: 1fr; } }
+
+/* ===== Brand panel ===== */
+.brand-panel {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 64px;
+  background: var(--emerald-deep);
   overflow: hidden;
+  isolation: isolate;
 }
-@media (max-width: 860px) {
-  .page-welcome { grid-template-columns: 1fr; grid-template-rows: auto 1fr }
-}
-
-/* Brand panel */
-.welcome-brand {
-  background: var(--surface-raised);
-  border-left: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: flex-end;
-  padding: 80px 64px;
-  position: relative; overflow: hidden;
-}
-.welcome-brand::before {
+.brand-panel::before {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 15% 30%, var(--accent-dim) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 45% at 85% 85%, var(--success-dim) 0%, transparent 60%);
+    radial-gradient(ellipse 70% 55% at 22% 8%, rgba(36,103,71,0.55) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(201,154,74,0.10) 0%, transparent 70%);
   pointer-events: none;
 }
-.brand-noise {
-  position: absolute; inset: 0; opacity: .03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+/* fine grid texture — quiet, not decorative noise */
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 0%, transparent 100%);
   pointer-events: none;
 }
 
-.brand-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 14px;
-  background: var(--accent-dim);
-  border: 1px solid var(--accent-border);
-  border-radius: var(--r-pill);
-  font-size: .72rem; font-weight: 700;
-  color: var(--accent);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-  animation: fade-up .5s .1s var(--ease) both;
-}
-.brand-eyebrow-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: breathe 2s ease-in-out infinite;
+.brand-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 460px;
+  width: 100%;
+  animation: fadeUp 0.55s var(--ease) both;
 }
 
-.brand-logo-mark {
-  width: 76px; height: 76px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
-  border-radius: var(--r-xl);
+.brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 56px; }
+
+.logo-mark {
+  width: 40px; height: 40px;
+  background: var(--emerald);
+  border-radius: var(--r-md);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 28px;
-  animation: scale-in .6s .2s var(--ease-spring) both;
-  box-shadow: 0 10px 34px var(--accent-glow);
   flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
 }
-.brand-logo-svg {
-  width: 38px; height: 38px;
-  fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+.logo-mark svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.logo-text {
+  font-size: 19px; font-weight: 700; color: #fff;
+  letter-spacing: 0.06em;
+}
+.logo-badge {
+  font-size: 11px; font-weight: 600;
+  color: var(--gold);
+  border: 1px solid rgba(201,154,74,0.35);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.02em;
+  margin-inline-start: 2px;
 }
 
 .brand-headline {
-  font-size: clamp(1.9rem, 2.9vw, 2.9rem);
+  font-size: clamp(30px, 3.2vw, 40px);
   font-weight: 700;
-  line-height: 1.28;
-  letter-spacing: -.02em;
-  text-align: right;
-  margin-bottom: 18px;
-  animation: fade-up .5s .3s var(--ease) both;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 16px;
 }
-.brand-headline em {
-  font-style: normal;
-  background: linear-gradient(90deg, var(--accent), var(--success));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.brand-headline .highlight {
+  color: var(--gold);
 }
 
 .brand-desc {
-  font-size: .95rem;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.62);
+  font-size: 15px;
   line-height: 1.85;
-  text-align: right;
-  max-width: 380px;
-  animation: fade-up .5s .35s var(--ease) both;
+  max-width: 42ch;
+  margin-bottom: 44px;
 }
 
+/* Stats — flat row with hairline dividers, no card inflation */
 .brand-stats {
-  display: flex; gap: 12px;
-  margin-top: 44px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  animation: fade-up .5s .42s var(--ease) both;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  margin-bottom: 40px;
 }
-.stat-pill {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 14px 18px;
-  transition: all var(--dur-base) var(--ease);
-  cursor: default;
+.stat-card {
+  padding: 20px 4px;
+  text-align: center;
+  border-inline-start: 1px solid rgba(255,255,255,0.12);
 }
-.stat-pill:hover {
-  border-color: var(--accent-border);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+.stat-card:first-child { border-inline-start: none; }
+.stat-value {
+  font-size: 26px; font-weight: 700; color: #fff;
+  line-height: 1; margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
-.stat-pill-value {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 1.5rem; font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1;
-  direction: ltr;
+.stat-label { font-size: 12.5px; color: rgba(255,255,255,0.5); font-weight: 500; }
+
+.brand-features { display: flex; flex-direction: column; gap: 14px; }
+.feature-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; color: rgba(255,255,255,0.72);
 }
-.stat-pill-label {
-  font-size: .7rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  margin-top: 4px;
+.feature-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(36,103,71,0.85);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.feature-icon svg { width: 11px; height: 11px; stroke: #fff; stroke-width: 3.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 980px) {
+  .brand-panel { padding: 40px 26px 34px; }
+  .brand-logo { margin-bottom: 32px; }
+  .brand-headline { font-size: 27px; }
+  .brand-desc { font-size: 14px; margin-bottom: 26px; }
+  .brand-stats { margin-bottom: 0; }
+  .stat-card { padding: 16px 4px; }
+  .stat-value { font-size: 21px; }
+  .brand-features { display: none; }
 }
 
-/* Registration form panel */
-.welcome-form {
-  background: var(--surface-base);
+/* ===== Form panel ===== */
+.form-panel {
   display: flex; align-items: center; justify-content: center;
-  padding: 60px 48px;
+  padding: 56px 40px;
+  background: var(--bg);
 }
-@media (max-width: 860px) {
-  .welcome-brand { padding: 52px 28px; align-items: flex-start }
-  .welcome-form { padding: 44px 24px }
-}
-
 .form-card {
   width: 100%;
-  max-width: 400px;
-  animation: slide-right .5s .2s var(--ease) both;
-}
-
-.form-header { margin-bottom: 34px }
-.form-title {
-  font-size: 1.5rem; font-weight: 700;
-  letter-spacing: -.02em;
-  margin-bottom: 7px;
-}
-.form-subtitle {
-  font-size: .88rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
-@media (max-width: 520px) { .fields-grid { grid-template-columns: 1fr } }
-
-.field { display: flex; flex-direction: column; gap: 7px }
-.field-label {
-  font-size: .73rem; font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-}
-.field-input {
-  width: 100%; padding: 12px 15px;
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  font-family: var(--font-arabic);
-  font-size: .9rem; font-weight: 500;
-  color: var(--text-primary);
-  outline: none;
-  transition: all var(--dur-base) var(--ease);
-  line-height: 1.4;
-}
-.field-input::placeholder { color: var(--text-muted); font-weight: 400 }
-.field-input:hover { border-color: var(--accent-border) }
-.field-input:focus {
-  border-color: var(--border-focus);
-  background: var(--surface-raised);
-  box-shadow: 0 0 0 3px var(--accent-dim);
-}
-.field-input.has-error {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 3px var(--danger-dim);
-}
-.field-error {
-  font-size: .72rem;
-  color: var(--danger);
-  font-weight: 500;
-  display: none;
-}
-.field-error.visible { display: block }
-
-.form-submit-area { margin-top: 22px }
-
-/* ═══════════════════════════════════════════════
-   PAGE 2 — CONFIRMATION
-═══════════════════════════════════════════════ */
-.page-confirm {
-  min-height: 100vh;
-  background: var(--surface-base);
-  display: flex; align-items: center; justify-content: center;
-  padding: 40px 20px;
-  position: relative;
-}
-.page-confirm::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
-  background-size: 32px 32px;
-  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 20%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(ellipse 60% 55% at 50% 20%, #000 0%, transparent 75%);
-  pointer-events: none;
-}
-
-.confirm-card {
-  max-width: 800px; width: 100%;
-  position: relative; z-index: 1;
-  animation: fade-up .5s var(--ease) both;
-  overflow: hidden;
-}
-
-.confirm-header {
-  background: var(--surface-raised);
-  border-bottom: 1px solid var(--border);
-  padding: 40px 44px 30px;
-  position: relative; overflow: hidden;
-}
-.confirm-header::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--success), var(--accent));
-  background-size: 200%;
-  animation: shimmer 4s linear infinite;
-}
-
-.confirm-header-top {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 16px;
-}
-.confirm-greeting { flex: 1; min-width: 0 }
-.confirm-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em }
-.confirm-subtitle {
-  font-size: .85rem; color: var(--text-secondary); margin-top: 5px;
-  direction: ltr; text-align: right; unicode-bidi: isolate;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-
-.icon-btn {
-  width: 38px; height: 38px; flex-shrink: 0;
-  border-radius: var(--r-md);
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: all var(--dur-base) var(--ease);
-}
-.icon-btn:hover { color: var(--danger); border-color: var(--danger-border); background: var(--danger-dim) }
-
-.btn-block { width: 100%; justify-content: center }
-
-.confirm-body {
-  background: var(--surface-raised);
-  padding: 30px 44px;
-  border-top: none;
-}
-
-/* Exam tiles */
-.exam-tiles {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 12px; margin-bottom: 30px;
-}
-@media (max-width: 640px) { .exam-tiles { grid-template-columns: 1fr 1fr } }
-
-.exam-tile {
-  background: var(--surface-overlay);
+  max-width: 420px;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 20px 14px;
-  text-align: center;
-  transition: all var(--dur-base) var(--ease);
-  cursor: default;
-  position: relative; overflow: hidden;
-}
-.exam-tile::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--success));
-  transform: scaleX(0); transform-origin: right;
-  transition: transform var(--dur-base) var(--ease);
-}
-.exam-tile:hover { border-color: var(--accent-border); transform: translateY(-2px); box-shadow: var(--shadow-sm) }
-.exam-tile:hover::after { transform: scaleX(1) }
-.tile-icon {
-  color: var(--accent);
-  margin-bottom: 10px;
-  opacity: .85;
-}
-.tile-value {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 1.7rem; font-weight: 600;
-  color: var(--text-primary); line-height: 1;
-  margin-bottom: 7px;
-}
-.tile-label {
-  font-size: .67rem; color: var(--text-secondary);
-  font-weight: 600;
-  text-transform: uppercase; letter-spacing: .07em;
+  box-shadow: var(--shadow-md);
+  padding: 40px 36px 32px;
+  animation: fadeUp 0.5s 0.06s var(--ease) both;
 }
 
-/* Instructions */
-.section-label {
-  font-size: .68rem; font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase; letter-spacing: .12em;
-  margin-bottom: 13px;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-label::after {
-  content: '';
-  flex: 1; height: 1px;
-  background: var(--border);
-}
-
-.instruction-list {
-  list-style: none;
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  margin-bottom: 26px;
-}
-.instruction-item {
-  display: flex; align-items: center; gap: 13px;
-  padding: 12px 17px;
-  font-size: .85rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  border-bottom: 1px solid var(--border);
-  transition: background var(--dur-fast) var(--ease);
-}
-.instruction-item:last-child { border-bottom: none }
-.instruction-item:hover { background: var(--surface-overlay) }
-.instr-check {
-  width: 19px; height: 19px;
-  border-radius: 50%;
-  background: var(--success);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.instr-check svg {
-  width: 10px; height: 10px;
-  fill: none; stroke: #06231A; stroke-width: 2.5;
-  stroke-linecap: round; stroke-linejoin: round;
-}
-
-/* History grid */
-.history-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; margin-bottom: 30px;
-}
-@media (max-width: 640px) { .history-grid { grid-template-columns: 1fr } }
-
-.history-item {
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 15px 17px;
-  display: flex; align-items: center; gap: 13px;
-  transition: all var(--dur-base) var(--ease);
-}
-.history-item:hover { border-color: var(--accent-border); transform: translateY(-2px); box-shadow: var(--shadow-sm) }
-.history-icon {
-  width: 40px; height: 40px;
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; flex-shrink: 0;
-}
-.icon-gold { background: linear-gradient(135deg,#F7EAC9,#EFD9A0) }
-.icon-blue { background: linear-gradient(135deg,#DFE9EE,#C9DBE3) }
-.icon-green { background: linear-gradient(135deg,#DCEEE2,#BFE0CB) }
-.icon-purple { background: linear-gradient(135deg,#E9E3EF,#D6C9E3) }
-.history-value {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 1.1rem; font-weight: 600;
-  color: var(--text-primary); direction: ltr;
-}
-.history-label {
-  font-size: .67rem; color: var(--text-secondary);
-  font-weight: 600; text-transform: uppercase;
-  letter-spacing: .06em; margin-bottom: 3px;
-}
-.history-empty {
-  text-align: center; padding: 22px;
-  color: var(--text-muted); font-size: .84rem;
-  grid-column: 1/-1;
-}
-
-.confirm-footer {
-  background: var(--surface-raised);
-  border-top: 1px solid var(--border);
-  padding: 22px 44px;
-  display: flex; gap: 12px; justify-content: flex-start;
-  flex-wrap: wrap;
-}
-@media (max-width: 640px) {
-  .confirm-body, .confirm-header { padding-left: 24px; padding-right: 24px }
-  .confirm-footer { padding: 18px 24px; flex-direction: column }
-  .student-identity { margin-top: 18px }
-}
-
-/* ═══════════════════════════════════════════════
-   PAGE 3 — EXAM
-═══════════════════════════════════════════════ */
-.exam-header {
-  background: var(--surface-glass);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  position: sticky; top: 0; z-index: 200;
-  height: 62px;
-}
-.exam-header-inner {
-  max-width: 1280px; margin: 0 auto;
-  height: 100%;
-  padding: 0 24px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-
-.exam-brand {
-  display: flex; align-items: center; gap: 12px;
-}
-.exam-logo {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px var(--accent-glow);
-}
-.exam-logo svg {
-  width: 18px; height: 18px;
-  fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-}
-.exam-title {
-  font-size: .88rem; font-weight: 600;
-  letter-spacing: -.01em; line-height: 1.3;
-}
-.exam-subtitle {
-  font-size: .64rem; color: var(--text-secondary);
-  font-family: var(--font-latin); direction: ltr;
-}
-
-.section-indicator {
-  display: none;
-  align-items: center; gap: 7px;
-  padding: 7px 15px;
-  border-radius: var(--r-pill);
-  font-size: .76rem; font-weight: 600;
-  border: 1px solid; white-space: nowrap;
-  transition: all var(--dur-base) var(--ease);
-}
-.section-indicator.show { display: inline-flex }
-@media (max-width: 720px) { .section-indicator { display: none !important } }
-
-/* Timer */
-.timer-wrap {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-pill);
-  padding: 8px 18px;
-  transition: all var(--dur-slow) var(--ease);
-}
-.timer-wrap.warn {
-  background: var(--warn-dim);
-  border-color: var(--warn-border);
-}
-.timer-wrap.danger {
-  background: var(--danger-dim);
-  border-color: var(--danger-border);
-  animation: pulse-danger .9s ease-in-out infinite;
-}
-.timer-icon {
-  width: 15px; height: 15px;
-  fill: none; stroke: var(--text-secondary); stroke-width: 2;
-  stroke-linecap: round; stroke-linejoin: round;
-  flex-shrink: 0;
-}
-.timer-wrap.warn .timer-icon { stroke: var(--warn) }
-.timer-wrap.danger .timer-icon { stroke: var(--danger) }
-.timer-label {
-  font-size: .6rem; font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: .1em;
-  line-height: 1;
-}
-.timer-wrap.warn .timer-label { color: var(--warn) }
-.timer-wrap.danger .timer-label { color: var(--danger) }
-.timer-display {
-  font-family: var(--font-mono);
-  font-size: 1.2rem; font-weight: 600;
-  color: var(--text-primary); direction: ltr;
-  min-width: 54px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-.timer-wrap.danger .timer-display { color: var(--danger) }
-
-/* Exam layout */
-.exam-body {
-  max-width: 1280px; margin: 0 auto;
-  padding: 28px 20px 40px;
-  display: grid;
-  grid-template-columns: 1fr 276px;
-  gap: 20px;
-  align-items: start;
-}
-@media (max-width: 960px) { .exam-body { grid-template-columns: 1fr } }
-
-/* Question card */
-.question-card {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 34px;
-  position: relative; overflow: hidden;
-  animation: fade-up .2s var(--ease);
-  box-shadow: var(--shadow-sm);
-}
-.question-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--success), var(--accent));
-  background-size: 200%;
-  animation: shimmer 4s linear infinite;
-}
-
-.question-meta {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 22px; padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap; gap: 8px;
-}
-.section-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 13px;
-  background: var(--accent-dim);
-  border: 1px solid var(--accent-border);
-  border-radius: var(--r-pill);
-  font-size: .74rem; font-weight: 600;
-  color: var(--accent);
-}
-.question-counter {
-  font-family: var(--font-mono);
-  font-size: .78rem; font-weight: 500;
-  color: var(--text-muted);
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-pill);
-  padding: 5px 13px;
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-}
-
-.reading-passage {
-  background: var(--surface-overlay);
-  border: 1px solid var(--accent-border);
-  border-radius: var(--r-lg);
-  padding: 20px 22px;
-  margin-bottom: 20px;
-  position: relative;
-  animation: fade-up .3s var(--ease);
-}
-.reading-passage::before {
-  content: '';
-  position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
-  background: linear-gradient(180deg, var(--accent), var(--success));
-  border-radius: 3px 0 0 3px;
-}
-.passage-label {
-  font-size: .65rem; font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase; letter-spacing: .1em;
-  margin-bottom: 14px; text-align: right; direction: rtl;
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-}
-.passage-label-text { display: flex; align-items: center; gap: 6px }
-.passage-progress {
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  font-weight: 600; letter-spacing: 0; text-transform: none;
-}
-.passage-toggle {
-  background: transparent;
-  border: 1px solid var(--accent-border);
-  color: var(--accent);
-  font-family: var(--font-arabic);
-  font-size: .68rem; font-weight: 600;
-  text-transform: none; letter-spacing: 0;
+.form-header { margin-bottom: 28px; }
+.form-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--emerald);
+  background: var(--mint);
   padding: 5px 12px;
   border-radius: var(--r-pill);
-  cursor: pointer;
-  transition: all var(--dur-base) var(--ease);
-  flex-shrink: 0;
+  margin-bottom: 16px;
 }
-.passage-toggle:hover { background: var(--accent-dim); border-color: var(--accent) }
-.passage-body {
-  direction: ltr; text-align: left;
-  font-family: var(--font-latin);
-  font-size: .91rem; line-height: 1.9;
-  color: rgba(237,243,239,.85);
+.form-eyebrow svg { width: 13px; height: 13px; stroke: var(--emerald); stroke-width: 2; fill: none; }
+
+.form-title {
+  font-size: 24px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--text); margin-bottom: 6px;
 }
-[data-theme="light"] .passage-body { color: rgba(23,33,28,.82) }
-.passage-body.collapsed { display: none }
+.form-subtitle { font-size: 14px; color: var(--text-2); }
 
-.question-text {
-  font-family: var(--font-latin);
-  font-size: .98rem; font-weight: 500;
-  color: var(--text-primary); line-height: 1.8;
-  padding: 18px 20px;
-  background: var(--surface-overlay);
-  border-radius: var(--r-md);
-  border-right: 3px solid var(--accent);
-  direction: ltr; text-align: left;
-  margin-bottom: 22px;
-}
-
-.options-list { display: flex; flex-direction: column; gap: 10px }
-
-.option {
-  display: flex; align-items: center; gap: 13px;
-  padding: 14px 17px;
-  background: var(--surface-overlay);
+/* Buttons — clear hierarchy: primary / secondary / tertiary */
+.btn-google {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--surface);
+  color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
+  padding: 12px;
+  font-size: 14px; font-weight: 600; font-family: var(--font);
   cursor: pointer;
-  transition: all var(--dur-base) var(--ease);
-  direction: ltr; text-align: left;
-  position: relative; overflow: hidden;
-  -webkit-user-select: none; user-select: none;
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--base) var(--ease), background var(--base) var(--ease), box-shadow var(--base) var(--ease);
 }
-.option::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, var(--accent-dim), transparent);
-  opacity: 0; transition: opacity var(--dur-base) var(--ease);
-}
-.option:hover { border-color: var(--accent-border); transform: translateX(-1px) }
-.option:hover::before { opacity: 1 }
-.option:hover .option-key { border-color: var(--accent); color: var(--accent) }
+.btn-google:hover { border-color: #CFD8D3; background: #FCFDFC; box-shadow: var(--shadow-sm); }
+.btn-google:active { background: var(--bg); }
+.btn-google svg { width: 18px; height: 18px; }
 
-.option.selected {
-  border-color: var(--accent);
-  background: var(--accent-dim);
-  box-shadow: 0 0 0 1px var(--accent-border) inset;
+.divider {
+  display: flex; align-items: center; gap: 14px;
+  color: var(--text-2); font-size: 12px; font-weight: 500;
+  margin: 22px 0;
 }
-.option.selected::before { opacity: 1 }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-.option-key {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface-high);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono);
-  font-size: .8rem; font-weight: 600;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition: all var(--dur-base) var(--ease);
-  position: relative; z-index: 1;
+.field-group { margin-bottom: 16px; }
+.field-label {
+  display: block; font-size: 12.5px; font-weight: 600;
+  color: var(--text-2); margin-bottom: 7px; letter-spacing: 0.01em;
 }
-.option.selected .option-key {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  box-shadow: 0 0 14px var(--accent-glow);
-}
-.option-text {
-  font-family: var(--font-latin);
-  font-size: .92rem; color: var(--text-primary);
-  font-weight: 400; flex: 1;
-  position: relative; z-index: 1;
-  line-height: 1.5;
-}
-.option.selected .option-text { color: var(--text-primary); font-weight: 500 }
-.option-check {
-  width: 21px; height: 21px;
-  border-radius: 50%; background: var(--success);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  opacity: 0; transform: scale(0) rotate(-20deg);
-  transition: all var(--dur-base) var(--ease-spring);
-  z-index: 1;
-}
-.option-check svg {
-  width: 10px; height: 10px; fill: none;
-  stroke: #06231A; stroke-width: 2.5;
-  stroke-linecap: round; stroke-linejoin: round;
-}
-.option.selected .option-check { opacity: 1; transform: scale(1) rotate(0) }
-
-/* Nav bar */
-.question-nav {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 22px; padding-top: 20px;
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap; gap: 10px;
-}
-.nav-group { display: flex; gap: 8px }
-
-/* Sidebar */
-.exam-sidebar {
-  display: flex; flex-direction: column; gap: 16px;
-  position: sticky; top: 82px;
-}
-@media (max-width: 960px) { .exam-sidebar { position: static; order: -1 } }
-
-.sidebar-panel {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-}
-.sidebar-title {
-  font-size: .65rem; font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase; letter-spacing: .12em;
-  margin-bottom: 15px;
-}
-.sidebar-divider {
-  height: 1px; background: var(--border);
-  margin: 18px 0;
-}
-
-.question-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
-}
-.grid-cell {
-  aspect-ratio: 1;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: var(--r-md);
-  font-family: var(--font-mono);
-  font-size: .7rem; font-weight: 500;
-  cursor: pointer;
-  transition: all var(--dur-fast) var(--ease);
-  border: 1px solid var(--border);
-  background: var(--surface-overlay);
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-.grid-cell:hover {
-  border-color: var(--accent-border);
-  color: var(--accent);
-  transform: scale(1.12);
-  z-index: 2;
-}
-.grid-cell.answered {
-  background: var(--success);
-  color: #06231A;
-  border-color: transparent;
-  box-shadow: 0 0 7px var(--success-border);
-}
-.grid-cell.current {
-  background: var(--accent);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 0 10px var(--accent-glow);
-  transform: scale(1.1);
-  z-index: 2;
-}
-.grid-cell.answered.current { background: var(--accent) }
-
-.grid-legend {
-  display: flex; flex-wrap: wrap; gap: 9px;
-  margin-top: 14px; padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-.legend-item {
-  display: flex; align-items: center; gap: 5px;
-  font-size: .67rem; color: var(--text-secondary); font-weight: 500;
-}
-.legend-dot {
-  width: 10px; height: 10px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border);
-}
-.legend-dot.lg-current { background: var(--accent); border-color: transparent }
-.legend-dot.lg-answered { background: var(--success); border-color: transparent }
-
-/* Progress */
-.progress-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 9px;
-}
-.progress-label { font-size: .72rem; color: var(--text-secondary); font-weight: 500 }
-.progress-value {
-  font-family: var(--font-mono);
-  font-size: .78rem; font-weight: 600; color: var(--accent);
-}
-.progress-track {
-  height: 6px; background: var(--surface-high);
-  border-radius: var(--r-pill); overflow: hidden; margin-bottom: 16px;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--success));
-  border-radius: var(--r-pill);
-  transition: width .5s var(--ease);
-  background-size: 200%;
-  animation: shimmer 4s linear infinite;
-}
-.mini-bar-label {
-  font-size: .64rem; color: var(--text-muted);
-  font-weight: 600; text-transform: uppercase;
-  letter-spacing: .07em; margin-bottom: 6px;
-}
-.mini-bar {
-  display: flex; gap: 2px; height: 4px;
-  border-radius: var(--r-pill); overflow: hidden;
-}
-.mini-segment { flex: 1; border-radius: 2px; transition: background var(--dur-base) var(--ease) }
-.mini-segment.done { background: var(--success) }
-.mini-segment.empty { background: var(--surface-high) }
-
-/* ═══════════════════════════════════════════════
-   SUBMIT MODAL
-═══════════════════════════════════════════════ */
-.modal-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(6,10,8,.78);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; padding: 20px;
-  animation: fade-in var(--dur-base) var(--ease);
-}
-.modal-box {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-2xl);
-  padding: 40px;
-  max-width: 410px; width: 100%;
-  text-align: center;
-  animation: scale-in var(--dur-slow) var(--ease-spring);
-  box-shadow: var(--shadow-xl);
-  position: relative; overflow: hidden;
-}
-.modal-box::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--warn), var(--danger));
-}
-.modal-icon-wrap {
-  width: 64px; height: 64px;
-  background: var(--warn-dim);
-  border: 1px solid var(--warn-border);
-  border-radius: var(--r-lg);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.7rem;
-  margin: 0 auto 20px;
-}
-.modal-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 9px }
-.modal-desc {
-  font-size: .88rem; color: var(--text-secondary);
-  line-height: 1.65; margin-bottom: 22px;
-}
-.modal-stats {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 11px; margin-bottom: 24px;
-}
-.modal-stat {
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 15px 12px;
-  text-align: center;
-}
-.modal-stat-value {
-  font-family: var(--font-mono);
-  font-size: 1.5rem; font-weight: 600;
-  color: var(--accent); line-height: 1;
-}
-.modal-stat-label {
-  font-size: .64rem; color: var(--text-secondary);
-  margin-top: 5px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .07em;
-}
-.modal-actions { display: flex; gap: 10px }
-.modal-actions .btn { flex: 1 }
-
-/* ═══════════════════════════════════════════════
-   PAGE 4 — RESULTS
-═══════════════════════════════════════════════ */
-.page-results {
-  min-height: 100vh;
-  background: var(--surface-base);
-  padding: 44px 20px;
-  position: relative; overflow: hidden;
-}
-.page-results::before {
-  content: '';
-  position: absolute; top: -80px; left: 50%;
-  transform: translateX(-50%);
-  width: 720px; height: 360px;
-  background: radial-gradient(ellipse, var(--accent-dim) 0%, transparent 70%);
+.input-wrap { position: relative; }
+.input-wrap .input-icon {
+  position: absolute; inset-inline-end: 14px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px;
+  stroke: #9AA6A0; stroke-width: 1.8; fill: none;
   pointer-events: none;
+  transition: stroke var(--fast) var(--ease);
 }
-
-.results-container {
-  max-width: 840px; margin: 0 auto;
-  position: relative; z-index: 1;
-}
-
-/* Pass/fail hero */
-.result-hero {
-  background: var(--surface-raised);
+.text-input {
+  width: 100%;
+  padding: 12px 42px 12px 14px;
+  border-radius: var(--r-md);
   border: 1px solid var(--border);
-  border-radius: var(--r-2xl);
-  padding: 48px 44px;
+  background: #FBFCFB;
+  color: var(--text);
+  font-size: 14.5px;
+  font-family: var(--font);
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.text-input::placeholder { color: #9AA6A0; }
+.text-input:hover { border-color: #CFD8D3; }
+.text-input:focus {
+  outline: none;
+  background: var(--surface);
+  border-color: var(--emerald);
+  box-shadow: var(--ring);
+}
+.text-input:focus + .input-icon { stroke: var(--emerald); }
+
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--r-md);
+  border: none;
+  background: var(--emerald);
+  color: #fff;
+  font-size: 15px; font-weight: 600; font-family: var(--font);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 1px 2px rgba(23,73,54,0.20);
+  transition: background var(--base) var(--ease), box-shadow var(--base) var(--ease), transform var(--fast) var(--ease);
+}
+.btn-primary:hover { background: var(--emerald-dark); box-shadow: 0 4px 14px -6px rgba(23,73,54,0.5); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:focus-visible { outline: none; box-shadow: var(--ring); }
+.btn-primary:disabled { background: var(--emerald); opacity: 0.55; cursor: not-allowed; box-shadow: none; transform: none; }
+
+.spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2.2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn-primary.loading .spinner { display: inline-block; }
+
+.error-message {
+  display: none; align-items: flex-start; gap: 9px;
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 14px;
+  animation: scaleIn 0.22s var(--ease);
+}
+.error-message.visible { display: flex; }
+.error-message svg { width: 16px; height: 16px; stroke: var(--error); stroke-width: 2; fill: none; flex-shrink: 0; margin-top: 1px; }
+
+.form-footer {
   text-align: center;
-  margin-bottom: 18px;
-  animation: fade-up .5s var(--ease) both;
-  position: relative; overflow: hidden;
-  box-shadow: var(--shadow-md);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
-.result-hero::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--success), var(--accent));
-  background-size: 200%; animation: shimmer 4s linear infinite;
+.form-footer-text { font-size: 13.5px; color: var(--text-2); }
+.form-footer-link {
+  color: var(--emerald);
+  cursor: pointer; text-decoration: none;
+  font-weight: 600; font-size: 13.5px; font-family: var(--font);
+  background: none; border: none; padding: 0;
+  margin-inline-start: 4px;
+  transition: color var(--fast);
+}
+.form-footer-link:hover { color: var(--emerald-dark); text-decoration: underline; text-underline-offset: 3px; }
+
+.security-note {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 20px;
+  font-size: 11.5px; color: var(--text-2);
+}
+.security-note svg { width: 12px; height: 12px; stroke: var(--text-2); stroke-width: 2; fill: none; }
+
+@media (max-width: 980px) {
+  .form-panel { padding: 32px 20px 44px; }
+  .form-card { max-width: 460px; padding: 30px 22px 26px; box-shadow: var(--shadow-sm); }
+  .form-title { font-size: 21px; }
 }
 
-.result-icon {
-  width: 88px; height: 88px;
-  border-radius: var(--r-xl);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.6rem;
-  margin: 0 auto 20px;
-  animation: scale-in .7s .1s var(--ease-spring) both;
-}
-.result-icon.pass {
-  background: var(--success-dim);
-  border: 1px solid var(--success-border);
-  box-shadow: 0 0 30px var(--success-border);
-}
-.result-icon.fail {
-  background: var(--danger-dim);
-  border: 1px solid var(--danger-border);
-  box-shadow: 0 0 30px var(--danger-border);
-}
-
-.result-title {
-  font-size: 1.9rem; font-weight: 700;
-  letter-spacing: -.02em; margin-bottom: 9px;
-  animation: fade-up .5s .2s var(--ease) both;
-}
-.result-subtitle {
-  color: var(--text-secondary); font-size: .92rem;
-  line-height: 1.65; margin-bottom: 26px;
-  animation: fade-up .5s .25s var(--ease) both;
-}
-
-.result-student-row {
-  display: flex; align-items: center; gap: 15px;
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 15px 19px;
-  margin-bottom: 32px;
-  text-align: right;
-  animation: fade-up .5s .3s var(--ease) both;
-}
-.result-avatar {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--success));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; flex-shrink: 0;
-}
-
-/* Score ring */
-.score-section {
-  display: flex; align-items: center; justify-content: center;
-  gap: 44px; flex-wrap: wrap;
-  margin-bottom: 32px;
-  animation: fade-up .5s .35s var(--ease) both;
-}
-.score-ring-wrap {
-  position: relative; width: 196px; height: 196px; flex-shrink: 0;
-}
-.ring-svg { width: 100%; height: 100%; transform: rotate(-90deg) }
-.ring-track { fill: none; stroke: var(--surface-high); stroke-width: 8 }
-.ring-progress {
-  fill: none; stroke: url(#grad-ring); stroke-width: 8;
-  stroke-linecap: round;
-  stroke-dasharray: 534.07;
-  stroke-dashoffset: 534.07;
-  transition: stroke-dashoffset 1.6s cubic-bezier(.4,0,.15,1);
-}
-.ring-center {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-}
-.ring-score {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 2.9rem; font-weight: 600;
-  color: var(--text-primary); line-height: 1;
-  direction: ltr; font-variant-numeric: tabular-nums;
-}
-.ring-label { font-size: .74rem; color: var(--text-secondary); margin-top: 5px; font-weight: 500 }
-
-.score-facts { display: flex; flex-direction: column; gap: 10px; min-width: 174px }
-.score-fact {
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 13px 17px;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  transition: all var(--dur-base) var(--ease);
-}
-.score-fact:hover { border-color: var(--accent-border); transform: translateX(-2px) }
-.fact-icon { display: flex; align-items: center; flex-shrink: 0 }
-.fact-right { text-align: right }
-.fact-value {
-  font-family: var(--font-mono);
-  font-size: 1.15rem; font-weight: 600;
-  color: var(--text-primary); direction: ltr;
-  font-variant-numeric: tabular-nums; line-height: 1;
-}
-.fact-label {
-  font-size: .63rem; color: var(--text-secondary);
-  font-weight: 600; text-transform: uppercase;
-  letter-spacing: .07em; margin-top: 4px;
-}
-
-/* Section performance */
-.section-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 11px; margin-bottom: 30px;
-  animation: fade-up .5s .5s var(--ease) both;
-}
-@media (max-width: 560px) { .section-grid { grid-template-columns: 1fr } }
-
-.section-card {
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 17px;
-  transition: all var(--dur-base) var(--ease);
-}
-.section-card:hover { border-color: var(--accent-border); transform: translateY(-2px); box-shadow: var(--shadow-sm) }
-.section-card-top {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px;
-}
-.section-name {
-  font-size: .84rem; font-weight: 600; color: var(--text-primary);
-  display: flex; align-items: center; gap: 7px;
-}
-.section-score-chip {
-  font-family: var(--font-mono);
-  font-size: .8rem; font-weight: 600;
-  color: var(--text-secondary);
-  direction: ltr; font-variant-numeric: tabular-nums;
-}
-.section-bar { height: 6px; background: var(--surface-high); border-radius: var(--r-pill); overflow: hidden }
-.section-fill { height: 100%; border-radius: var(--r-pill); transition: width 1.1s var(--ease) }
-
-.result-actions {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  animation: fade-up .5s .6s var(--ease) both;
-}
-
-/* ═══════════════════════════════════════════════
-   PAGE 5 — REVIEW
-═══════════════════════════════════════════════ */
-.page-review {
-  min-height: 100vh;
-  background: var(--surface-base);
-  padding: 28px 20px;
-}
-.review-container { max-width: 900px; margin: 0 auto }
-
-.review-header {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 24px 28px;
-  margin-bottom: 18px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 14px;
-  animation: fade-up .4s var(--ease);
-  position: relative; overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.review-header::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--success));
-}
-.review-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em }
-.review-chips { display: flex; gap: 8px; flex-wrap: wrap }
-
-/* Review question card */
-.review-question {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 24px;
-  margin-bottom: 12px;
-  transition: all var(--dur-base) var(--ease);
-  position: relative; overflow: hidden;
-  animation: fade-up .3s var(--ease);
-  box-shadow: var(--shadow-sm);
-}
-.review-question::before {
-  content: '';
-  position: absolute; top: 0; right: 0; bottom: 0; width: 3px;
-  border-radius: 0 var(--r-xl) var(--r-xl) 0;
-}
-.review-question.correct::before { background: var(--success) }
-.review-question.wrong::before { background: var(--danger) }
-.review-question.unanswered::before { background: var(--text-muted) }
-.review-question:hover { border-color: var(--accent-border); box-shadow: var(--shadow-md) }
-
-.review-q-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 13px; flex-wrap: wrap; gap: 8px;
-}
-.review-q-number { font-size: .84rem; font-weight: 700; color: var(--text-primary) }
-
-.review-q-text {
-  font-family: var(--font-latin);
-  font-size: .94rem; font-weight: 500;
-  color: var(--text-primary); margin-bottom: 13px;
-  padding: 14px 16px;
-  background: var(--surface-overlay);
-  border-radius: var(--r-md);
-  text-align: left; direction: ltr; line-height: 1.75;
-}
-.review-options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 13px }
-.review-option {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border);
-  font-family: var(--font-latin);
-  direction: ltr; text-align: left;
-  font-size: .87rem;
-  background: var(--surface-overlay);
-  color: var(--text-secondary);
-}
-.review-option.correct-answer {
-  background: var(--success-dim);
-  border-color: var(--success-border);
-  color: var(--success);
-}
-.review-option.wrong-selected {
-  background: var(--danger-dim);
-  border-color: var(--danger-border);
-  color: var(--danger);
-}
-.review-opt-key {
-  font-weight: 700; font-size: .76rem;
-  min-width: 46px; color: inherit;
-  font-family: var(--font-mono);
-}
-.review-explanation {
-  background: var(--warn-dim);
-  border: 1px solid var(--warn-border);
-  border-radius: var(--r-md);
-  padding: 12px 15px;
-  font-family: var(--font-latin);
-  font-size: .83rem; color: var(--warn);
-  direction: ltr; text-align: left; line-height: 1.65;
-}
-.review-explanation strong { display: block; margin-bottom: 4px; font-weight: 700 }
-
-.review-actions {
-  display: flex; gap: 12px; justify-content: center;
-  margin-top: 24px; margin-bottom: 48px; flex-wrap: wrap;
-}
-
-/* RESPONSIVE */
-@media (max-width: 640px) {
-  .score-section { flex-direction: column; gap: 22px }
-  .score-facts { width: 100% }
-  .result-hero { padding: 34px 24px }
-  .review-header { flex-direction: column; align-items: flex-start }
-  .modal-actions { flex-direction: column }
-  .modal-stats { grid-template-columns: 1fr }
-  .result-actions { flex-direction: column }
-  .review-actions { flex-direction: column }
-}
-
-/* ═══════════════════════════════════════════════
-   LOADING STATE
-═══════════════════════════════════════════════ */
-.skeleton {
-  background: linear-gradient(90deg, var(--surface-overlay) 25%, var(--surface-high) 50%, var(--surface-overlay) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--r-md);
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
 </head>
 <body>
 
-<!-- SVG defs for ring gradient -->
-<svg width="0" height="0" style="position:absolute;pointer-events:none;overflow:hidden">
-  <defs>
-    <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#1B4E36"/>
-      <stop offset="100%" stop-color="#3FA579"/>
-    </linearGradient>
-  </defs>
-</svg>
-
-<!-- Ambient background -->
-<div class="ambient-bg" aria-hidden="true">
-  <div class="ambient-blob ambient-blob-1"></div>
-  <div class="ambient-blob ambient-blob-2"></div>
-</div>
-
-<!-- Floating Controls -->
-<div class="floating-controls">
-  <button class="ctrl-btn" id="themeToggle" onclick="toggleTheme()" title="تبديل السمة">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  </button>
-</div>
-
-<!-- ════════════════════════════════
-<!-- ════════════════════════════════
-     PAGE 2: CONFIRMATION
-════════════════════════════════ -->
-<div id="confirmPage" class="page-confirm hidden">
-  <div class="card confirm-card">
-    <div class="confirm-header">
-      <div class="confirm-header-top">
-        <div class="confirm-greeting">
-          <div class="badge badge-accent" style="margin-bottom:10px">INELT</div>
-          <h2 class="confirm-title">مرحباً بعودتك</h2>
-          <p class="confirm-subtitle" id="confirmName">–</p>
-        </div>
-        <button class="icon-btn" onclick="ExamAPI.signOut()" title="تسجيل الخروج">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="confirm-body">
-      <div class="exam-tiles">
-        <div class="exam-tile">
-          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-          <div class="tile-value mono">60</div>
-          <div class="tile-label">دقيقة</div>
-        </div>
-        <div class="exam-tile">
-          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <div class="tile-value mono">40</div>
-          <div class="tile-label">سؤالاً</div>
-        </div>
-        <div class="exam-tile">
-          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-          <div class="tile-value mono">100</div>
-          <div class="tile-label">درجة</div>
-        </div>
-        <div class="exam-tile">
-          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.6L22 9.3l-5.4 4.6L18.2 21 12 17.3 5.8 21l1.6-7.1L2 9.3l7.4-.7L12 2z"/></svg>
-          <div class="tile-value mono">50</div>
-          <div class="tile-label">للنجاح</div>
-        </div>
-      </div>
-
-      <div class="section-label">التعليمات</div>
-      <ul class="instruction-list">
-        <li class="instruction-item">
-          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          اقرأ كل سؤال بعناية قبل اختيار إجابتك
-        </li>
-        <li class="instruction-item">
-          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          يمكنك التنقل بين الأسئلة في أي وقت
-        </li>
-        <li class="instruction-item">
-          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          الأسئلة غير المجابة تُحسب خاطئة
-        </li>
-        <li class="instruction-item">
-          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          يُسلَّم الاختبار تلقائياً عند انتهاء الوقت
-        </li>
-        <li class="instruction-item">
-          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          كل إجابة صحيحة = 2.5 درجة
-        </li>
-      </ul>
-    </div>
-
-    <div class="confirm-footer">
-      <button class="btn btn-primary btn-lg btn-block" id="btnStartExam" onclick="startExam()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>ابدأ الاختبار</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════
-     PAGE 3: EXAM
-════════════════════════════════ -->
-<div id="examPage" class="hidden">
-  <header class="exam-header">
-    <div class="exam-header-inner">
-      <div class="exam-brand">
-        <div class="exam-logo">
+<div class="app-shell">
+  <!-- Brand Panel -->
+  <div class="brand-panel">
+    <div class="brand-inner">
+      <div class="brand-logo">
+        <div class="logo-mark">
           <svg viewBox="0 0 24 24">
-            <rect x="4" y="4" width="16" height="2" rx="1"/>
-            <rect x="4" y="9" width="12" height="2" rx="1"/>
-            <rect x="4" y="14" width="14" height="2" rx="1"/>
-            <rect x="4" y="19" width="9" height="2" rx="1"/>
+            <path d="M4 7.5 12 4l8 3.5-8 3.5-8-3.5Z"/>
+            <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"/>
           </svg>
         </div>
-        <div>
-          <div class="exam-title">اختبار INELT</div>
-          <div class="exam-subtitle en">Iraqi National English Exam</div>
+        <div class="logo-text en">INELT</div>
+        <span class="logo-badge">العراق</span>
+      </div>
+
+      <h1 class="brand-headline">
+        اختبر مستواك<br>في <span class="highlight">اللغة الإنكليزية</span>
+      </h1>
+
+      <p class="brand-desc">
+        الاختبار الوطني العراقي للغة الإنكليزية — تدرّب على أسئلة حقيقية وتتبّع تقدمك في كل محاولة.
+      </p>
+
+      <div class="brand-stats">
+        <div class="stat-card">
+          <div class="stat-value en">40</div>
+          <div class="stat-label">سؤال</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value en">60</div>
+          <div class="stat-label">دقيقة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value en">4</div>
+          <div class="stat-label">أقسام</div>
         </div>
       </div>
 
-      <div class="section-indicator" id="sectionIndicator"></div>
-
-      <div class="timer-wrap" id="timerBox">
-        <svg class="timer-icon" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>
-        </svg>
-        <div>
-          <div class="timer-label">الوقت المتبقي</div>
-          <div class="timer-display en mono" id="timerDisplay">60:00</div>
+      <div class="brand-features">
+        <div class="feature-item">
+          <span class="feature-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          قواعد، مفردات، محادثة، واستيعاب قرائي
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          نتيجة فورية بعد الانتهاء مباشرة
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          حساب آمن خاص بك وحدك
         </div>
       </div>
-    </div>
-  </header>
-
-  <div class="exam-body">
-    <main>
-      <div id="questionCard" class="question-card"></div>
-      <div class="question-nav">
-        <div class="nav-group">
-          <button class="btn btn-ghost" id="prevBtn" onclick="goToPrevious()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            <span>السابق</span>
-          </button>
-        </div>
-        <div class="nav-group">
-          <button class="btn btn-ghost" id="nextBtn" onclick="goToNext()">
-            <span>التالي</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-          </button>
-          <button class="btn btn-danger" onclick="showSubmitModal()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            <span>تسليم</span>
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <aside class="exam-sidebar">
-      <div class="sidebar-panel">
-        <div class="sidebar-title">التنقل بين الأسئلة</div>
-        <div id="questionGrid" class="question-grid"></div>
-        <div class="grid-legend">
-          <div class="legend-item"><div class="legend-dot lg-current"></div><span>الحالي</span></div>
-          <div class="legend-item"><div class="legend-dot lg-answered"></div><span>مجاب</span></div>
-          <div class="legend-item"><div class="legend-dot"></div><span>لم يُجب</span></div>
-        </div>
-
-        <div class="sidebar-divider"></div>
-
-        <div class="progress-header">
-          <span class="progress-label">التقدم الكلي</span>
-          <span class="progress-value" id="progressValue">0%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill" style="width:0%"></div>
-        </div>
-        <div class="mini-bar-label">الأسئلة المجابة</div>
-        <div class="mini-bar" id="sectionMiniBar"></div>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<!-- ════════════════════════════════
-     MODAL: SUBMIT CONFIRM
-════════════════════════════════ -->
-<div id="submitModal" class="modal-backdrop hidden">
-  <div class="modal-box">
-    <div class="modal-icon-wrap">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    </div>
-    <h3 class="modal-title">تأكيد التسليم</h3>
-    <p class="modal-desc">لن تتمكن من تعديل إجاباتك بعد التسليم. هل أنت متأكد؟</p>
-    <div class="modal-stats">
-      <div class="modal-stat">
-        <div class="modal-stat-value mono" id="modalAnswered">0</div>
-        <div class="modal-stat-label">مجابة</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-value mono" id="modalUnanswered">40</div>
-        <div class="modal-stat-label">متبقية</div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost btn-lg" onclick="closeSubmitModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        العودة
-      </button>
-      <button class="btn btn-danger btn-lg" onclick="submitExam()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        سلّم الاختبار
-      </button>
     </div>
   </div>
-</div>
 
-<!-- ════════════════════════════════
-     PAGE 4: RESULTS
-════════════════════════════════ -->
-<div id="resultsPage" class="page-results hidden">
-  <div class="results-container">
-    <div class="result-hero">
-      <div id="resultIcon" class="result-icon"></div>
-      <h2 id="resultTitle" class="result-title"></h2>
-      <p id="resultSubtitle" class="result-subtitle"></p>
-      <div id="autoSubmitNote" class="badge badge-warn hidden" style="margin-bottom:20px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> تم تسليم الاختبار تلقائياً عند انتهاء الوقت</div>
-
-      <div class="result-student-row">
-        <div class="result-avatar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div style="text-align:right;flex:1">
-          <div style="font-weight:700;font-size:.97rem" id="resStudentName"></div>
-          <div style="font-size:.77rem;color:var(--text-secondary);margin-top:3px" id="resStudentMeta"></div>
+  <!-- Form Panel -->
+  <div class="form-panel">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-eyebrow">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          مرحباً بك
         </div>
+        <h2 class="form-title" id="title">تسجيل الدخول</h2>
+        <p class="form-subtitle" id="subtitle">أهلاً بعودتك — أكمل حيث توقفت</p>
       </div>
 
-      <div class="score-section">
-        <div class="score-ring-wrap">
-          <svg class="ring-svg" viewBox="0 0 190 190">
-            <circle class="ring-track" cx="95" cy="95" r="85"/>
-            <circle id="scoreCircleProgress" class="ring-progress" cx="95" cy="95" r="85"/>
-          </svg>
-          <div class="ring-center">
-            <div id="scoreNumber" class="ring-score en"></div>
-            <div class="ring-label">من 100</div>
+      <button class="btn-google" onclick="ExamAPI.signInWithGoogle(getRedirect())">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        الدخول باستخدام Google
+      </button>
+
+      <div class="divider">أو باستخدام البريد الإلكتروني</div>
+
+      <form id="form" onsubmit="return false">
+        <div class="field-group">
+          <label class="field-label">البريد الإلكتروني</label>
+          <div class="input-wrap">
+            <input type="email" id="email" class="text-input" required autocomplete="email" placeholder="name@example.com">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           </div>
         </div>
 
-        <div class="score-facts">
-          <div class="score-fact">
-            <span class="fact-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg></span>
-            <div class="fact-right">
-              <div id="correctCount" class="fact-value en"></div>
-              <div class="fact-label">صحيحة</div>
-            </div>
-          </div>
-          <div class="score-fact">
-            <span class="fact-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
-            <div class="fact-right">
-              <div id="wrongCount" class="fact-value en"></div>
-              <div class="fact-label">خاطئة</div>
-            </div>
-          </div>
-          <div class="score-fact">
-            <span class="fact-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></span>
-            <div class="fact-right">
-              <div id="timeTaken" class="fact-value en"></div>
-              <div class="fact-label">الوقت المستغرق</div>
-            </div>
-          </div>
-          <div class="score-fact">
-            <span class="fact-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-            <div class="fact-right">
-              <div id="percentage" class="fact-value en"></div>
-              <div class="fact-label">النسبة المئوية</div>
-            </div>
+        <div class="field-group">
+          <label class="field-label">كلمة المرور</label>
+          <div class="input-wrap">
+            <input type="password" id="password" class="text-input" required autocomplete="current-password" minlength="6" placeholder="••••••••">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
         </div>
-      </div>
 
-      <div class="section-label" style="margin-bottom:14px">أداء الأقسام</div>
-      <div class="section-grid" id="sectionPerformance"></div>
-
-      <div class="result-actions">
-        <button class="btn btn-ghost btn-lg" onclick="showReviewPage()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          مراجعة الإجابات
+        <button type="submit" class="btn-primary" id="submitBtn" onclick="submitForm()">
+          <span class="spinner"></span>
+          <span class="btn-label">دخول</span>
         </button>
-        <button class="btn btn-primary btn-lg" onclick="restartExam()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.02"/></svg>
-          إعادة الاختبار
-        </button>
+      </form>
+
+      <div class="error-message" id="errorBox">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="errorText"></span>
+      </div>
+
+      <div class="form-footer">
+        <span class="form-footer-text" id="toggleText">ليس لديك حساب؟</span>
+        <button class="form-footer-link" id="toggleLink" onclick="toggleMode()">إنشاء حساب</button>
+      </div>
+
+      <div class="security-note">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        بياناتك مشفّرة ومحمية بأعلى معايير الأمان
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     PAGE 5: REVIEW
-════════════════════════════════ -->
-<div id="reviewPage" class="page-review hidden">
-  <div class="review-container">
-    <div class="review-header">
-      <h2 class="review-title">مراجعة الإجابات</h2>
-      <div class="review-chips">
-        <div class="badge badge-success"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg> صحيحة: <span id="reviewCorrect">0</span></div>
-        <div class="badge badge-danger"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> خاطئة: <span id="reviewWrong">0</span></div>
-        <div class="badge badge-accent">الدرجة: <span id="reviewScore" class="en">0</span></div>
-      </div>
-    </div>
-    <div id="reviewQuestions"></div>
-    <div class="review-actions">
-      <button class="btn btn-ghost btn-lg" onclick="backToResults()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        النتيجة
-      </button>
-      <button class="btn btn-primary btn-lg" onclick="restartExam()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.02"/></svg>
-        إعادة الاختبار
-      </button>
-    </div>
-  </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
 <script>
-/* ════════════════════════════════════════════
-   QUESTION BANK
-   Moved server-side into Supabase (see backend/schema.sql,
-   backend/functions/exam-start). No question or answer data is
-   embedded in this file anymore — the original seed content was
-   extracted to backend/seed-questions.json for import via the
-   admin dashboard's "Upload" feature. See /js/api.js for how the
-   exam now fetches a randomized set from the server.
-════════════════════════════════════════════ */
+let mode = 'signin';
 
-/* ════════════════════════════════════════════
-   STATE
-════════════════════════════════════════════ */
-let cQ = 0, uA = [], tR = 3600, tI = null;
-let started = false, submitted = false, sTime = null, qs = [], passage = "";
-let passageOpen = true;
-let sInfo = { name:"", university:"", college:"", department:"" };
-let res = { correct:0, wrong:0, score:0, pct:0, passed:false };
-function total() { return qs.length || 40 }
-function resetState() {
-  cQ=0; uA=[]; tR=3600; started=false; submitted=false; sTime=null; qs=[]; passage=""; passageOpen=true;
-  if (tI) { clearInterval(tI); tI=null }
-  res={correct:0,wrong:0,score:0,pct:0,passed:false};
+function getRedirect() {
+  const p = new URLSearchParams(location.search).get('redirect');
+  return p && p.startsWith('/') ? p : '/index.html';
 }
-const sNames = {
-  "Reading Comprehension":"القراءة والفهم",
-  "Grammar":"القواعد",
-  "Functions":"الوظائف اللغوية",
-  "Conversation":"الحوار"
-};
-const sColors = {
-  "Reading Comprehension":"#246747",
-  "Grammar":"#3B6E8F",
-  "Functions":"#A0722A",
-  "Conversation":"#7A5C8A"
-};
-const sIcons = {
-  "Reading Comprehension":'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
-  "Grammar":'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>',
-  "Functions":'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-  "Conversation":'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>'
-};
 
-/* ════════════════════════════════════════════
-   SOUND ENGINE
-════════════════════════════════════════════ */
-let snd = true, aCtx = null;
-function initAudio() { if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)() }
-function tone(f, d, t, v) {
-  if (!snd || !aCtx) return;
+function toggleMode() {
+  mode = mode === 'signin' ? 'signup' : 'signin';
+  document.getElementById('title').textContent = mode === 'signin' ? 'تسجيل الدخول' : 'إنشاء حساب';
+  document.getElementById('subtitle').textContent = mode === 'signin' ? 'أهلاً بعودتك — أكمل حيث توقفت' : 'أنشئ حسابك للبدء';
+  document.querySelector('.btn-label').textContent = mode === 'signin' ? 'دخول' : 'إنشاء حساب';
+  document.getElementById('toggleText').textContent = mode === 'signin' ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
+  document.getElementById('toggleLink').textContent = mode === 'signin' ? 'إنشاء حساب' : 'تسجيل الدخول';
+  document.getElementById('errorBox').classList.remove('visible');
+}
+
+async function submitForm() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errorBox = document.getElementById('errorBox');
+  const errorText = document.getElementById('errorText');
+  const btn = document.getElementById('submitBtn');
+
+  errorBox.classList.remove('visible');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
   try {
-    const o = aCtx.createOscillator(), g = aCtx.createGain();
-    o.type = t || 'sine';
-    o.frequency.setValueAtTime(f, aCtx.currentTime);
-    g.gain.setValueAtTime(v || .08, aCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001, aCtx.currentTime + d);
-    o.connect(g); g.connect(aCtx.destination);
-    o.start(); o.stop(aCtx.currentTime + d);
-  } catch(e) {}
-}
-function playSound(n) {
-  initAudio(); if (!snd) return;
-  switch(n) {
-    case 'sel': tone(660, .07, 'sine', .06); break;
-    case 'next': tone(440, .08, 'sine', .05); setTimeout(() => tone(550, .08, 'sine', .05), 70); break;
-    case 'prev': tone(550, .08, 'sine', .05); setTimeout(() => tone(440, .08, 'sine', .05), 70); break;
-    case 'sub': tone(523, .12, 'sine', .08); setTimeout(() => tone(659, .12, 'sine', .08), 130); setTimeout(() => tone(784, .18, 'sine', .08), 260); break;
-    case 'tout': tone(300, .28, 'square', .04); setTimeout(() => tone(250, .38, 'square', .04), 280); break;
-    case 'res': tone(523, .18, 'sine', .08); setTimeout(() => tone(659, .18, 'sine', .08), 180); setTimeout(() => tone(784, .18, 'sine', .08), 360); setTimeout(() => tone(1047, .36, 'sine', .08), 540); break;
-  }
-}
-function toggleSound() {
-  snd = !snd;
-  localStorage.setItem('snd', snd ? '1' : '0');
-  updateSoundUI();
-}
-function updateSoundUI() {
-  const btn = document.getElementById('soundToggle');
-  const icon = document.getElementById('soundIcon');
-  btn.classList.toggle('active', snd);
-  if (!snd) {
-    icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-  } else {
-    icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>';
-  }
-}
-function loadSound() {
-  // Sound has been removed from the UI entirely — always off, and we
-  // skip touching #soundToggle/#soundIcon since those elements no longer exist.
-  snd = false;
-}
-
-/* ════════════════════════════════════════════
-   THEME
-════════════════════════════════════════════ */
-function toggleTheme() {
-  const h = document.documentElement;
-  const next = h.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  h.setAttribute('data-theme', next);
-  localStorage.setItem('th', next);
-  updateThemeIcon(next);
-}
-function updateThemeIcon(theme) {
-  const btn = document.getElementById('themeToggle');
-  const icon = btn.querySelector('svg');
-  if (theme === 'light') {
-    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-  } else {
-    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-  }
-}
-function loadTheme() {
-  const s = localStorage.getItem('th') || 'light';
-  document.documentElement.setAttribute('data-theme', s);
-  updateThemeIcon(s);
-}
-
-/* ════════════════════════════════════════════
-   HISTORY
-════════════════════════════════════════════ */
-// loadHist() no longer reads a local score history (per the platform's
-// "minimal student data" policy — scores are never persisted server-side
-// either). It now shows live attempts-remaining / premium status instead,
-// fetched from the account API in js/api.js.
-async function loadHist() {
-  const g = document.getElementById('historyGrid');
-  g.innerHTML = '<div class="history-empty">...جارٍ التحميل</div>';
-  try {
-    const status = await ExamAPI.getStatus(); // { attempts_used, premium }
-    const remaining = status.premium ? '∞' : Math.max(0, 2 - status.attempts_used);
-    g.innerHTML =
-      `<div class="history-item"><div class="history-icon icon-gold"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A5F22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div><div><div class="history-label">الحساب</div><div class="history-value en">${status.premium ? 'Premium' : 'Free'}</div></div></div>` +
-      `<div class="history-item"><div class="history-icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E6B4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.02"/></svg></div><div><div class="history-label">محاولات متبقية</div><div class="history-value en">${remaining}</div></div></div>` +
-      `<div class="history-item"><div class="history-icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6E8F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div><div class="history-label">محاولات مستخدمة</div><div class="history-value en">${status.attempts_used}</div></div></div>`;
-  } catch (e) {
-    g.innerHTML = '<div class="history-empty">تعذّر تحميل حالة الحساب</div>';
-  }
-}
-// saveHist intentionally removed: scores are graded and returned by the
-// server per-attempt and are not persisted anywhere (see exam-submit).
-
-/* ════════════════════════════════════════════
-   QUESTION SELECTION
-════════════════════════════════════════════ */
-function shuffle(a) {
-  const r = a.slice();
-  for (let i = r.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [r[i],r[j]] = [r[j],r[i]];
-  }
-  return r;
-}
-let currentAttemptId = null;
-
-// Fetches a freshly randomized 40-question exam from the server. The
-// server enforces the attempt limit and never sends correct answers —
-// qs[i].correctAnswer / .explanation are filled in only after submission,
-// from the grading response (see submitExam below).
-async function selectQs() {
-  const data = await ExamAPI.startExam(); // throws ExamAPI.LockedError if attempts are exhausted
-  currentAttemptId = data.attempt_id;
-  passage = data.passage;
-  qs = data.questions.map(q => ({
-    id: q.id, section: q.section, question: q.question, options: q.options,
-    correctAnswer: null, explanation: null
-  }));
-  uA = new Array(qs.length).fill(null);
-}
-
-/* ════════════════════════════════════════════
-   REGISTRATION → CONFIRM
-════════════════════════════════════════════ */
-// goToConfirm()/backToWelcome() removed — the name/university/college/
-// department step no longer exists. Students go straight from login to
-// the confirmPage (see the DOMContentLoaded handler below).
-
-/* ════════════════════════════════════════════
-   EXAM START
-════════════════════════════════════════════ */
-async function startExam() {
-  const btn = document.activeElement;
-  if (btn && btn.tagName === 'BUTTON') btn.disabled = true;
-  try {
-    await selectQs();
-  } catch (e) {
-    if (e.code === 'attempts_exhausted') {
-      window.location.href = '/upgrade.html';
+    if (mode === 'signin') {
+      await ExamAPI.signInWithPassword(email, password);
+    } else {
+      await ExamAPI.signUpWithPassword(email, password);
+      alert('تم إنشاء الحساب! يمكنك الآن تسجيل الدخول (قد تحتاج لتأكيد بريدك الإلكتروني أولاً حسب إعدادات المشروع).');
+      toggleMode();
+      btn.classList.remove('loading');
+      btn.disabled = false;
       return;
     }
-    if (e.code === 'unauthorized') {
-      window.location.href = '/login.html';
-      return;
-    }
-    alert('تعذّر بدء الامتحان، حاول مرة أخرى. ' + (e.message || ''));
-    if (btn) btn.disabled = false;
-    return;
-  }
-  document.getElementById('confirmPage').classList.add('hidden');
-  document.getElementById('examPage').classList.remove('hidden');
-  if (btn) btn.disabled = false; // re-enable for next time (e.g. after a retry)
-  started = true; sTime = new Date();
-  renderQ(); renderGrid(); updateProg(); startTimer();
-  window.scrollTo(0,0);
-}
-
-/* ════════════════════════════════════════════
-   TIMER
-════════════════════════════════════════════ */
-function startTimer() {
-  tI = setInterval(() => {
-    tR--;
-    updateTimer();
-    if (tR <= 0) { clearInterval(tI); playSound('tout'); submitExam(true) }
-  }, 1000);
-}
-function updateTimer() {
-  const m = Math.floor(tR/60), s = tR%60;
-  document.getElementById('timerDisplay').textContent =
-    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  const box = document.getElementById('timerBox');
-  box.classList.remove('warn','danger');
-  if (tR <= 300) box.classList.add('danger');
-  else if (tR <= 600) box.classList.add('warn');
-}
-
-/* ════════════════════════════════════════════
-   RENDER QUESTION
-════════════════════════════════════════════ */
-function renderQ() {
-  const q = qs[cQ];
-  const card = document.getElementById('questionCard');
-  if (!q) { card.innerHTML = '<div style="color:var(--text-muted);text-align:right">لا توجد أسئلة.</div>'; return }
-
-  const keys = ['A','B','C','D'];
-  let optHTML = '';
-  for (let i = 0; i < 4; i++) {
-    const sel = uA[cQ] === i ? 'selected' : '';
-    optHTML += `
-      <div class="option ${sel}" onclick="selAns(${i})">
-        <div class="option-key">${keys[i]}</div>
-        <div class="option-text">${q.options[i]}</div>
-        <div class="option-check">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-      </div>`;
-  }
-
-  let passageHTML = '';
-  if (q.section === 'Reading Comprehension') {
-    const readingQs = qs.filter(x => x.section === 'Reading Comprehension');
-    const posInSection = qs.slice(0, cQ).filter(x => x.section === 'Reading Comprehension').length + 1;
-    passageHTML = `
-      <div class="reading-passage">
-        <div class="passage-label">
-          <span class="passage-label-text"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> نص القراءة <span class="passage-progress en">${posInSection}/${readingQs.length}</span></span>
-          <button type="button" class="passage-toggle" onclick="togglePassage()">${passageOpen ? 'إخفاء النص ▲' : 'عرض النص ▼'}</button>
-        </div>
-        <div class="passage-body${passageOpen ? '' : ' collapsed'}">${passage}</div>
-      </div>`;
-  }
-
-  const badgeColor = sColors[q.section];
-  card.innerHTML = `
-    <div class="question-meta">
-      <div class="section-badge" style="background:${badgeColor}1a;border-color:${badgeColor}40;color:${badgeColor}">${sIcons[q.section]} ${sNames[q.section]}</div>
-      <div class="question-counter en">${cQ+1} / ${total()}</div>
-    </div>
-    ${passageHTML}
-    <div class="question-text">${q.question}</div>
-    <div class="options-list">${optHTML}</div>`;
-
-  // Keep the header's section indicator in sync with the question on screen.
-  const indicator = document.getElementById('sectionIndicator');
-  if (indicator) {
-    indicator.className = 'section-indicator show';
-    indicator.style.background = `${badgeColor}1a`;
-    indicator.style.borderColor = `${badgeColor}40`;
-    indicator.style.color = badgeColor;
-    indicator.innerHTML = `${sIcons[q.section]} ${sNames[q.section]}`;
-  }
-
-  // Nav buttons
-  const prev = document.getElementById('prevBtn');
-  const next = document.getElementById('nextBtn');
-  prev.disabled = cQ === 0;
-
-  if (cQ === total()-1) {
-    next.innerHTML = `<span>إنهاء</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7" transform="scale(-1,1) translate(-24,0)"/></svg>`;
-    next.className = 'btn btn-success';
-    next.onclick = showSubmitModal;
-  } else {
-    next.innerHTML = `<span>التالي</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>`;
-    next.className = 'btn btn-ghost';
-    next.onclick = goToNext;
-  }
-  renderGrid();
-}
-
-function selAns(i) {
-  playSound('sel'); uA[cQ] = i;
-  renderQ(); updateProg(); renderGrid();
-}
-function togglePassage() {
-  passageOpen = !passageOpen;
-  renderQ();
-}
-function goToNext() {
-  playSound('next');
-  if (cQ < total()-1) { cQ++; renderQ() } else showSubmitModal();
-}
-function goToPrevious() {
-  playSound('prev');
-  if (cQ > 0) { cQ--; renderQ() }
-}
-function goToQuestion(i) { cQ = i; renderQ() }
-
-function renderGrid() {
-  const g = document.getElementById('questionGrid');
-  let h = '';
-  for (let i = 0; i < total(); i++) {
-    let cls = 'grid-cell';
-    if (i === cQ) cls += ' current';
-    if (uA[i] !== null) cls += ' answered';
-    h += `<div class="${cls}" onclick="goToQuestion(${i})" title="سؤال ${i+1}">${i+1}</div>`;
-  }
-  g.innerHTML = h;
-}
-
-function updateProg() {
-  const answered = uA.filter(x => x !== null).length;
-  const pct = Math.round(answered / total() * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressValue').textContent = pct + '%';
-  let mh = '';
-  for (let i = 0; i < total(); i++) {
-    mh += `<div class="mini-segment ${uA[i] !== null ? 'done' : 'empty'}"></div>`;
-  }
-  document.getElementById('sectionMiniBar').innerHTML = mh;
-}
-
-/* ════════════════════════════════════════════
-   MODAL
-════════════════════════════════════════════ */
-function showSubmitModal() {
-  const answered = uA.filter(x => x !== null).length;
-  document.getElementById('modalAnswered').textContent = answered;
-  document.getElementById('modalUnanswered').textContent = total() - answered;
-  document.getElementById('submitModal').classList.remove('hidden');
-}
-function closeSubmitModal() {
-  document.getElementById('submitModal').classList.add('hidden');
-}
-
-/* ════════════════════════════════════════════
-   SUBMIT & RESULTS
-════════════════════════════════════════════ */
-async function submitExam(auto) {
-  if (submitted) return;
-  submitted = true;
-  if (tI) clearInterval(tI);
-  playSound('sub');
-
-  // Grading happens on the server against the questions actually served
-  // for this attempt — the browser only sends which option index was
-  // picked per question id, never a computed score.
-  const answers = qs.map((q, i) => ({ question_id: q.id, selected: uA[i] }));
-  let grade;
-  try {
-    grade = await ExamAPI.submitExam(currentAttemptId, answers);
+    window.location.href = getRedirect();
   } catch (e) {
-    submitted = false;
-    if (tR > 0 && !auto) startTimer();
-    alert('تعذّر إرسال الامتحان، تحقق من اتصالك وحاول مرة أخرى. ' + (e.message || ''));
-    return;
+    errorText.textContent = e.message || 'حدث خطأ، حاول مرة أخرى';
+    errorBox.classList.add('visible');
+    btn.classList.remove('loading');
+    btn.disabled = false;
   }
-
-  // Merge correct answers/explanations back into qs for the review page.
-  const byId = new Map(grade.review.map(r => [r.id, r]));
-  qs = qs.map(q => {
-    const r = byId.get(q.id);
-    return r ? { ...q, correctAnswer: r.correct_answer, explanation: r.explanation } : q;
-  });
-
-  const { correct, wrong, score, pct, passed, section_stats: ss } = grade;
-  res = {correct, wrong, score, pct, passed};
-
-  const end = new Date(), tk = Math.floor((end - sTime)/1000);
-  const tm = Math.floor(tk/60), ts = tk%60;
-
-  document.getElementById('examPage').classList.add('hidden');
-  document.getElementById('submitModal').classList.add('hidden');
-  document.getElementById('resultsPage').classList.remove('hidden');
-
-  document.getElementById('resStudentName').textContent = sInfo.name;
-  document.getElementById('resStudentMeta').textContent =
-    sInfo.university + ' · ' + sInfo.college + ' · ' + sInfo.department;
-
-  const ic = document.getElementById('resultIcon');
-  if (passed) {
-    ic.innerHTML = '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>';
-    ic.className = 'result-icon pass';
-    document.getElementById('resultTitle').textContent = 'تهانينا! لقد نجحت!';
-    document.getElementById('resultSubtitle').textContent = 'أداء رائع! لقد اجتزت الامتحان بنجاح.';
-  } else {
-    ic.innerHTML = '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.02"/></svg>';
-    ic.className = 'result-icon fail';
-    document.getElementById('resultTitle').textContent = 'حاول مرة أخرى!';
-    document.getElementById('resultSubtitle').textContent = 'لم تنجح هذه المرة. راجع دروسك وحاول مجدداً.';
-  }
-  document.getElementById('autoSubmitNote').classList.toggle('hidden', !auto);
-
-  document.getElementById('scoreNumber').textContent = score.toFixed(1);
-  document.getElementById('correctCount').textContent = correct;
-  document.getElementById('wrongCount').textContent = wrong;
-  document.getElementById('percentage').textContent = pct.toFixed(1) + '%';
-  document.getElementById('timeTaken').textContent =
-    String(tm).padStart(2,'0') + ':' + String(ts).padStart(2,'0');
-
-  // Animate ring — r=85, circumference = 2π×85 = 534.07
-  const circ = document.getElementById('scoreCircleProgress');
-  setTimeout(() => {
-    circ.style.strokeDashoffset = 534.07 * (1 - pct/100);
-  }, 300);
-
-  // Section performance cards
-  const entries = Object.entries(ss);
-  let spH = '';
-  for (let i = 0; i < entries.length; i++) {
-    const [sec, st] = entries[i];
-    const p = Math.round(st.c / st.t * 100);
-    const col = sColors[sec];
-    spH += `
-      <div class="section-card">
-        <div class="section-card-top">
-          <div class="section-name">${sIcons[sec]} ${sNames[sec]}</div>
-          <div class="section-score-chip">${st.c}/${st.t}</div>
-        </div>
-        <div class="section-bar">
-          <div class="section-fill" id="secbar${i}" style="width:0%;background:${col}"></div>
-        </div>
-      </div>`;
-  }
-  document.getElementById('sectionPerformance').innerHTML = spH;
-  setTimeout(() => {
-    for (let i = 0; i < entries.length; i++) {
-      const st = entries[i][1];
-      document.getElementById('secbar'+i).style.width = (st.c/st.t*100) + '%';
-    }
-  }, 700);
-
-  setTimeout(() => playSound('res'), 800);
-  window.scrollTo(0,0);
 }
 
-/* ════════════════════════════════════════════
-   REVIEW
-════════════════════════════════════════════ */
-function showReviewPage() {
-  document.getElementById('resultsPage').classList.add('hidden');
-  document.getElementById('reviewPage').classList.remove('hidden');
-  document.getElementById('reviewCorrect').textContent = res.correct;
-  document.getElementById('reviewWrong').textContent = res.wrong;
-  document.getElementById('reviewScore').textContent = res.score.toFixed(1);
-
-  const keys = ['A','B','C','D'];
-  let h = '';
-  for (let i = 0; i < total(); i++) {
-    const q = qs[i], ua = uA[i], ca = q.correctAnswer;
-    const isCor = ua === ca, isUna = ua === null;
-    const cls = isCor ? 'correct' : (isUna ? 'unanswered' : 'wrong');
-    const badge = isCor
-      ? '<div class="badge badge-success"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg> صحيحة</div>'
-      : (isUna ? '<div class="badge badge-muted"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg> لم يُجب</div>' : '<div class="badge badge-danger"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> خاطئة</div>');
-
-    let optH = '';
-    for (let j = 0; j < 4; j++) {
-      let optCls = 'review-option';
-      let lbl = keys[j];
-      if (j === ca) { optCls += ' correct-answer'; lbl += ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><polyline points="20 6 9 17 4 12"/></svg>' }
-      else if (j === ua && !isCor) { optCls += ' wrong-selected'; lbl += ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' }
-      optH += `<div class="${optCls}"><span class="review-opt-key">${lbl}</span><span>${q.options[j]}</span></div>`;
-    }
-
-    h += `
-      <div class="review-question ${cls}">
-        <div class="review-q-header">
-          <span class="review-q-number">سؤال ${i+1} — ${sNames[q.section]}</span>
-          ${badge}
-        </div>
-        <div class="review-q-text">${q.question}</div>
-        <div class="review-options">${optH}</div>
-        <div class="review-explanation">
-          <strong><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> الشرح:</strong>${q.explanation || 'سيُضاف الشرح لاحقاً.'}
-        </div>
-      </div>`;
-  }
-  document.getElementById('reviewQuestions').innerHTML = h;
-  window.scrollTo(0,0);
-}
-
-function backToResults() {
-  document.getElementById('reviewPage').classList.add('hidden');
-  document.getElementById('resultsPage').classList.remove('hidden');
-}
-
-async function restartExam() {
-  playSound('next');
-
-  // Free users only get one attempt — send them to the payment page
-  // instead of letting them retry.
-  let status;
-  try { status = await ExamAPI.getStatus(); } catch { status = null; }
-  if (!status || !status.premium) {
-    window.location.href = '/upgrade.html';
-    return;
-  }
-
-  resetState();
-  ['resultsPage','reviewPage','examPage','confirmPage'].forEach(id =>
-    document.getElementById(id).classList.add('hidden'));
-  document.getElementById('submitModal').classList.add('hidden');
-  document.getElementById('confirmPage').classList.remove('hidden');
-  const startBtn = document.getElementById('btnStartExam');
-  if (startBtn) startBtn.disabled = false; // guard against it ever getting stuck
-  document.getElementById('timerDisplay').textContent = '60:00';
-  document.getElementById('timerBox').classList.remove('warn','danger');
-  document.getElementById('autoSubmitNote').classList.add('hidden');
-  const sc = document.getElementById('scoreCircleProgress');
-  if (sc) sc.style.strokeDashoffset = '534.07';
-  window.scrollTo(0,0);
-}
-
-/* ════════════════════════════════════════════
-   KEYBOARD NAVIGATION
-════════════════════════════════════════════ */
-document.addEventListener('keydown', e => {
-  if (!started || submitted) return;
-  if (e.key === 'ArrowLeft') { playSound('next'); goToNext() }
-  if (e.key === 'ArrowRight') { playSound('prev'); goToPrevious() }
-  if (e.key >= '1' && e.key <= '4') { playSound('sel'); selAns(parseInt(e.key)-1) }
-  if (e.key === 'Enter' && cQ === total()-1) showSubmitModal();
-  if (e.key === 'Escape') closeSubmitModal();
-});
-
-window.addEventListener('beforeunload', e => {
-  if (started && !submitted) {
-    e.preventDefault();
-    e.returnValue = 'أنت في منتصف الاختبار.';
-  }
-});
-
-/* ════════════════════════════════════════════
-   RIPPLE EFFECT
-════════════════════════════════════════════ */
-document.addEventListener('click', e => {
-  const btn = e.target.closest('.btn');
-  if (!btn) return;
-  const r = document.createElement('span');
-  r.className = 'ripple';
-  const rect = btn.getBoundingClientRect();
-  const sz = Math.max(rect.width, rect.height);
-  r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
-  btn.appendChild(r);
-  setTimeout(() => r.remove(), 600);
-});
-
-/* ════════════════════════════════════════════
-   INIT
-════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', async () => {
-  loadTheme();
-  loadSound();
-
-  // Auth guard: this page requires a signed-in user. ExamAPI.requireSession
-  // redirects to /login.html if there's no valid Supabase session.
-  const ok = await ExamAPI.requireSession();
-  if (!ok) return;
-
-  // (top-left floating sign-out button removed — the sign-out button next
-  // to "ابدأ الامتحان" on the confirm page is the only one now)
-
-  // Skip the name/university/college registration page entirely — go
-  // straight to the exam instructions screen, using the signed-in email
-  // as the display name/greeting.
+(async () => {
   const session = await ExamAPI.getSession();
-  const email = session?.user?.email || 'Student';
-  sInfo = { name: email, university: '', college: '', department: '' };
-  document.getElementById('confirmName').textContent = email;
-  document.getElementById('confirmPage').classList.remove('hidden');
-
-  // If we just came back from a successful Stripe checkout, let the user
-  // know their premium unlock is active (webhook grants it asynchronously,
-  // usually within a couple of seconds).
-  if (new URLSearchParams(location.search).get('premium') === 'success') {
-    setTimeout(() => alert('تم تفعيل الاشتراك المميز بنجاح! يمكنك الآن أداء عدد غير محدود من المحاولات.'), 400);
-    history.replaceState({}, '', location.pathname);
-  }
-});
+  if (session) window.location.href = getRedirect();
+})();
 </script>
 </body>
 </html>
