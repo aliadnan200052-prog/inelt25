@@ -330,7 +330,16 @@ body { background: var(--surface-base); }
   line-height: 1.3;
 }
 
-/* Section chip — its colours are injected inline per section. */
+/* Section chip — its colours are injected inline per section.
+   Those hues are tuned for the light theme, so in dark mode the tint and
+   border still carry the section identity while the label takes a
+   readable foreground (inline styles can only be beaten with !important). */
+[data-theme="dark"] .section-indicator,
+[data-theme="dark"] .section-badge { color: var(--text-primary) !important; }
+/* Same reason: lift the injected bar colour instead of replacing it, so
+   each section keeps its hue and clears 3:1 against the dark track. */
+[data-theme="dark"] .section-fill { filter: brightness(1.45) saturate(1.05); }
+
 .section-indicator {
   display: none;
   align-items: center;

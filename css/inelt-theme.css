@@ -59,12 +59,12 @@
   --accent-border:   rgba(180,121,28,.26);
 
   /* ── Semantic ── */
-  --success:         #177A54;
-  --success-dim:     rgba(23,122,84,.09);
-  --success-border:  rgba(23,122,84,.24);
-  --danger:          #C0384F;
-  --danger-dim:      rgba(192,56,79,.08);
-  --danger-border:   rgba(192,56,79,.22);
+  --success:         #136A49;
+  --success-dim:     rgba(19,106,73,.09);
+  --success-border:  rgba(19,106,73,.24);
+  --danger:          #B02F46;
+  --danger-dim:      rgba(176,47,70,.08);
+  --danger-border:   rgba(176,47,70,.22);
   --warn:            #8F5F11;
   --warn-bright:     #C9922E;
   --warn-dim:        rgba(180,121,28,.10);
@@ -185,7 +185,7 @@
 
   --text-primary:   #E8EFEA;
   --text-secondary: #9AAAA0;
-  --text-muted:     #7E8D84;   /* 5.4:1 on --surface-base */
+  --text-muted:     #8A9A90;   /* 6.4:1 on --surface-base, 4.8:1 on --surface-high */
   --text-inverse:   #0D1310;
   --text-link:      #6FD1AB;
 
