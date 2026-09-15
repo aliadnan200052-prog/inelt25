@@ -573,8 +573,9 @@ body { background: var(--surface-base); }
   flex: 1;
   min-width: 0;
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  /* Always flush left, whatever language the option is written in.
+     Bidi still orders Arabic glyphs correctly within the line. */
+  text-align: left;
   font-size: var(--fs-sm);
   line-height: 1.65;
   color: var(--text-primary);
