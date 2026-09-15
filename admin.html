@@ -5,34 +5,333 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>INELT Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%231F7A5C'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/inelt-theme.css">
 <style>
-  :root{--bg:#0A120E;--card:#0F1913;--border:rgba(255,255,255,.08);--text:#EDF3EF;--muted:#93A69B;--accent:#3FA579;--accent-strong:#2E8563;--danger:#E0778C;}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;padding:24px;max-width:1100px;margin-inline:auto;}
-  h1{font-size:22px;margin-bottom:4px;}
-  .muted{color:var(--muted);font-size:13px;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0;}
-  .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
-  .stat .n{font-size:26px;font-weight:800;}
-  .stat .l{font-size:12px;color:var(--muted);}
-  section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
-  section h2{font-size:15px;margin:0 0 14px;}
-  input[type=file]{color:var(--text);}
-  button{padding:9px 16px;border-radius:10px;border:none;background:var(--accent-strong);color:#fff;font-weight:600;cursor:pointer;font-size:13px;}
-  button.secondary{background:transparent;border:1px solid var(--border);color:var(--text);}
-  button.danger{background:transparent;border:1px solid rgba(224,119,140,.4);color:var(--danger);}
-  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;}
-  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);}
-  th{color:var(--muted);font-weight:600;font-size:12px;}
-  .row-actions{display:flex;gap:6px;}
-  select,input[type=text],textarea{background:#0A120E;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px;font-size:13px;}
-  #importResult{margin-top:12px;font-size:13px;white-space:pre-wrap;}
-  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:rgba(63,165,121,.14);color:var(--accent);}
+/* =====================================================================
+   INELT · Admin — design system v2 ("Quiet Academic")
+   Tokens/primitives come from /css/inelt-theme.css. This page stays
+   English/LTR; only its appearance changed.
+   ===================================================================== */
+
+body {
+  font-family: var(--font-en);
+  line-height: 1.6;
+  padding: 0;
+}
+
+.admin-shell {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: var(--sp-8) var(--sp-6) var(--sp-10);
+}
+
+/* ── Page header ───────────────────────────────────────────────────── */
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-6);
+  margin-bottom: var(--sp-7);
+  border-bottom: 1px solid var(--border);
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+.admin-mark {
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--primary-strong);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--fs-xs);
+  letter-spacing: .06em;
+}
+h1 {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.muted {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+/* Access check — a live state rather than a blank page. */
+#whoami:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 3px;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface-high);
+  border: 1px solid var(--border);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+  animation: whoami-pulse 1.6s var(--ease) infinite;
+}
+@keyframes whoami-pulse { 0%,100% { opacity: 1 } 50% { opacity: .55 } }
+
+/* ── Stat cards ────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-7);
+}
+.stat {
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur-2) var(--ease),
+              transform var(--dur-2) var(--ease),
+              box-shadow var(--dur-2) var(--ease);
+}
+.stat:hover {
+  border-color: var(--primary-border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.stat .n {
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.stat .l {
+  margin-top: 4px;
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+}
+/* First card is the total — mark it as the primary figure. */
+.stat:first-child { border-color: var(--primary-border); background: var(--primary-soft); }
+.stat:first-child .n { color: var(--primary-strong); }
+
+/* ── Sections ──────────────────────────────────────────────────────── */
+section {
+  padding: var(--sp-6);
+  margin-bottom: var(--sp-6);
+  border-radius: var(--r-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+section h2 {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+}
+section > .muted { display: block; margin-bottom: var(--sp-5); max-width: 68ch; }
+
+/* ── Controls ──────────────────────────────────────────────────────── */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  background: var(--primary-strong);
+  color: var(--on-primary);
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--dur-2) var(--ease),
+              border-color var(--dur-2) var(--ease),
+              color var(--dur-2) var(--ease),
+              transform var(--dur-1) var(--ease);
+}
+button:hover { background: var(--primary-deep); transform: translateY(-1px); }
+button:active { transform: translateY(0) scale(.98); }
+
+button.secondary {
+  background: var(--surface-raised);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+button.secondary:hover {
+  background: var(--surface-high);
+  border-color: var(--primary-border);
+  color: var(--primary-strong);
+}
+
+button.danger {
+  background: var(--danger-dim);
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+button.danger:hover { background: var(--danger); border-color: transparent; color: #fff; }
+
+select,
+input[type=text],
+textarea {
+  padding: 8px 11px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font-family: var(--font-en);
+  font-size: var(--fs-xs);
+  transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+select:focus,
+input[type=text]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-dim);
+}
+
+input[type=file] {
+  max-width: 100%;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--border-strong);
+  background: var(--surface-overlay);
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+input[type=file]:hover { border-color: var(--primary-border); background: var(--primary-dim); }
+input[type=file]::file-selector-button {
+  margin-inline-end: 10px;
+  padding: 6px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xs);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font-family: var(--font-en);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Import row + result ───────────────────────────────────────────── */
+.import-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+#importResult:not(:empty) {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-sm);
+  background: var(--surface-overlay);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  line-height: 1.8;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+
+/* ── Filter bar ────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  margin-bottom: var(--sp-5);
+}
+.filter-bar .spacer { flex: 1; }
+
+/* ── Table ─────────────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+th, td {
+  text-align: left;
+  padding: 11px var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-high);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+tbody tr { transition: background-color var(--dur-1) var(--ease); }
+tbody tr:hover { background: var(--surface-overlay); }
+tbody tr:last-child td { border-bottom: none; }
+td { color: var(--text-primary); line-height: 1.7; }
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+.row-actions button { padding: 6px 11px; font-size: var(--fs-2xs); }
+
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--primary-dim);
+  border: 1px solid var(--primary-border);
+  color: var(--primary-strong);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Pagination ────────────────────────────────────────────────────── */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+#pageLabel { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .admin-shell { padding: var(--sp-6) var(--sp-4) var(--sp-9); }
+  section { padding: var(--sp-5); border-radius: var(--r-md); }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+  .stat { padding: var(--sp-4); }
+  .stat .n { font-size: var(--fs-2xl); }
+  #pageLabel { margin-inline-start: 0; width: 100%; }
+}
 </style>
 </head>
 <body>
-<h1>INELT — Admin Dashboard</h1>
-<p class="muted" id="whoami">checking access…</p>
+<div class="admin-shell">
+
+<header class="admin-header">
+  <div class="admin-mark">IN</div>
+  <div>
+    <h1>INELT — Admin Dashboard</h1>
+    <p class="muted" id="whoami">checking access…</p>
+  </div>
+</header>
 
 <div id="app" style="display:none">
   <div class="grid" id="statsGrid"></div>
@@ -40,14 +339,16 @@
   <section>
     <h2>Bulk import questions</h2>
     <p class="muted">Accepts .xlsx, .csv, or .json. Duplicates (same section + question + options) are skipped automatically.</p>
-    <input type="file" id="fileInput" accept=".xlsx,.csv,.json">
-    <button onclick="doImport()">Upload &amp; Import</button>
+    <div class="import-row">
+      <input type="file" id="fileInput" accept=".xlsx,.csv,.json">
+      <button onclick="doImport()">Upload &amp; Import</button>
+    </div>
     <div id="importResult"></div>
   </section>
 
   <section>
     <h2>Question bank</h2>
-    <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+    <div class="filter-bar">
       <select id="sectionFilter" onchange="loadList()">
         <option value="">All sections</option>
         <option>Reading Comprehension</option>
@@ -55,19 +356,24 @@
         <option>Functions</option>
         <option>Conversation</option>
       </select>
+      <span class="spacer"></span>
       <button class="secondary" onclick="ExamAPI.adminExportUrl('json')">Export JSON</button>
       <button class="secondary" onclick="ExamAPI.adminExportUrl('csv')">Export CSV</button>
     </div>
-    <table>
-      <thead><tr><th>Section</th><th>Question</th><th>Options</th><th>Correct</th><th></th></tr></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-    <div style="margin-top:10px;display:flex;gap:8px;">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>Question</th><th>Options</th><th>Correct</th><th></th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="pager">
       <button class="secondary" onclick="changePage(-1)">← Prev</button>
       <button class="secondary" onclick="changePage(1)">Next →</button>
       <span class="muted" id="pageLabel"></span>
     </div>
   </section>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
