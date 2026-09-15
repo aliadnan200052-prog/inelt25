@@ -544,6 +544,7 @@ body { background: var(--surface-base); }
   border: 1.5px solid var(--border);
   background: var(--surface-raised);
   cursor: pointer;
+  direction: ltr;               /* key on the left, text reads from the left */
   transition: border-color var(--dur-2) var(--ease),
               background-color var(--dur-2) var(--ease),
               transform var(--dur-1) var(--ease);
@@ -569,7 +570,7 @@ body { background: var(--surface-base); }
               border-color var(--dur-2) var(--ease);
 }
 .option-text {
-  flex: 0 1 auto;
+  flex: 1;
   min-width: 0;
   font-family: var(--font-mixed);
   unicode-bidi: plaintext;
@@ -1078,14 +1079,14 @@ body { background: var(--surface-base); }
   border: 1px solid var(--border);
   background: var(--surface-overlay);
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
   font-size: var(--fs-xs);
   line-height: 1.65;
   color: var(--text-secondary);
 }
 .review-opt-key {
   flex-shrink: 0;
+  unicode-bidi: plaintext;
   display: inline-flex;
   align-items: center;
   gap: 4px;
