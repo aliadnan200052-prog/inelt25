@@ -524,11 +524,12 @@ body { background: var(--surface-base); }
   line-height: 1.85;
   color: var(--text-primary);
   margin-bottom: var(--sp-6);
-  /* Usually an English sentence inside an RTL page, but not guaranteed:
-     let the browser resolve direction from the content itself. */
+  /* Always flush left, matching the answer options, whatever language
+     the question is written in. Bidi still orders Arabic glyphs
+     correctly within the line. */
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
+  text-align: left;
 }
 .options-list {
   display: flex;
@@ -544,6 +545,7 @@ body { background: var(--surface-base); }
   border: 1.5px solid var(--border);
   background: var(--surface-raised);
   cursor: pointer;
+  direction: ltr;               /* key on the left, text reads from the left */
   transition: border-color var(--dur-2) var(--ease),
               background-color var(--dur-2) var(--ease),
               transform var(--dur-1) var(--ease);
@@ -569,11 +571,12 @@ body { background: var(--surface-base); }
               border-color var(--dur-2) var(--ease);
 }
 .option-text {
-  flex: 0 1 auto;
+  flex: 1;
   min-width: 0;
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  /* Always flush left, whatever language the option is written in.
+     Bidi still orders Arabic glyphs correctly within the line. */
+  text-align: left;
   font-size: var(--fs-sm);
   line-height: 1.65;
   color: var(--text-primary);
@@ -1055,8 +1058,8 @@ body { background: var(--surface-base); }
 }
 .review-q-text {
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
+  text-align: left;
   font-size: var(--fs-md);
   font-weight: 600;
   line-height: 1.75;
@@ -1078,14 +1081,14 @@ body { background: var(--surface-base); }
   border: 1px solid var(--border);
   background: var(--surface-overlay);
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
   font-size: var(--fs-xs);
   line-height: 1.65;
   color: var(--text-secondary);
 }
 .review-opt-key {
   flex-shrink: 0;
+  unicode-bidi: plaintext;
   display: inline-flex;
   align-items: center;
   gap: 4px;
