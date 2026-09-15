@@ -524,11 +524,11 @@ body { background: var(--surface-base); }
   line-height: 1.85;
   color: var(--text-primary);
   margin-bottom: var(--sp-6);
-  /* Questions are English sentences inside an RTL page. */
-  font-family: var(--font-en);
-  direction: ltr;
-  text-align: left;
-  unicode-bidi: isolate;
+  /* Usually an English sentence inside an RTL page, but not guaranteed:
+     let the browser resolve direction from the content itself. */
+  font-family: var(--font-mixed);
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 .options-list {
   display: flex;
@@ -544,8 +544,6 @@ body { background: var(--surface-base); }
   border: 1.5px solid var(--border);
   background: var(--surface-raised);
   cursor: pointer;
-  direction: ltr;               /* option text is English */
-  text-align: left;
   transition: border-color var(--dur-2) var(--ease),
               background-color var(--dur-2) var(--ease),
               transform var(--dur-1) var(--ease);
@@ -571,15 +569,18 @@ body { background: var(--surface-base); }
               border-color var(--dur-2) var(--ease);
 }
 .option-text {
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
-  font-family: var(--font-en);
+  font-family: var(--font-mixed);
+  unicode-bidi: plaintext;
+  text-align: start;
   font-size: var(--fs-sm);
   line-height: 1.65;
   color: var(--text-primary);
 }
 .option-check {
   flex-shrink: 0;
+  margin-inline-start: auto;
   width: 21px; height: 21px;
   display: grid; place-items: center;
   border-radius: 50%;
@@ -1053,10 +1054,9 @@ body { background: var(--surface-base); }
   color: var(--text-secondary);
 }
 .review-q-text {
-  font-family: var(--font-en);
-  direction: ltr;
-  text-align: left;
-  unicode-bidi: isolate;
+  font-family: var(--font-mixed);
+  unicode-bidi: plaintext;
+  text-align: start;
   font-size: var(--fs-md);
   font-weight: 600;
   line-height: 1.75;
@@ -1077,9 +1077,9 @@ body { background: var(--surface-base); }
   border-radius: var(--r-sm);
   border: 1px solid var(--border);
   background: var(--surface-overlay);
-  font-family: var(--font-en);
-  direction: ltr;
-  text-align: left;
+  font-family: var(--font-mixed);
+  unicode-bidi: plaintext;
+  text-align: start;
   font-size: var(--fs-xs);
   line-height: 1.65;
   color: var(--text-secondary);

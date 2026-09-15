@@ -125,6 +125,9 @@
   --font-ar: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
   --font-en: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  /* Question/option text is English on an Arabic page, but may contain
+     Arabic. Latin glyphs take Inter, Arabic glyphs fall back to Plex. */
+  --font-mixed: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
 
   --fs-2xs: .75rem;   /* 12 */
   --fs-xs:  .8125rem; /* 13 */
