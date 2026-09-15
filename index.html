@@ -524,11 +524,12 @@ body { background: var(--surface-base); }
   line-height: 1.85;
   color: var(--text-primary);
   margin-bottom: var(--sp-6);
-  /* Usually an English sentence inside an RTL page, but not guaranteed:
-     let the browser resolve direction from the content itself. */
+  /* Always flush left, matching the answer options, whatever language
+     the question is written in. Bidi still orders Arabic glyphs
+     correctly within the line. */
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
+  text-align: left;
 }
 .options-list {
   display: flex;
@@ -1057,8 +1058,8 @@ body { background: var(--surface-base); }
 }
 .review-q-text {
   font-family: var(--font-mixed);
-  unicode-bidi: plaintext;
-  text-align: start;
+  direction: ltr;
+  text-align: left;
   font-size: var(--fs-md);
   font-weight: 600;
   line-height: 1.75;
