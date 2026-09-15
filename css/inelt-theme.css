@@ -53,20 +53,22 @@
   --secondary-dim:   rgba(43,92,138,.08);
   --secondary-border:rgba(43,92,138,.22);
 
-  --accent:          #B4791C;   /* gold — premium only, kept scarce */
-  --accent-dim:      rgba(180,121,28,.09);
-  --accent-border:   rgba(180,121,28,.24);
+  --accent:          #8F5F11;   /* gold — premium only, kept scarce (AA as text) */
+  --accent-bright:   #C9922E;   /* decorative fills/icons only, never small text */
+  --accent-dim:      rgba(180,121,28,.10);
+  --accent-border:   rgba(180,121,28,.26);
 
   /* ── Semantic ── */
-  --success:         #1E8F63;
-  --success-dim:     rgba(30,143,99,.09);
-  --success-border:  rgba(30,143,99,.24);
+  --success:         #177A54;
+  --success-dim:     rgba(23,122,84,.09);
+  --success-border:  rgba(23,122,84,.24);
   --danger:          #C0384F;
   --danger-dim:      rgba(192,56,79,.08);
   --danger-border:   rgba(192,56,79,.22);
-  --warn:            #B4791C;
-  --warn-dim:        rgba(180,121,28,.09);
-  --warn-border:     rgba(180,121,28,.24);
+  --warn:            #8F5F11;
+  --warn-bright:     #C9922E;
+  --warn-dim:        rgba(180,121,28,.10);
+  --warn-border:     rgba(180,121,28,.26);
   --info:            #2B6CB0;
   --info-dim:        rgba(43,108,176,.08);
   --info-border:     rgba(43,108,176,.22);
@@ -81,8 +83,8 @@
 
   /* ── Text ── */
   --text-primary:   var(--n-900);
-  --text-secondary: var(--n-500);
-  --text-muted:     var(--n-400);
+  --text-secondary: var(--n-600);  /* 7.4:1 on paper */
+  --text-muted:     #5F6B64;       /* 5.1:1 on paper — AA at 12px */
   --text-inverse:   #FFFFFF;
   --text-link:      var(--green-600);
 
@@ -156,6 +158,7 @@
   --secondary-border:rgba(127,179,222,.28);
 
   --accent:         #E0AC5A;
+  --accent-bright:  #E8BC74;
   --accent-dim:     rgba(224,172,90,.12);
   --accent-border:  rgba(224,172,90,.28);
 
@@ -166,6 +169,7 @@
   --danger-dim:     rgba(232,130,150,.12);
   --danger-border:  rgba(232,130,150,.26);
   --warn:           #E0AC5A;
+  --warn-bright:    #E8BC74;
   --warn-dim:       rgba(224,172,90,.12);
   --warn-border:    rgba(224,172,90,.28);
   --info:           #7FB3DE;
@@ -181,7 +185,7 @@
 
   --text-primary:   #E8EFEA;
   --text-secondary: #9AAAA0;
-  --text-muted:     #6B7A71;
+  --text-muted:     #7E8D84;   /* 5.4:1 on --surface-base */
   --text-inverse:   #0D1310;
   --text-link:      #6FD1AB;
 
