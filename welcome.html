@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INELT — الامتحان الوطني العراقي للغة الإنكليزية. امتحان تجريبي يحاكي الامتحان الأصلي.">
+<meta name="theme-color" content="#488A70">
+<title>INELT · الامتحان الوطني الانكليزي</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23488A70'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/inelt-theme.css">
+<style>
+/* =====================================================================
+   INELT · Welcome — the entry screen for a visitor who is not signed in.
+   Deliberately static: no script, no Supabase, no network call beyond
+   the fonts and the shared stylesheet, so it paints instantly on a slow
+   connection. Both links hand off to /login.html, which already sends a
+   signed-in visitor straight on to the exam.
+   ===================================================================== */
+
+.welcome-shell {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  padding: var(--sp-9) var(--sp-6) var(--sp-10);
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Soft green wave anchored to the bottom of the screen. */
+.welcome-wave {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 30vh;
+  min-height: 170px;
+  z-index: 0;
+  pointer-events: none;
+}
+.welcome-wave svg { width: 100%; height: 100%; display: block; }
+
+.welcome-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: rise-in var(--dur-4) var(--ease-entrance) both;
+}
+
+/* ── Wordmark ───────────────────────────────────────────────────────── */
+.welcome-logo {
+  position: relative;
+  font-family: var(--font-en);
+  font-size: clamp(2.6rem, 13vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1;
+  direction: ltr;
+  unicode-bidi: isolate;
+  color: var(--green-700);
+  margin-bottom: var(--sp-4);
+}
+.welcome-logo .num { color: var(--green-300); }
+/* The three little strokes above the wordmark, as in the design. */
+.logo-spark {
+  position: absolute;
+  top: -12px;
+  inset-inline-end: -26px;
+  width: 30px; height: 30px;
+  stroke: var(--green-300);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.welcome-title {
+  font-size: clamp(1.15rem, 5.4vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+}
+.welcome-tagline {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  letter-spacing: .01em;
+}
+
+/* ── Illustration ───────────────────────────────────────────────────── */
+.welcome-art {
+  width: 100%;
+  max-width: 320px;
+  margin: var(--sp-7) 0 var(--sp-6);
+  animation: rise-in var(--dur-4) var(--ease-entrance) both;
+  animation-delay: 90ms;
+}
+.welcome-art svg { width: 100%; height: auto; display: block; }
+
+.welcome-note {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-7);
+  line-height: 1.8;
+}
+
+/* ── Actions ────────────────────────────────────────────────────────── */
+.welcome-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: 17px 28px;
+  border-radius: var(--r-pill);
+  background: var(--primary-strong);
+  color: var(--on-primary);
+  font-family: var(--font-ar);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  box-shadow: 0 8px 22px var(--primary-glow);
+  transition: background-color var(--dur-2) var(--ease),
+              box-shadow var(--dur-2) var(--ease),
+              transform var(--dur-1) var(--ease);
+}
+.welcome-cta:hover {
+  background: var(--primary-deep);
+  box-shadow: 0 12px 28px var(--primary-glow);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.welcome-cta:active { transform: translateY(0) scale(.99); }
+.welcome-cta svg {
+  width: 17px; height: 17px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* The chevron is drawn pointing right; mirror it for the RTL layout. */
+  transform: scaleX(-1);
+}
+
+.welcome-signin {
+  display: inline-block;
+  margin-top: var(--sp-6);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+.welcome-signin:hover {
+  color: var(--primary-deep);
+  background: var(--primary-dim);
+  text-decoration: none;
+}
+
+/* ── Larger screens: the design is a phone screen, so it stays a
+      centred column and simply gets more breathing room. ───────────── */
+@media (min-width: 768px) {
+  .welcome-inner { max-width: 460px; }
+  .welcome-art { max-width: 360px; }
+  .welcome-wave { height: 26vh; }
+}
+@media (min-height: 900px) and (min-width: 768px) {
+  .welcome-art { max-width: 400px; }
+}
+@media (max-height: 700px) {
+  .welcome-art { max-width: 210px; margin: var(--sp-5) 0 var(--sp-4); }
+  .welcome-note { margin-bottom: var(--sp-5); }
+}
+</style>
+</head>
+<body>
+
+<div class="welcome-shell">
+
+  <!-- Bottom wave -->
+  <div class="welcome-wave" aria-hidden="true">
+    <svg viewBox="0 0 400 200" preserveAspectRatio="none">
+      <path d="M0 78 C 70 28, 150 118, 230 84 C 300 54, 350 84, 400 66 L400 200 L0 200 Z"
+            fill="var(--green-100)" opacity=".85"/>
+      <path d="M0 116 C 80 74, 160 150, 250 118 C 320 94, 360 116, 400 104 L400 200 L0 200 Z"
+            fill="var(--green-200)" opacity=".45"/>
+    </svg>
+  </div>
+
+  <div class="welcome-inner">
+
+    <div class="welcome-logo">
+      Inelt<span class="num">25</span>
+      <svg class="logo-spark" viewBox="0 0 30 30" aria-hidden="true">
+        <path d="M4 16 L1 19"/>
+        <path d="M12 8 L11 3"/>
+        <path d="M19 12 L23 9"/>
+      </svg>
+    </div>
+
+    <h1 class="welcome-title">الامتحان الوطني الانكليزي</h1>
+    <p class="welcome-tagline">تدرب .. راجع .. حقق هدفك</p>
+
+    <!-- Books, answer sheet and pencil -->
+    <div class="welcome-art" aria-hidden="true">
+      <svg viewBox="0 0 320 240" fill="none">
+        <!-- ground shadow -->
+        <ellipse cx="165" cy="209" rx="104" ry="11" fill="#E8DFC9" opacity=".55"/>
+
+        <!-- answer sheet -->
+        <g transform="rotate(-5 176 104)">
+          <rect x="118" y="34" width="116" height="140" rx="12"
+                fill="#FFFFFF" stroke="#8FBFA4" stroke-width="3"/>
+          <circle cx="146" cy="72" r="7.5" stroke="#8FBFA4" stroke-width="3"/>
+          <circle cx="172" cy="72" r="7.5" stroke="#8FBFA4" stroke-width="3"/>
+          <circle cx="198" cy="72" r="7.5" fill="#6FA98B"/>
+          <rect x="138" y="100" width="76" height="6" rx="3" fill="#D8E8DD"/>
+          <rect x="138" y="118" width="58" height="6" rx="3" fill="#D8E8DD"/>
+          <rect x="138" y="136" width="68" height="6" rx="3" fill="#D8E8DD"/>
+        </g>
+
+        <!-- lower book (blue) -->
+        <path d="M58 182 h122 a9 9 0 0 1 9 9 v10 a9 9 0 0 1 -9 9 H58 a9 9 0 0 1 -9 -9 v-10 a9 9 0 0 1 9 -9 z"
+              fill="#C9DCEF" stroke="#7FA3C4" stroke-width="3"/>
+        <path d="M58 182 v28" stroke="#7FA3C4" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- upper book (green) -->
+        <path d="M70 150 h116 a9 9 0 0 1 9 9 v12 a9 9 0 0 1 -9 9 H70 a9 9 0 0 1 -9 -9 v-12 a9 9 0 0 1 9 -9 z"
+              fill="#8CC3A5" stroke="#4F8F6F" stroke-width="3"/>
+        <path d="M70 150 v30" stroke="#4F8F6F" stroke-width="3" stroke-linecap="round"/>
+        <path d="M84 165 h84" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".75"/>
+
+        <!-- pencil -->
+        <g transform="rotate(20 250 120)">
+          <rect x="242" y="62" width="17" height="94" rx="4" fill="#F4DCA6" stroke="#C6A867" stroke-width="2.6"/>
+          <path d="M242 156 l8.5 18 l8.5 -18 z" fill="#E8C98C" stroke="#C6A867" stroke-width="2.6" stroke-linejoin="round"/>
+          <path d="M246.5 170 l4 8 l4 -8 z" fill="#5C5348"/>
+          <rect x="242" y="62" width="17" height="15" rx="4" fill="#E79C8E" stroke="#C6A867" stroke-width="2.6"/>
+        </g>
+
+        <!-- accent strokes -->
+        <g stroke="#8CC3A5" stroke-width="3.4" stroke-linecap="round">
+          <path d="M42 96 l-13 -7"/>
+          <path d="M50 70 l-6 -14"/>
+          <path d="M72 54 l3 -14"/>
+          <path d="M276 176 l14 6"/>
+          <path d="M286 150 l14 -2"/>
+        </g>
+      </svg>
+    </div>
+
+    <p class="welcome-note">امتحان تجريبي يحاكي الامتحان الاصلي</p>
+
+    <a class="welcome-cta" href="/login.html">
+      <span>ابدأ الآن</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a class="welcome-signin" href="/login.html">تسجيل الدخول</a>
+
+  </div>
+</div>
+
+</body>
+</html>

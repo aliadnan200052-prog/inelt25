@@ -2187,10 +2187,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadTheme();
   loadSound();
 
-  // Auth guard: this page requires a signed-in user. ExamAPI.requireSession
-  // redirects to /login.html if there's no valid Supabase session.
-  const ok = await ExamAPI.requireSession();
-  if (!ok) return;
+  // Auth guard: this page requires a signed-in user. A visitor with no
+  // session now meets the welcome screen first, which hands off to
+  // /login.html; a signed-in user carries straight on as before.
+  const hasSession = await ExamAPI.getSession();
+  if (!hasSession) { window.location.href = '/welcome.html'; return; }
 
   // (top-left floating sign-out button removed — the sign-out button next
   // to "ابدأ الامتحان" on the confirm page is the only one now)
