@@ -12,46 +12,55 @@
    1. TOKENS — LIGHT (default)
    ─────────────────────────────────────────────────────────────────────── */
 :root {
-  /* ── Primary · "Academy Green" ── */
-  --green-50:  #EDF7F2;
-  --green-100: #D3EBE0;
-  --green-200: #A7D7C2;
-  --green-300: #6FBB9E;
-  --green-400: #3E9B7C;
-  --green-500: #1F7A5C;
-  --green-600: #17624A;
-  --green-700: #124E3B;
-  --green-800: #0D3B2D;
-  --green-900: #082A20;
+  /* ── Primary · sampled from the mockup ──
+     500 #488A70 is the mockup's brand green; 600 #377863 is its CTA fill
+     (white on #488A70 alone is 4.1:1, so buttons use 600). ── */
+  --green-50:  #EFF5EE;
+  --green-100: #E2EEE8;
+  --green-200: #C3DFD1;
+  --green-300: #80BC9A;
+  --green-400: #5FA285;
+  --green-500: #488A70;
+  --green-600: #377863;
+  --green-700: #2C6350;
+  --green-800: #234E40;
+  --green-900: #17362C;
 
-  /* ── Neutrals · warm greige (paper, not cold grey) ── */
+  /* ── Neutrals · warm cream, matching the mockup's #FDF9F2 canvas ── */
   --n-0:   #FFFFFF;
-  --n-25:  #FAFBFA;
-  --n-50:  #F4F6F4;
-  --n-100: #E9EDEA;
-  --n-200: #D6DCD8;
-  --n-300: #B6C0BA;
-  --n-400: #8C9A92;
-  --n-500: #6A776F;
-  --n-600: #4D584F;
-  --n-700: #38423A;
-  --n-800: #232B26;
-  --n-900: #161D19;
-  --n-950: #0D1310;
+  --n-25:  #FEFCF7;
+  --n-50:  #FDF9F2;
+  --n-100: #F5F0E5;
+  --n-200: #E6E0D2;
+  --n-300: #C3BCAC;
+  --n-400: #9A9488;
+  --n-500: #6E6A60;
+  --n-600: #52504A;
+  --n-700: #3C3B36;
+  --n-800: #262A26;
+  --n-900: #1E2A24;
+  --n-950: #121A16;
+
+  /* ── Pastel category tints, sampled from the mockup's cards ── */
+  --tint-green:  #EFF5EE;
+  --tint-purple: #F2EEF7;
+  --tint-blue:   #ECF4FB;
+  --tint-amber:  #FEF5E3;
+  --tint-cool:   #F1F5F9;
 
   /* ── Roles ── */
   --primary:         var(--green-500);
   --primary-strong:  var(--green-600);
   --primary-deep:    var(--green-700);
   --primary-soft:    var(--green-50);
-  --primary-dim:     rgba(31,122,92,.08);
-  --primary-border:  rgba(31,122,92,.22);
-  --primary-glow:    rgba(31,122,92,.18);
+  --primary-dim:     rgba(72,138,112,.10);
+  --primary-border:  rgba(72,138,112,.26);
+  --primary-glow:    rgba(72,138,112,.22);
   --on-primary:      #FFFFFF;
 
-  --secondary:       #2B5C8A;
-  --secondary-dim:   rgba(43,92,138,.08);
-  --secondary-border:rgba(43,92,138,.22);
+  --secondary:       #1B5E9E;
+  --secondary-dim:   rgba(27,94,158,.08);
+  --secondary-border:rgba(27,94,158,.20);
 
   --accent:          #8F5F11;   /* gold — premium only, kept scarce (AA as text) */
   --accent-bright:   #C9922E;   /* decorative fills/icons only, never small text */
@@ -79,25 +88,25 @@
   --surface-overlay: var(--n-25);
   --surface-high:    var(--n-100);
   --surface-sunken:  var(--n-100);
-  --surface-glass:   rgba(255,255,255,.82);
+  --surface-glass:   rgba(253,249,242,.86);
 
   /* ── Text ── */
   --text-primary:   var(--n-900);
   --text-secondary: var(--n-600);  /* 7.4:1 on paper */
-  --text-muted:     #5F6B64;       /* 5.1:1 on paper — AA at 12px */
+  --text-muted:     #6B6459;       /* AA at 12px on the cream canvas */
   --text-inverse:   #FFFFFF;
   --text-link:      var(--green-600);
 
   /* ── Lines ── */
-  --border:        rgba(22,29,25,.10);
-  --border-strong: rgba(22,29,25,.16);
+  --border:        rgba(60,52,38,.10);
+  --border-strong: rgba(60,52,38,.17);
   --focus-ring:    var(--green-500);
 
   /* ── Section hues (mirrors the 4 exam sections) ── */
-  --sec-reading:      #1F7A5C;
-  --sec-grammar:      #2B5C8A;
-  --sec-functions:    #B4791C;
-  --sec-conversation: #6D4E86;
+  --sec-reading:      #5134B0;   /* mockup "Reading"   — purple */
+  --sec-grammar:      #1B5E9E;   /* mockup "Grammar"   — blue   */
+  --sec-functions:    #8F5F11;   /* mockup "Writing"   — amber  */
+  --sec-conversation: #276F52;   /* mockup "Listening" — green  */
 
   /* ── Spacing scale (4px base) ── */
   --sp-1: 2px;   --sp-2: 4px;   --sp-3: 8px;   --sp-4: 12px;
@@ -105,15 +114,15 @@
   --sp-9: 40px;  --sp-10: 48px; --sp-11: 64px; --sp-12: 80px;
 
   /* ── Radius ── */
-  --r-xs: 6px;  --r-sm: 10px; --r-md: 14px;
-  --r-lg: 18px; --r-xl: 24px; --r-2xl: 32px; --r-pill: 999px;
+  --r-xs: 8px;  --r-sm: 12px; --r-md: 16px;
+  --r-lg: 22px; --r-xl: 26px; --r-2xl: 34px; --r-pill: 999px;
 
   /* ── Elevation ── */
-  --shadow-xs: 0 1px 2px rgba(22,29,25,.05);
-  --shadow-sm: 0 1px 3px rgba(22,29,25,.06), 0 1px 2px rgba(22,29,25,.04);
-  --shadow-md: 0 6px 16px rgba(22,29,25,.07), 0 2px 5px rgba(22,29,25,.04);
-  --shadow-lg: 0 16px 36px rgba(22,29,25,.09), 0 4px 12px rgba(22,29,25,.05);
-  --shadow-xl: 0 28px 64px rgba(22,29,25,.12), 0 8px 20px rgba(22,29,25,.06);
+  --shadow-xs: 0 1px 2px rgba(60,52,38,.04);
+  --shadow-sm: 0 2px 6px rgba(60,52,38,.05), 0 1px 2px rgba(60,52,38,.03);
+  --shadow-md: 0 8px 20px rgba(60,52,38,.06), 0 2px 6px rgba(60,52,38,.03);
+  --shadow-lg: 0 18px 40px rgba(60,52,38,.08), 0 5px 14px rgba(60,52,38,.04);
+  --shadow-xl: 0 30px 70px rgba(60,52,38,.10), 0 10px 24px rgba(60,52,38,.05);
 
   /* ── Motion ── */
   --ease:          cubic-bezier(.2,.8,.2,1);
@@ -196,10 +205,17 @@
   --border-strong: rgba(255,255,255,.16);
   --focus-ring:    #4DBE95;
 
-  --sec-reading:      #4DBE95;
-  --sec-grammar:      #7FB3DE;
-  --sec-functions:    #E0AC5A;
-  --sec-conversation: #B49AD0;
+  --sec-reading:      #B9A6F0;   /* purple */
+  --sec-grammar:      #8FC0E8;   /* blue   */
+  --sec-functions:    #E5B76A;   /* amber  */
+  --sec-conversation: #6FCBA3;   /* green  */
+
+  /* Dark counterparts of the pastel category tints. */
+  --tint-green:  #1A2B22;
+  --tint-purple: #241F33;
+  --tint-blue:   #172533;
+  --tint-amber:  #2E2517;
+  --tint-cool:   #1E262B;
 
   --shadow-xs: 0 1px 2px rgba(0,0,0,.34);
   --shadow-sm: 0 1px 3px rgba(0,0,0,.40), 0 1px 2px rgba(0,0,0,.26);
@@ -301,7 +317,7 @@ button { background: none; border: none; cursor: pointer; }
 .card {
   background: var(--surface-raised);
   border: 1px solid var(--border);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   box-shadow: var(--shadow-sm);
 }
 
@@ -315,8 +331,8 @@ button { background: none; border: none; cursor: pointer; }
   align-items: center;
   justify-content: center;
   gap: var(--sp-3);
-  padding: 11px 20px;
-  border-radius: var(--r-md);
+  padding: 13px 24px;
+  border-radius: var(--r-pill);
   border: 1px solid transparent;
   font-family: var(--font-ar);
   font-size: var(--fs-sm);
@@ -337,8 +353,8 @@ button { background: none; border: none; cursor: pointer; }
 .btn:active:not(:disabled) { transform: translateY(0) scale(.985); }
 .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
-.btn-lg { padding: 14px 26px; font-size: var(--fs-md); border-radius: var(--r-md); }
-.btn-sm { padding: 8px 14px; font-size: var(--fs-xs); border-radius: var(--r-sm); }
+.btn-lg { padding: 16px 30px; font-size: var(--fs-md); border-radius: var(--r-pill); }
+.btn-sm { padding: 9px 16px; font-size: var(--fs-xs); border-radius: var(--r-pill); }
 .btn-block { width: 100%; }
 
 .btn-primary {
@@ -369,7 +385,7 @@ button { background: none; border: none; cursor: pointer; }
 .btn-success:hover:not(:disabled) { filter: brightness(.93); box-shadow: 0 6px 18px var(--success-dim); }
 
 .btn-danger {
-  background: var(--danger-dim);
+  background: var(--surface-raised);
   color: var(--danger);
   border-color: var(--danger-border);
 }
@@ -397,7 +413,7 @@ button { background: none; border: none; cursor: pointer; }
   align-items: center;
   justify-content: center;
   width: 38px; height: 38px;
-  border-radius: var(--r-sm);
+  border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface-raised);
   color: var(--text-secondary);
@@ -426,7 +442,7 @@ button { background: none; border: none; cursor: pointer; }
   line-height: 1.4;
   border: 1px solid transparent;
 }
-.badge-accent  { background: var(--primary-dim);  color: var(--primary-strong); border-color: var(--primary-border); }
+.badge-accent  { background: var(--primary-dim);  color: var(--primary-deep); border-color: var(--primary-border); }
 .badge-success { background: var(--success-dim);  color: var(--success);        border-color: var(--success-border); }
 .badge-danger  { background: var(--danger-dim);   color: var(--danger);         border-color: var(--danger-border); }
 .badge-warn    { background: var(--warn-dim);     color: var(--warn);           border-color: var(--warn-border); }
@@ -436,7 +452,7 @@ button { background: none; border: none; cursor: pointer; }
 /* ── Form controls ── */
 .text-input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: var(--r-md);
   border: 1px solid var(--border-strong);
   background: var(--surface-raised);

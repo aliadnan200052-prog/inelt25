@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="INELT — الاختبار الوطني العراقي للغة الإنكليزية. تدرّب على أسئلة حقيقية في القراءة والقواعد والوظائف اللغوية والحوار، وتتبّع نتائجك.">
-<meta name="theme-color" content="#1F7A5C">
+<meta name="theme-color" content="#488A70">
 <title>INELT · Iraqi National English Exam</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%231F7A5C'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23488A70'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -214,10 +214,9 @@ body { background: var(--surface-base); }
   margin-bottom: var(--sp-8);
 }
 .exam-tile {
-  padding: var(--sp-5) var(--sp-3);
-  border-radius: var(--r-md);
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
+  padding: var(--sp-6) var(--sp-3);
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
   text-align: center;
   transition: border-color var(--dur-2) var(--ease),
               transform var(--dur-2) var(--ease),
@@ -228,9 +227,18 @@ body { background: var(--surface-base); }
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
+/* Pastel category tints, in the mockup's order. */
+.exam-tile:nth-child(1) { background: var(--tint-green);  }
+.exam-tile:nth-child(2) { background: var(--tint-blue);   }
+.exam-tile:nth-child(3) { background: var(--tint-purple); }
+.exam-tile:nth-child(4) { background: var(--tint-amber);  }
+.exam-tile:nth-child(1) .tile-icon { color: var(--sec-conversation); }
+.exam-tile:nth-child(2) .tile-icon { color: var(--sec-grammar); }
+.exam-tile:nth-child(3) .tile-icon { color: var(--sec-reading); }
+.exam-tile:nth-child(4) .tile-icon { color: var(--sec-functions); }
+
 .tile-icon {
   margin: 0 auto 10px;
-  color: var(--primary);
   stroke-width: 2;
 }
 .tile-value {
@@ -430,6 +438,7 @@ body { background: var(--surface-base); }
   box-shadow: var(--shadow-sm);
   padding: var(--sp-7);
 }
+.question-card, .sidebar-panel { background: var(--surface-raised); }
 /* Slides only when navigating between questions — never when answering. */
 .question-card.slide-next { animation: q-slide-next var(--dur-3) var(--ease-entrance) both; }
 .question-card.slide-prev { animation: q-slide-prev var(--dur-3) var(--ease-entrance) both; }
@@ -540,10 +549,11 @@ body { background: var(--surface-base); }
   display: flex;
   align-items: center;
   gap: var(--sp-4);
-  padding: 14px var(--sp-5);
+  padding: 13px var(--sp-5);
   border-radius: var(--r-md);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   background: var(--surface-raised);
+  box-shadow: var(--shadow-xs);
   cursor: pointer;
   direction: ltr;               /* key on the left, text reads from the left */
   transition: border-color var(--dur-2) var(--ease),
@@ -557,11 +567,11 @@ body { background: var(--surface-base); }
 .option:active { transform: scale(.995); }
 .option-key {
   flex-shrink: 0;
-  width: 30px; height: 30px;
+  width: 32px; height: 32px;
   display: grid; place-items: center;
-  border-radius: var(--r-xs);
-  background: var(--surface-high);
-  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--tint-cool);
+  border: 1px solid transparent;
   font-family: var(--font-en);
   font-size: var(--fs-xs);
   font-weight: 700;
@@ -716,9 +726,9 @@ body { background: var(--surface-base); }
   font-variant-numeric: tabular-nums;
 }
 .progress-track {
-  height: 7px;
+  height: 9px;
   border-radius: var(--r-pill);
-  background: var(--surface-high);
+  background: var(--n-100);
   overflow: hidden;
 }
 .progress-fill {
@@ -892,13 +902,13 @@ body { background: var(--surface-base); }
 }
 .ring-track {
   fill: none;
-  stroke: var(--surface-high);
-  stroke-width: 13;
+  stroke: var(--n-100);
+  stroke-width: 15;
 }
 .ring-progress {
   fill: none;
   stroke: url(#grad-ring);
-  stroke-width: 13;
+  stroke-width: 15;
   stroke-linecap: round;
   stroke-dasharray: 534.07;
   stroke-dashoffset: 534.07;
@@ -933,8 +943,8 @@ body { background: var(--surface-base); }
   display: flex;
   align-items: center;
   gap: var(--sp-4);
-  padding: var(--sp-4) var(--sp-5);
-  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
   background: var(--surface-overlay);
   border: 1px solid var(--border);
   text-align: start;
@@ -966,10 +976,21 @@ body { background: var(--surface-base); }
 }
 .section-card {
   padding: var(--sp-5);
-  border-radius: var(--r-md);
-  background: var(--surface-overlay);
-  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
 }
+/* Same pastel language as the dashboard tiles. */
+.section-card:nth-child(1) { background: var(--tint-purple); }
+.section-card:nth-child(2) { background: var(--tint-blue);   }
+.section-card:nth-child(3) { background: var(--tint-amber);  }
+.section-card:nth-child(4) { background: var(--tint-green);  }
+.section-card .section-score-chip { background: rgba(255,255,255,.72); }
+.section-card .section-bar { background: rgba(255,255,255,.75); }
+[data-theme="dark"] .section-card .section-score-chip {
+  background: rgba(255,255,255,.10);
+  color: var(--text-primary);   /* 4.48:1 as secondary on the green tint */
+}
+[data-theme="dark"] .section-card .section-bar { background: rgba(255,255,255,.12); }
 .section-card-top {
   display: flex;
   align-items: center;
@@ -1221,8 +1242,8 @@ body { background: var(--surface-base); }
 <svg width="0" height="0" style="position:absolute;pointer-events:none;overflow:hidden">
   <defs>
     <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#124E3B"/>
-      <stop offset="100%" stop-color="#3E9B7C"/>
+      <stop offset="0%" stop-color="#2C6350"/>
+      <stop offset="100%" stop-color="#5FA285"/>
     </linearGradient>
   </defs>
 </svg>
@@ -1595,10 +1616,10 @@ const sNames = {
   "Conversation":"الحوار"
 };
 const sColors = {
-  "Reading Comprehension":"#1F7A5C",
-  "Grammar":"#2B5C8A",
+  "Reading Comprehension":"#5134B0",
+  "Grammar":"#1B5E9E",
   "Functions":"#8F5F11",
-  "Conversation":"#6D4E86"
+  "Conversation":"#276F52"
 };
 const sIcons = {
   "Reading Comprehension":'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
