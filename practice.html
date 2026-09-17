@@ -75,14 +75,6 @@
 }
 .pr-count.sel { background: var(--primary-strong); border-color: var(--primary-strong); color: var(--on-primary); }
 
-.pr-note {
-  display: flex; align-items: flex-start; gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-5); margin-bottom: var(--sp-6);
-  border-radius: var(--r-md); background: var(--primary-dim);
-  border: 1px solid var(--primary-border);
-  font-size: var(--fs-xs); line-height: 1.8; color: var(--primary-deep);
-}
-
 /* ── Runner ── */
 .pr-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-3); }
 .pr-progress-label { font-size: var(--fs-2xs); color: var(--text-secondary); }
@@ -139,15 +131,6 @@
 .pr-opt.wrong .pr-key { background: var(--danger); color: #fff; }
 .pr-opt.wrong .pr-mark { display: grid; background: var(--danger); }
 
-.pr-explain {
-  margin-top: var(--sp-5); padding: var(--sp-4) var(--sp-5);
-  border-radius: var(--r-md); background: var(--info-dim);
-  border: 1px solid var(--info-border); font-size: var(--fs-xs);
-  line-height: 1.85; color: var(--text-primary);
-  animation: rise-in var(--dur-3) var(--ease-entrance) both;
-}
-.pr-explain strong { color: var(--info); margin-inline-end: 6px; }
-
 .pr-actions { display: flex; gap: var(--sp-4); }
 .pr-actions .btn { flex: 1; }
 
@@ -184,16 +167,12 @@
 
   <!-- ── Setup ── -->
   <div id="setup">
-    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة والشرح بعد كل سؤال مباشرة.</p>
+    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.</p>
 
     <div class="pr-sections" id="sections"></div>
 
     <div class="pr-count-label">عدد الأسئلة</div>
     <div class="pr-counts" id="counts"></div>
-
-    <div class="pr-note">
-      <span>هذا التدريب <strong>لا يُحسب من محاولات الامتحان</strong> — تدرّب كما تشاء.</span>
-    </div>
 
     <button class="btn btn-primary btn-lg btn-block" id="startBtn">ابدأ التدريب</button>
   </div>
@@ -332,8 +311,6 @@ function answer(n) {
   });
   if (n === correct) right++;
   $('prScore').textContent = `${right} / ${i + 1}`;
-  $('prExplain').innerHTML =
-    `<div class="pr-explain"><strong>الشرح:</strong>${q.explanation || 'سيُضاف الشرح لاحقاً.'}</div>`;
   $('nextBtn').disabled = false;
 }
 

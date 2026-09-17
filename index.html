@@ -1139,24 +1139,6 @@ body { background: var(--surface-base); }
   color: var(--danger);
   font-weight: 600;
 }
-.review-explanation {
-  padding: var(--sp-4) var(--sp-5);
-  border-radius: var(--r-sm);
-  background: var(--info-dim);
-  border: 1px solid var(--info-border);
-  font-size: var(--fs-xs);
-  line-height: 1.85;
-  color: var(--text-primary);
-}
-.review-explanation strong {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-inline-end: 6px;
-  color: var(--info);
-  font-weight: 700;
-}
-
 /* ───────────────────────────────────────────────────────────────────────
    LEGACY · account-status tiles (loadHist) — kept so the helper still
    renders correctly if it is ever wired back up.
@@ -1760,15 +1742,15 @@ let currentAttemptId = null;
 
 // Fetches a freshly randomized 40-question exam from the server. The
 // server enforces the attempt limit and never sends correct answers —
-// qs[i].correctAnswer / .explanation are filled in only after submission,
-// from the grading response (see submitExam below).
+// qs[i].correctAnswer is filled in only after submission, from the
+// grading response (see submitExam below).
 async function selectQs() {
   const data = await ExamAPI.startExam(); // throws ExamAPI.LockedError if attempts are exhausted
   currentAttemptId = data.attempt_id;
   passage = data.passage;
   qs = data.questions.map(q => ({
     id: q.id, section: q.section, question: q.question, options: q.options,
-    correctAnswer: null, explanation: null
+    correctAnswer: null
   }));
   uA = new Array(qs.length).fill(null);
 }
@@ -2009,11 +1991,11 @@ async function submitExam(auto) {
     return;
   }
 
-  // Merge correct answers/explanations back into qs for the review page.
+  // Merge correct answers back into qs for the review page.
   const byId = new Map(grade.review.map(r => [r.id, r]));
   qs = qs.map(q => {
     const r = byId.get(q.id);
-    return r ? { ...q, correctAnswer: r.correct_answer, explanation: r.explanation } : q;
+    return r ? { ...q, correctAnswer: r.correct_answer } : q;
   });
 
   const { correct, wrong, score, pct, passed, section_stats: ss } = grade;
@@ -2124,9 +2106,6 @@ function showReviewPage() {
         </div>
         <div class="review-q-text">${q.question}</div>
         <div class="review-options">${optH}</div>
-        <div class="review-explanation">
-          <strong><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> الشرح:</strong>${q.explanation || 'سيُضاف الشرح لاحقاً.'}
-        </div>
       </div>`;
   }
   document.getElementById('reviewQuestions').innerHTML = h;
