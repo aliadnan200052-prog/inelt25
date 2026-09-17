@@ -117,8 +117,8 @@ const ExamAPI = (() => {
 
     // ── Section practice ──────────────────────────────────
     // Practice is NOT an exam attempt. It calls its own SQL function,
-    // never touches attempts_used, and returns the correct answers and
-    // explanations up front so each question can be marked immediately.
+    // never touches attempts_used, and returns the correct answer up
+    // front so each question can be marked immediately.
     async startPractice(section, count = 10) {
       const { data, error } = await client.rpc("start_practice", {
         p_section: section,
