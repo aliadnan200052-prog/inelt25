@@ -10,6 +10,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="INELT">
 <link rel="stylesheet" href="/css/inelt-theme.css">
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
@@ -2224,6 +2229,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     history.replaceState({}, '', location.pathname);
   }
 });
+</script>
+<script>
+/* Register the service worker so the site can be installed to the home
+   screen. Wrapped in a guard: if registration fails the site carries on
+   exactly as before. */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
