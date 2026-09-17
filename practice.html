@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#488A70">
+<title>تدرّب على قسم · INELT</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23488A70'/%3E%3Crect x='8' y='10' width='20' height='2.4' rx='1.2' fill='white'/%3E%3Crect x='8' y='16' width='15' height='2.4' rx='1.2' fill='white' opacity='.85'/%3E%3Crect x='8' y='22' width='17' height='2.4' rx='1.2' fill='white' opacity='.7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<link rel="stylesheet" href="/css/inelt-theme.css">
+<style>
+/* =====================================================================
+   INELT · Practice — drill a single section, untimed.
+
+   Separate from index.html on purpose: the exam page runs live timed
+   attempts and this must not be able to disturb it. Practice never
+   creates an attempt and never touches attempts_used.
+   ===================================================================== */
+
+.pr-shell { max-width: 760px; margin-inline: auto; padding: var(--sp-7) var(--sp-5) var(--sp-10); }
+
+.pr-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-4); margin-bottom: var(--sp-7);
+}
+.pr-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: var(--r-pill);
+  border: 1px solid var(--border-strong); background: var(--surface-raised);
+  font-size: var(--fs-xs); font-weight: 600; color: var(--text-primary);
+  transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
+}
+.pr-back:hover { background: var(--surface-high); border-color: var(--primary-border); text-decoration: none; }
+.pr-back svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transform: scaleX(-1); }
+.pr-heading { font-size: var(--fs-xl); font-weight: 700; }
+
+/* ── Section picker ── */
+.pr-lead { font-size: var(--fs-sm); color: var(--text-secondary); line-height: 1.8; margin-bottom: var(--sp-7); }
+.pr-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-8); }
+.pr-section {
+  padding: var(--sp-6) var(--sp-5); border-radius: var(--r-lg);
+  border: 2px solid transparent; text-align: start; cursor: pointer;
+  transition: transform var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+.pr-section:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.pr-section.sel { box-shadow: var(--shadow-sm); }
+.pr-section[data-k="reading"]      { background: var(--tint-purple); }
+.pr-section[data-k="grammar"]      { background: var(--tint-blue); }
+.pr-section[data-k="functions"]    { background: var(--tint-amber); }
+.pr-section[data-k="conversation"] { background: var(--tint-green); }
+.pr-section[data-k="reading"].sel      { border-color: var(--sec-reading); }
+.pr-section[data-k="grammar"].sel      { border-color: var(--sec-grammar); }
+.pr-section[data-k="functions"].sel    { border-color: var(--sec-functions); }
+.pr-section[data-k="conversation"].sel { border-color: var(--sec-conversation); }
+.pr-section-icon { margin-bottom: var(--sp-4); }
+.pr-section[data-k="reading"]      .pr-section-icon { color: var(--sec-reading); }
+.pr-section[data-k="grammar"]      .pr-section-icon { color: var(--sec-grammar); }
+.pr-section[data-k="functions"]    .pr-section-icon { color: var(--sec-functions); }
+.pr-section[data-k="conversation"] .pr-section-icon { color: var(--sec-conversation); }
+.pr-section-name { font-size: var(--fs-md); font-weight: 700; color: var(--text-primary); }
+.pr-section-en   { margin-top: 3px; font-size: var(--fs-2xs); color: var(--text-secondary); }
+
+.pr-count-label { font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); margin-bottom: var(--sp-4); }
+.pr-counts { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-8); flex-wrap: wrap; }
+.pr-count {
+  padding: 10px 22px; border-radius: var(--r-pill);
+  border: 1px solid var(--border-strong); background: var(--surface-raised);
+  font-family: var(--font-en); font-size: var(--fs-sm); font-weight: 700;
+  color: var(--text-primary); cursor: pointer;
+  transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+.pr-count.sel { background: var(--primary-strong); border-color: var(--primary-strong); color: var(--on-primary); }
+
+.pr-note {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5); margin-bottom: var(--sp-6);
+  border-radius: var(--r-md); background: var(--primary-dim);
+  border: 1px solid var(--primary-border);
+  font-size: var(--fs-xs); line-height: 1.8; color: var(--primary-deep);
+}
+
+/* ── Runner ── */
+.pr-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-3); }
+.pr-progress-label { font-size: var(--fs-2xs); color: var(--text-secondary); }
+.pr-score { font-family: var(--font-en); direction: ltr; unicode-bidi: isolate; font-size: var(--fs-xs); font-weight: 700; color: var(--primary-deep); }
+.pr-track { height: 9px; border-radius: var(--r-pill); background: var(--surface-high); overflow: hidden; margin-bottom: var(--sp-6); }
+.pr-fill { height: 100%; border-radius: var(--r-pill); background: linear-gradient(90deg, var(--primary-deep), var(--primary)); transition: width var(--dur-4) var(--ease); }
+
+.pr-card {
+  background: var(--surface-raised); border: 1px solid var(--border);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-sm);
+  padding: var(--sp-7); margin-bottom: var(--sp-5);
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+.pr-passage {
+  margin-bottom: var(--sp-6); border-radius: var(--r-md);
+  border: 1px solid var(--border); background: var(--surface-overlay);
+  padding: var(--sp-5); font-family: var(--font-en);
+  direction: ltr; text-align: left; font-size: var(--fs-sm);
+  line-height: 1.95; color: var(--text-primary);
+  max-height: 260px; overflow-y: auto;
+}
+.pr-q {
+  font-family: var(--font-mixed); direction: ltr; text-align: left;
+  font-size: var(--fs-lg); font-weight: 600; line-height: 1.85;
+  color: var(--text-primary); margin-bottom: var(--sp-6);
+}
+.pr-opts { display: flex; flex-direction: column; gap: var(--sp-4); }
+.pr-opt {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: 13px var(--sp-5); border-radius: var(--r-md);
+  border: 1px solid var(--border); background: var(--surface-raised);
+  box-shadow: var(--shadow-xs); cursor: pointer; direction: ltr;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+.pr-opt:hover:not(.done) { border-color: var(--primary-border); background: var(--primary-dim); }
+.pr-key {
+  flex-shrink: 0; width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--tint-cool);
+  font-family: var(--font-en); font-size: var(--fs-xs); font-weight: 700;
+  color: var(--text-secondary);
+}
+.pr-text { flex: 1; min-width: 0; font-family: var(--font-mixed); text-align: left; font-size: var(--fs-sm); line-height: 1.65; }
+.pr-mark { flex-shrink: 0; width: 21px; height: 21px; display: none; place-items: center; border-radius: 50%; }
+.pr-mark svg { width: 11px; height: 11px; fill: none; stroke: #fff; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.pr-mark .x, .pr-opt.wrong .pr-mark .tick { display: none; }
+.pr-opt.wrong .pr-mark .x { display: block; }
+
+/* answered state */
+.pr-opts.done .pr-opt { cursor: default; }
+.pr-opt.correct { border-color: var(--success); background: var(--success-dim); }
+.pr-opt.correct .pr-key { background: var(--success); color: #fff; }
+.pr-opt.correct .pr-mark { display: grid; background: var(--success); }
+.pr-opt.wrong { border-color: var(--danger); background: var(--danger-dim); }
+.pr-opt.wrong .pr-key { background: var(--danger); color: #fff; }
+.pr-opt.wrong .pr-mark { display: grid; background: var(--danger); }
+
+.pr-explain {
+  margin-top: var(--sp-5); padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-md); background: var(--info-dim);
+  border: 1px solid var(--info-border); font-size: var(--fs-xs);
+  line-height: 1.85; color: var(--text-primary);
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+.pr-explain strong { color: var(--info); margin-inline-end: 6px; }
+
+.pr-actions { display: flex; gap: var(--sp-4); }
+.pr-actions .btn { flex: 1; }
+
+/* ── Summary ── */
+.pr-summary { text-align: center; padding: var(--sp-9) var(--sp-7); }
+.pr-summary-ring { font-family: var(--font-en); direction: ltr; unicode-bidi: isolate; font-size: var(--fs-5xl); font-weight: 700; line-height: 1; color: var(--primary-deep); }
+.pr-summary-sub { margin-top: var(--sp-3); font-size: var(--fs-sm); color: var(--text-secondary); }
+.pr-summary-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-top: var(--sp-8); }
+
+/* ── Skeleton ── */
+.pr-skel-line { height: 14px; margin-bottom: 12px; border-radius: var(--r-pill); }
+.pr-skel-opt  { height: 58px; margin-bottom: 14px; border-radius: var(--r-md); }
+
+@media (max-width: 620px) {
+  .pr-shell { padding: var(--sp-6) var(--sp-4) var(--sp-9); }
+  .pr-sections { grid-template-columns: 1fr; }
+  .pr-card { padding: var(--sp-5); border-radius: var(--r-lg); }
+  .pr-q { font-size: var(--fs-md); }
+  .pr-actions, .pr-summary-actions { grid-template-columns: 1fr; flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="pr-shell">
+
+  <div class="pr-top">
+    <h1 class="pr-heading">تدرّب على قسم</h1>
+    <a class="pr-back" href="/index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>رجوع</span>
+    </a>
+  </div>
+
+  <!-- ── Setup ── -->
+  <div id="setup">
+    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة والشرح بعد كل سؤال مباشرة.</p>
+
+    <div class="pr-sections" id="sections"></div>
+
+    <div class="pr-count-label">عدد الأسئلة</div>
+    <div class="pr-counts" id="counts"></div>
+
+    <div class="pr-note">
+      <span>هذا التدريب <strong>لا يُحسب من محاولات الامتحان</strong> — تدرّب كما تشاء.</span>
+    </div>
+
+    <button class="btn btn-primary btn-lg btn-block" id="startBtn">ابدأ التدريب</button>
+  </div>
+
+  <!-- ── Runner ── -->
+  <div id="runner" class="hidden">
+    <div class="pr-progress-row">
+      <span class="pr-progress-label" id="prPos">—</span>
+      <span class="pr-score" id="prScore">0 / 0</span>
+    </div>
+    <div class="pr-track"><div class="pr-fill" id="prFill" style="width:0%"></div></div>
+    <div class="pr-card" id="prCard"></div>
+    <div class="pr-actions">
+      <button class="btn btn-primary btn-lg" id="nextBtn" disabled>التالي</button>
+    </div>
+  </div>
+
+  <!-- ── Summary ── -->
+  <div id="summary" class="hidden">
+    <div class="card pr-summary">
+      <div class="pr-summary-ring" id="sumScore">—</div>
+      <p class="pr-summary-sub" id="sumText"></p>
+      <div class="pr-summary-actions">
+        <button class="btn btn-ghost btn-lg" id="againBtn">تدريب آخر</button>
+        <a class="btn btn-primary btn-lg" href="/index.html">العودة للرئيسية</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script>
+/* ════════════════════════════════════════════
+   Practice runner — self-contained. Nothing here touches the exam page,
+   and no call it makes creates an attempt.
+════════════════════════════════════════════ */
+const SECTIONS = [
+  { key: 'conversation', api: 'Conversation',           ar: 'الحوار',           en: 'Conversation' },
+  { key: 'functions',    api: 'Functions',              ar: 'الوظائف اللغوية',  en: 'Functions' },
+  { key: 'grammar',      api: 'Grammar',                ar: 'القواعد',          en: 'Grammar' },
+  { key: 'reading',      api: 'Reading Comprehension',  ar: 'القراءة والفهم',   en: 'Reading' }
+];
+const ICONS = {
+  reading:      '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  grammar:      '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>',
+  functions:    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  conversation: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>'
+};
+const COUNTS = [5, 10, 20];
+const KEYS = ['A','B','C','D'];
+
+let pick = 'grammar', count = 10;
+let qs = [], passage = '', i = 0, right = 0, answered = false;
+
+const $ = id => document.getElementById(id);
+
+function renderSetup() {
+  $('sections').innerHTML = SECTIONS.map(s =>
+    `<div class="pr-section${s.key === pick ? ' sel' : ''}" data-k="${s.key}" onclick="choose('${s.key}')">
+       <div class="pr-section-icon">${ICONS[s.key]}</div>
+       <div class="pr-section-name">${s.ar}</div>
+       <div class="pr-section-en en">${s.en}</div>
+     </div>`).join('');
+  $('counts').innerHTML = COUNTS.map(c =>
+    `<button class="pr-count${c === count ? ' sel' : ''}" onclick="setCount(${c})">${c}</button>`).join('');
+}
+function choose(k) { pick = k; renderSetup(); }
+function setCount(c) { count = c; renderSetup(); }
+
+async function start() {
+  const btn = $('startBtn');
+  btn.disabled = true;
+  const api = SECTIONS.find(s => s.key === pick).api;
+  let data;
+  try {
+    data = await ExamAPI.startPractice(api, count);
+  } catch (e) {
+    alert('تعذّر بدء التدريب. ' + (e.message || ''));
+    btn.disabled = false;
+    return;
+  }
+  qs = data.questions || [];
+  passage = data.passage || '';
+  if (!qs.length) {
+    alert('لا توجد أسئلة متاحة في هذا القسم بعد.');
+    btn.disabled = false;
+    return;
+  }
+  i = 0; right = 0;
+  $('setup').classList.add('hidden');
+  $('runner').classList.remove('hidden');
+  renderQ();
+  window.scrollTo(0, 0);
+}
+
+function renderQ() {
+  const q = qs[i];
+  answered = false;
+  $('prPos').textContent = `سؤال ${i + 1} من ${qs.length}`;
+  $('prScore').textContent = `${right} / ${i}`;
+  $('prFill').style.width = (i / qs.length * 100) + '%';
+  $('nextBtn').disabled = true;
+  $('nextBtn').textContent = (i === qs.length - 1) ? 'إنهاء' : 'التالي';
+
+  const opts = (q.options || []).map((o, n) =>
+    `<div class="pr-opt" data-n="${n}" onclick="answer(${n})">
+       <div class="pr-key">${KEYS[n]}</div>
+       <div class="pr-text">${o}</div>
+       <div class="pr-mark">
+         <svg class="tick" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+         <svg class="x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+       </div>
+     </div>`).join('');
+
+  $('prCard').innerHTML =
+    (passage ? `<div class="pr-passage">${passage}</div>` : '') +
+    `<div class="pr-q">${q.question}</div>
+     <div class="pr-opts" id="prOpts">${opts}</div>
+     <div id="prExplain"></div>`;
+}
+
+function answer(n) {
+  if (answered) return;
+  answered = true;
+  const q = qs[i];
+  const correct = q.correct_answer;
+  const list = $('prOpts');
+  list.classList.add('done');
+  list.querySelectorAll('.pr-opt').forEach(el => {
+    const k = Number(el.dataset.n);
+    if (k === correct) el.classList.add('correct');
+    else if (k === n) el.classList.add('wrong');
+  });
+  if (n === correct) right++;
+  $('prScore').textContent = `${right} / ${i + 1}`;
+  $('prExplain').innerHTML =
+    `<div class="pr-explain"><strong>الشرح:</strong>${q.explanation || 'سيُضاف الشرح لاحقاً.'}</div>`;
+  $('nextBtn').disabled = false;
+}
+
+function next() {
+  if (i < qs.length - 1) { i++; renderQ(); window.scrollTo(0, 0); }
+  else finish();
+}
+
+function finish() {
+  const pct = Math.round(right / qs.length * 100);
+  $('runner').classList.add('hidden');
+  $('summary').classList.remove('hidden');
+  $('sumScore').textContent = `${right} / ${qs.length}`;
+  $('sumText').textContent =
+    pct >= 80 ? 'ممتاز! استمر على هذا المستوى.'
+    : pct >= 50 ? 'جيد — راجع الأسئلة التي أخطأت فيها.'
+    : 'تحتاج مراجعة هذا القسم. جرّب مرة أخرى.';
+  window.scrollTo(0, 0);
+}
+
+function again() {
+  $('summary').classList.add('hidden');
+  $('setup').classList.remove('hidden');
+  $('startBtn').disabled = false;
+  window.scrollTo(0, 0);
+}
+
+$('startBtn').onclick = start;
+$('nextBtn').onclick = next;
+$('againBtn').onclick = again;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const s = localStorage.getItem('th') || 'light';
+  document.documentElement.setAttribute('data-theme', s);
+  const ok = await ExamAPI.requireSession();
+  if (!ok) return;
+  renderSetup();
+});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>

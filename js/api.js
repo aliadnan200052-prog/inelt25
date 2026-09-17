@@ -115,6 +115,21 @@ const ExamAPI = (() => {
       return data;
     },
 
+    // ── Section practice ──────────────────────────────────
+    // Practice is NOT an exam attempt. It calls its own SQL function,
+    // never touches attempts_used, and returns the correct answers and
+    // explanations up front so each question can be marked immediately.
+    async startPractice(section, count = 10) {
+      const { data, error } = await client.rpc("start_practice", {
+        p_section: section,
+        p_count: count,
+      });
+      if (error) throw new ApiError(error.message);
+      if (data?.error === "unauthorized") throw new ApiError("Not signed in", "unauthorized");
+      if (data?.error) throw new ApiError(data.error);
+      return data;
+    },
+
     // ── Premium purchase ──────────────────────────────────
     async startCheckout() {
       const { url } = await call("create-checkout", { method: "POST" });

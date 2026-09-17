@@ -301,6 +301,7 @@ body { background: var(--surface-base); }
   gap: var(--sp-5);
 }
 .confirm-footer .btn { width: 100%; }
+.confirm-footer a.btn { text-decoration: none; }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 2 · EXAM — deliberately calm and low-contrast-noise
@@ -738,7 +739,7 @@ body { background: var(--surface-base); }
 .progress-track {
   height: 9px;
   border-radius: var(--r-pill);
-  background: var(--n-100);
+  background: var(--surface-high);
   overflow: hidden;
 }
 .progress-fill {
@@ -912,7 +913,7 @@ body { background: var(--surface-base); }
 }
 .ring-track {
   fill: none;
-  stroke: var(--n-100);
+  stroke: var(--surface-high);
   stroke-width: 15;
 }
 .ring-progress {
@@ -1365,6 +1366,10 @@ body { background: var(--surface-base); }
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span>ابدأ الاختبار</span>
       </button>
+      <a class="btn btn-ghost btn-lg btn-block" href="/practice.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>
+        <span>تدرّب على قسم واحد</span>
+      </a>
       <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
       <span>زورونا على التلغرام</span>
