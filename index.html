@@ -394,6 +394,89 @@ body { background: var(--surface-base); }
   background: var(--primary);
 }
 
+/* ── Learning resources — placeholders until the material is ready ── */
+.resources-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+  padding: var(--sp-6);
+}
+.resource-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+/* Not links, not buttons — nothing to open yet, so nothing reacts to a tap. */
+.resource-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "ic text soon";
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: none;
+}
+.resource-ic {
+  grid-area: ic;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--r-md);
+}
+.resource-ic svg { width: 19px; height: 19px; }
+.resource-list > li:nth-child(1) .resource-ic { background: var(--tint-purple); color: var(--sec-reading); }
+.resource-list > li:nth-child(2) .resource-ic { background: var(--tint-amber);  color: var(--sec-functions); }
+.resource-text { grid-area: text; min-width: 0; }
+.resource-name {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.resource-note {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+.resource-soon {
+  grid-area: soon;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.resource-soon::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warn-bright);
+  animation: soon-pulse 2.4s var(--ease) infinite;
+}
+@keyframes soon-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) {
+  .resource-soon::before { animation: none; }
+}
+/* Narrow screens: the pill drops under the text instead of squeezing it. */
+@media (max-width: 430px) {
+  .resource-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "ic text" "ic soon";
+    row-gap: var(--sp-3);
+  }
+  .resource-ic   { grid-area: ic; align-self: start; }
+  .resource-text { grid-area: text; }
+  .resource-soon { grid-area: soon; justify-self: start; }
+}
+
 .instruction-list { list-style: none; }
 .instruction-item {
   display: flex;
@@ -445,7 +528,7 @@ body { background: var(--surface-base); }
   width: 17px; height: 17px;
   opacity: .5;
 }
-.confirm-footer .telegram-link { margin-top: var(--sp-2); }
+.confirm-tail { display: flex; justify-content: center; }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 2 · EXAM — deliberately calm and low-contrast-noise
@@ -1353,6 +1436,9 @@ body { background: var(--surface-base); }
   .confirm-art { width: 138px; }
   .confirm-title  { font-size: var(--fs-xl); }
   .exam-tile { padding: var(--sp-4); }
+  .resources-card { padding: var(--sp-5); }
+  .resource-item { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+  .resource-ic { width: 36px; height: 36px; }
   .tile-value { font-size: var(--fs-2xl); }
   .tile-arrow { bottom: var(--sp-3); inset-inline-start: var(--sp-4); }
   .instructions-card { padding: var(--sp-5); }
@@ -1557,6 +1643,41 @@ body { background: var(--surface-base); }
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>
         <span>تدرّب على قسم واحد</span>
       </a>
+    </div>
+
+    <!-- Lectures and the booklet: reserved here, content lands later. -->
+    <section class="resources-card" aria-labelledby="resourcesTitle">
+      <div class="instructions-head">
+        <span class="instructions-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <div class="section-label" id="resourcesTitle">مصادر التعلّم</div>
+      </div>
+      <ul class="resource-list">
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="15" height="16" rx="3"/><path d="M17 10.5l4.3-2.6a.6.6 0 0 1 .9.5v7.2a.6.6 0 0 1-.9.5L17 13.5z"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">المحاضرات</div>
+            <div class="resource-note">شروحات مصوّرة لكل قسم من الامتحان</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 19.5"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">الملزمة</div>
+            <div class="resource-note">ملخّص القواعد والمفردات بصيغة PDF</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="confirm-tail">
       <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
       <span>زورونا على التلغرام</span>
