@@ -135,536 +135,400 @@ body { background: var(--surface-base); }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 1 · CONFIRM (student dashboard)
-
-   Built to the supplied design: a green hero carrying the wordmark, the
-   greeting and a desk illustration, then an off-white sheet that curves
-   over it holding the exam card, a progress row, an encouragement strip,
-   the learning resources, the section grid and a fixed tab bar.
-
-   Everything here is page-scoped — nothing leaks into the exam, results
-   or admin screens, which keep the tokens from css/inelt-theme.css.
+   Green greeting card with an illustration, four tinted fact tiles, a
+   boxed instruction list, then the actions.
    ─────────────────────────────────────────────────────────────────────── */
 .page-confirm {
-  --dash-bg:      #F7F7F4;
-  --dash-card:    #FFFFFF;
-  --dash-line:    #ECEEEA;
-  --dash-t1:      #17251F;
-  --dash-t2:      #5C6963;
-  --dash-t3:      #66716B;
-
-  --hero-1:       #3A7563;
-  --hero-2:       #1E4639;
-  --hero-glow:    rgba(158,214,188,.28);
-
-  --g-deep:       #1B5D4F;
-  --g-mid:        #266D58;
-  --g-soft:       #E4F1EA;
-  --g-soft-line:  #D3E7DC;
-
-  --amber-bg:     #FCF3E0;
-  --amber-bg-2:   #FDF7E9;
-  --amber-ink:    #895B10;
-  --amber-chip:   #F6E3BE;
-
-  --violet-bg:    #F3EFFB;
-  --violet-bg-2:  #F2F1FA;
-  --violet-ink:   #5B4CA8;
-  --violet-chip:  #E2DCF6;
-
-  --blue-bg:      #E8F0FE;
-  --blue-ink:     #1B5E9E;
-
-  --dash-sh:      0 1px 2px rgba(20,38,31,.04), 0 10px 26px -14px rgba(20,38,31,.16);
-
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 0 0 92px;
-  background: var(--dash-bg);
+  display: grid;
+  place-items: start center;
+  padding: var(--sp-5) var(--sp-5) var(--sp-9);
   overflow: hidden;
 }
-[data-theme="dark"] .page-confirm {
-  --dash-bg:      #141C18;
-  --dash-card:    #1B241F;
-  --dash-line:    rgba(255,255,255,.08);
-  --dash-t1:      #E8EFEA;
-  --dash-t2:      #9CACA3;
-  --dash-t3:      #899B91;
-  --hero-1:       #245243;
-  --hero-2:       #10271F;
-  --g-deep:       #4FB894;
-  --g-mid:        #3E9E7E;
-  --g-soft:       #1D3229;
-  --g-soft-line:  rgba(255,255,255,.08);
-  --amber-bg:     #2E2517;  --amber-bg-2: #29220F; --amber-ink: #E0AC5A; --amber-chip: #43351B;
-  --violet-bg:    #241F33;  --violet-bg-2:#221D31; --violet-ink:#B4A6EE; --violet-chip:#332B4A;
-  --blue-bg:      #172533;  --blue-ink:   #7FB4E6;
-  --dash-sh:      0 1px 2px rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.5);
-}
-
-/* ══════════ HERO ══════════ */
-.dash-hero {
-  position: relative;
-  padding: var(--sp-6) var(--sp-6) calc(var(--sp-9) + 26px);
-  background:
-    radial-gradient(70% 80% at 84% -6%, var(--hero-glow) 0%, transparent 60%),
-    linear-gradient(202deg, var(--hero-1) 0%, var(--hero-2) 100%);
-  overflow: hidden;
-}
-/* the desk: a stack of books and a pen, at the far edge */
-.dash-hero-art {
+/* Leaves in the bottom corner of the page */
+.confirm-leaves {
   position: absolute;
-  bottom: 10px; inset-inline-end: 0;
-  width: 176px;
-  opacity: .96;
+  bottom: -14px;
+  inset-inline-start: -18px;
+  width: 190px;
+  z-index: 0;
   pointer-events: none;
 }
-.dash-hero-top {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--sp-4);
-}
-.dash-brand {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 9px 16px 9px 14px;
-  border-radius: var(--r-pill);
-  background: rgba(255,255,255,.13);
-  border: 1px solid rgba(255,255,255,.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.dash-brand svg { width: 17px; height: 17px; color: #9FD9BC; flex-shrink: 0; }
-.dash-brand b {
-  font-family: var(--font-en);
-  direction: ltr;
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  letter-spacing: .14em;
-  color: #fff;
-}
-/* the account button — still the sign-out control it has always been */
-.dash-avatar {
-  width: 44px; height: 44px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #fff;
-  cursor: pointer;
-  transition: background var(--dur-2) var(--ease), transform var(--dur-1) var(--ease);
-}
-.dash-avatar:hover { background: rgba(255,255,255,.24); }
-.dash-avatar:active { transform: scale(.94); }
-.dash-avatar svg { width: 20px; height: 20px; }
+[data-theme="dark"] .confirm-leaves { opacity: .14; }
 
-.dash-greet {
-  position: relative; z-index: 1;
-  margin-top: var(--sp-7);
-  max-width: 60%;
-}
-.dash-hello {
-  font-size: var(--fs-2xl);
-  font-weight: 700;
-  line-height: 1.4;
-  color: #fff;
-  letter-spacing: -.012em;
-}
-.dash-hello .wave { font-size: .84em; }
-.dash-name {
-  display: block;
-  margin-top: 2px;
-  font-size: var(--fs-xl);
-  font-weight: 700;
-  line-height: 1.4;
-  color: #A9DFC3;
-  /* an address can be long and must never wrap onto three lines */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  direction: ltr;
-  text-align: start;
-  unicode-bidi: plaintext;
-}
-.dash-tagline {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-sm);
-  color: rgba(226,241,234,.8);
-}
-.dash-rule {
-  display: block;
-  width: 56px; height: 3px;
-  margin-top: var(--sp-4);
-  border-radius: var(--r-pill);
-  background: rgba(169,223,195,.85);
-}
-
-/* ══════════ SHEET ══════════ */
-/* curves up over the hero so the two read as one surface */
-.dash-sheet {
+/* The old card wrapper is now just a column — each block carries itself. */
+.confirm-card {
   position: relative;
-  z-index: 2;
-  margin-top: -26px;
-  padding: var(--sp-6) var(--sp-5) 0;
-  border-radius: 30px 30px 0 0;
-  background: var(--dash-bg);
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   gap: var(--sp-5);
 }
 
-.dash-card {
-  background: var(--dash-card);
-  border-radius: var(--r-lg);
-  box-shadow: var(--dash-sh);
-}
-
-/* ══════════ EXAM CARD — the one thing this screen is for ══════════ */
-.dash-exam {
+/* ── Greeting card ── */
+.confirm-header {
   position: relative;
-  padding: var(--sp-5);
   overflow: hidden;
+  border-radius: var(--r-xl);
+  padding: var(--sp-6) var(--sp-6) var(--sp-7);
+  background:
+    radial-gradient(120% 140% at 88% -25%, rgba(255,255,255,.10) 0%, transparent 60%),
+    linear-gradient(200deg, var(--green-700) 0%, var(--green-800) 100%);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  min-height: 150px;
 }
-.dash-exam-art {
+.confirm-art {
   position: absolute;
-  top: 12px; inset-inline-end: 8px;
-  width: 124px;
+  bottom: -8px;
+  inset-inline-start: auto;
+  inset-inline-end: 4px;
+  width: 152px;
+  opacity: .92;
   pointer-events: none;
 }
-.dash-exam-head { position: relative; z-index: 1; max-width: 64%; }
-.dash-chip {
-  display: inline-block;
-  padding: 6px 13px;
-  border-radius: var(--r-pill);
-  background: var(--g-soft);
-  color: var(--g-deep);
-  font-size: var(--fs-2xs);
-  font-weight: 700;
-}
-.dash-exam-title {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  line-height: 1.5;
-  color: var(--dash-t1);
-  letter-spacing: -.012em;
-}
-.dash-exam-sub {
-  margin-top: 6px;
-  font-size: var(--fs-sm);
-  color: var(--dash-t2);
-}
-
-/* the three facts as one strip, divided by hairlines — not three cards */
-.dash-facts {
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: var(--sp-5);
-  padding: var(--sp-4) 0;
-  border-radius: var(--r-md);
-  background: var(--g-soft);
-}
-.dash-fact {
+.confirm-header-top {
   position: relative;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-5);
 }
-.dash-fact + .dash-fact::after {
-  content: "";
-  position: absolute; inset-inline-end: 0; top: 2px; bottom: 2px;
-  width: 1px;
-  background: var(--g-soft-line);
+.confirm-greeting {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.dash-fact-top {
-  display: flex; align-items: center; gap: 7px;
-  color: var(--g-deep);
-}
-.dash-fact-top svg { width: 15px; height: 15px; flex-shrink: 0; }
-.dash-fact-top b {
+.confirm-header .badge-accent {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.24);
+  color: #fff;
   font-family: var(--font-en);
-  font-size: var(--fs-lg);
+  letter-spacing: .10em;
+}
+.confirm-title {
+  position: relative;
+  display: inline-block;
+  font-size: var(--fs-2xl);
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: -.02em;
-  color: var(--dash-t1);
+  color: #fff;
+  padding-bottom: 7px;
 }
-.dash-fact span { font-size: var(--fs-2xs); color: var(--dash-t2); }
-
-.dash-exam-actions {
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: stretch;
-  gap: var(--sp-4);
-  margin-top: var(--sp-4);
+/* Short accent rule under the greeting, as in the design. */
+.confirm-title::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  width: 46px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--green-300);
 }
-.dash-pass {
-  display: flex; align-items: center; gap: var(--sp-4);
-  padding: var(--sp-4);
-  border-radius: var(--r-md);
-  background: var(--g-soft);
-}
-.dash-pass-ic {
-  width: 36px; height: 36px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--dash-card);
-  color: var(--g-deep);
-}
-.dash-pass-ic svg { width: 17px; height: 17px; }
-.dash-pass-l { font-size: var(--fs-2xs); color: var(--dash-t2); }
-.dash-pass-v {
-  margin-top: 2px;
+.confirm-subtitle {
+  margin-top: 8px;
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,.80);
   font-family: var(--font-en);
   direction: ltr;
-  unicode-bidi: isolate;      /* else RTL renders this as 100 / 50 */
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--dash-t1);
-}
-.dash-pass-v i { font-style: normal; font-size: var(--fs-xs); color: var(--dash-t2); }
-
-.dash-cta {
-  display: flex; align-items: center; justify-content: center; gap: var(--sp-4);
-  min-height: 62px;
-  padding: 0 var(--sp-4);
-  border: none;
-  border-radius: var(--r-md);
-  background: linear-gradient(180deg, var(--g-mid) 0%, var(--g-deep) 100%);
-  box-shadow: 0 8px 18px -8px rgba(27,93,79,.62);
-  color: #fff;
-  font-family: inherit;
-  font-size: var(--fs-md);
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
-}
-[data-theme="dark"] .dash-cta { color: #06241A; }
-.dash-cta:hover { box-shadow: 0 12px 24px -8px rgba(27,93,79,.7); }
-.dash-cta:active { transform: scale(.985); }
-.dash-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-/* ══════════ ENCOURAGEMENT ══════════ */
-.dash-tip {
-  position: relative;
-  display: flex; align-items: center; gap: var(--sp-5);
-  padding: var(--sp-5);
-  border-radius: var(--r-lg);
-  background: var(--g-soft);
+  unicode-bidi: isolate;
+  text-align: start;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
-.dash-tip-ic {
-  width: 46px; height: 46px;
+.confirm-header .icon-btn {
   flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(180deg, var(--g-mid), var(--g-deep));
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.26);
   color: #fff;
 }
-[data-theme="dark"] .dash-tip-ic { color: #06241A; }
-.dash-tip-ic svg { width: 21px; height: 21px; }
-.dash-tip-t { font-size: var(--fs-md); font-weight: 700; color: var(--dash-t1); }
-.dash-tip-s { margin-top: 3px; font-size: var(--fs-xs); color: var(--dash-t2); }
-.dash-tip-leaves {
+.confirm-header .icon-btn:hover {
+  background: rgba(255,255,255,.22);
+  border-color: rgba(255,255,255,.40);
+}
+
+.confirm-body { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+/* ── Fact tiles ── */
+.exam-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+}
+.exam-tile {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "icon value" "icon label";
+  align-items: center;
+  column-gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-5) calc(var(--sp-5) + 14px);
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+.exam-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+/* A soft wave in the corner of each tile. */
+.exam-tile::after {
+  content: "";
   position: absolute;
-  bottom: -12px; inset-inline-start: -6px;
-  width: 104px;
-  opacity: .5;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  bottom: -72px;
+  inset-inline-start: -44px;
+  background: rgba(255,255,255,.34);
   pointer-events: none;
 }
-[data-theme="dark"] .dash-tip-leaves { opacity: .16; }
+[data-theme="dark"] .exam-tile::after { background: rgba(255,255,255,.04); }
 
-/* ══════════ PANELS (resources · sections) ══════════ */
-.dash-panel { padding: var(--sp-5); }
-.dash-panel-head {
-  display: flex; align-items: center; gap: var(--sp-3);
+/* Icon sits in a tinted disc with the figure beside it. */
+.tile-icon {
+  grid-area: icon;
+  position: relative;
+  z-index: 1;
+  box-sizing: content-box;
+  width: 18px; height: 18px;
+  padding: 11px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.66);
+  stroke-width: 2.1;
+}
+[data-theme="dark"] .tile-icon { background: rgba(255,255,255,.08); }
+.tile-value {
+  grid-area: value;
+  position: relative;
+  z-index: 1;
+  /* .mono forces direction:ltr, which would align the figure away from the
+     icon. Follow the page direction so the figure and its label share an edge. */
+  direction: inherit;
+  text-align: start;
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-primary);
+  letter-spacing: -.01em;
+}
+.tile-label {
+  grid-area: label;
+  position: relative;
+  z-index: 1;
+  text-align: start;
+  margin-top: 3px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.tile-arrow {
+  position: absolute;
+  z-index: 1;
+  bottom: var(--sp-4);
+  inset-inline-start: var(--sp-5);
+  width: 16px; height: 16px;
+  opacity: .55;
+}
+
+/* Per-tile tints, in the order the markup lists them. */
+.exam-tile:nth-child(1) { background: var(--tint-green); }
+.exam-tile:nth-child(2) { background: var(--tint-blue); }
+.exam-tile:nth-child(3) { background: var(--tint-purple); }
+.exam-tile:nth-child(4) { background: var(--tint-amber); }
+.exam-tile:nth-child(1) .tile-icon, .exam-tile:nth-child(1) .tile-arrow { color: var(--sec-conversation); }
+.exam-tile:nth-child(2) .tile-icon, .exam-tile:nth-child(2) .tile-arrow { color: var(--sec-grammar); }
+.exam-tile:nth-child(3) .tile-icon, .exam-tile:nth-child(3) .tile-arrow { color: var(--sec-reading); }
+.exam-tile:nth-child(4) .tile-icon, .exam-tile:nth-child(4) .tile-arrow { color: var(--sec-functions); }
+
+/* ── Instructions card ── */
+.instructions-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+  padding: var(--sp-6);
+}
+.instructions-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
   margin-bottom: var(--sp-5);
 }
-.dash-panel-head > svg { width: 19px; height: 19px; color: var(--g-deep); flex-shrink: 0; }
-.dash-panel-title {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--dash-t1);
-}
-.dash-panel-note {
-  margin-inline-start: auto;
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: var(--fs-2xs);
-  font-weight: 600;
-  color: var(--dash-t3);
-}
-.dash-panel-note svg { width: 12px; height: 12px; }
-
-/* ── resources: two cards, deliberately unalike ── */
-.dash-res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
-.dash-res {
-  position: relative;
-  display: flex; flex-direction: column;
-  padding: var(--sp-4);
-  border-radius: var(--r-md);
-  overflow: hidden;
-}
-.dash-res-pdf { background: var(--amber-bg-2); }
-.dash-res-vid { background: var(--violet-bg-2); }
-.dash-res-ic {
+.instructions-ic {
   width: 38px; height: 38px;
+  flex-shrink: 0;
   display: grid; place-items: center;
   border-radius: var(--r-sm);
-  background: var(--dash-card);
+  background: var(--primary-dim);
+  color: var(--primary-strong);
 }
-.dash-res-ic svg { width: 18px; height: 18px; }
-.dash-res-pdf .dash-res-ic { color: var(--amber-ink); }
-.dash-res-vid .dash-res-ic { color: var(--violet-ink); }
-.dash-res-name {
-  margin-top: var(--sp-4);
+.instructions-ic svg { width: 18px; height: 18px; }
+.instructions-head .section-label {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6px;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.instructions-head .section-label::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  width: 34px; height: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* ── Learning resources — placeholders until the material is ready ── */
+.resources-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+  padding: var(--sp-6);
+}
+.resource-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+/* Not links, not buttons — nothing to open yet, so nothing reacts to a tap. */
+.resource-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "ic text soon";
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: none;
+}
+.resource-ic {
+  grid-area: ic;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--r-md);
+}
+.resource-ic svg { width: 19px; height: 19px; }
+.resource-list > li:nth-child(1) .resource-ic { background: var(--tint-purple); color: var(--sec-reading); }
+.resource-list > li:nth-child(2) .resource-ic { background: var(--tint-amber);  color: var(--sec-functions); }
+.resource-text { grid-area: text; min-width: 0; }
+.resource-name {
   font-size: var(--fs-sm);
   font-weight: 700;
-  color: var(--dash-t1);
+  color: var(--text-primary);
 }
-.dash-res-desc {
-  margin-top: 4px;
-  font-size: var(--fs-2xs);
-  line-height: 1.65;
-  color: var(--dash-t2);
-  flex: 1;
+.resource-note {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
 }
-/* not a link: there is nothing to open yet, so nothing reacts to a tap */
-.dash-res-chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  align-self: flex-start;
-  margin-top: var(--sp-4);
-  padding: 6px 11px;
+.resource-soon {
+  grid-area: soon;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
   border-radius: var(--r-pill);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
   font-size: var(--fs-2xs);
   font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
-.dash-res-chip svg { width: 11px; height: 11px; }
-.dash-res-pdf .dash-res-chip { background: var(--amber-chip); color: var(--amber-ink); }
-.dash-res-vid .dash-res-chip { background: var(--violet-chip); color: var(--violet-ink); }
-.dash-res-deco {
+.resource-soon::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warn-bright);
+  animation: soon-pulse 2.4s var(--ease) infinite;
+}
+@keyframes soon-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) {
+  .resource-soon::before { animation: none; }
+}
+/* Narrow screens: the pill drops under the text instead of squeezing it. */
+@media (max-width: 430px) {
+  .resource-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "ic text" "ic soon";
+    row-gap: var(--sp-3);
+  }
+  .resource-ic   { grid-area: ic; align-self: start; }
+  .resource-text { grid-area: text; }
+  .resource-soon { grid-area: soon; justify-self: start; }
+}
+
+.instruction-list { list-style: none; }
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+.instruction-item:last-child { border-bottom: none; padding-bottom: 0; }
+.instruction-item:first-child { padding-top: 0; }
+.instr-check {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--primary-dim);
+  border: 1px solid var(--primary-border);
+}
+.instr-check svg {
+  width: 12px; height: 12px;
+  fill: none;
+  stroke: var(--primary-strong);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Actions ── */
+.confirm-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: 0;
+  border: none;
+  background: none;
+}
+.confirm-footer .btn { width: 100%; }
+.confirm-footer a.btn { text-decoration: none; }
+.confirm-footer .btn-primary { box-shadow: 0 8px 20px var(--primary-glow); }
+/* The trailing arrow sits at the far edge of the primary button. */
+.confirm-footer .btn-primary { position: relative; }
+.btn-trail {
   position: absolute;
-  bottom: -8px; inset-inline-start: -10px;
-  width: 78px;
-  opacity: .8;
-  pointer-events: none;
+  inset-inline-end: var(--sp-6);
+  width: 17px; height: 17px;
+  opacity: .5;
 }
-[data-theme="dark"] .dash-res-deco { opacity: .3; }
-
-/* ── sections: four compact practice tiles ── */
-.dash-sec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
-.dash-sec {
-  display: flex; flex-direction: column; align-items: center;
-  padding: var(--sp-4) 4px var(--sp-3);
-  border-radius: var(--r-sm);
-  text-decoration: none;
-  transition: transform var(--dur-1) var(--ease);
-}
-.dash-sec:active { transform: scale(.96); }
-.dash-sec svg { width: 19px; height: 19px; }
-.dash-sec-name {
-  margin-top: var(--sp-3);
-  font-size: 10.5px;
-  font-weight: 600;
-  line-height: 1.35;
-  text-align: center;
-  color: var(--dash-t1);
-}
-.dash-sec-go {
-  position: relative;
-  margin-top: var(--sp-3);
-  padding-top: 9px;
-  font-size: 10px;
-  font-weight: 700;
-  text-align: center;
-}
-.dash-sec-go::before {
-  content: "";
-  position: absolute; top: 0; inset-inline-start: 50%;
-  transform: translateX(50%);
-  width: 26px; height: 1.5px;
-  border-radius: 2px;
-  background: currentColor;
-  opacity: .35;
-}
-.dash-sec-a { background: var(--amber-bg);  color: var(--amber-ink); }
-.dash-sec-b { background: var(--violet-bg); color: var(--violet-ink); }
-.dash-sec-c { background: var(--blue-bg);   color: var(--blue-ink); }
-.dash-sec-d { background: var(--g-soft);    color: var(--g-deep); }
-
-/* ══════════ TELEGRAM ══════════ */
-.dash-tg { display: flex; justify-content: center; padding-top: var(--sp-2); }
-
-/* ══════════ TAB BAR ══════════ */
-.dash-tabs {
-  position: fixed;
-  z-index: 50;
-  bottom: 0; inset-inline: 0;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: var(--sp-3) var(--sp-3) calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
-  background: rgba(255,255,255,.9);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border-top: 1px solid var(--dash-line);
-}
-.dash-tab {
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
-  padding: 6px 0 5px;
-  border-radius: var(--r-sm);
-  text-decoration: none;
-  color: var(--dash-t3);
-}
-.dash-tab svg { width: 21px; height: 21px; }
-.dash-tab span { font-size: 10px; font-weight: 600; }
-.dash-tab.on { color: var(--g-deep); }
-.dash-tab.on span { font-weight: 700; }
-.dash-tab.on::after {
-  content: "";
-  width: 20px; height: 3px;
-  margin-top: 1px;
-  border-radius: var(--r-pill);
-  background: currentColor;
-}
-[data-theme="dark"] .dash-tabs { background: rgba(27,36,31,.9); }
-.dash-tab {
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
-}
-/* a screen that does not exist yet does not pretend to be tappable */
-.dash-tab[aria-disabled="true"] { opacity: .5; cursor: default; }
-
-/* Lift the floating theme toggle clear of the tab bar on this screen only. */
-body:has(#confirmPage:not(.hidden)) .floating-controls {
-  bottom: calc(var(--sp-5) + 74px);
-}
-
-/* ── On a laptop the app keeps its shape: one centred column, not a stretch ── */
-@media (min-width: 720px) {
-  .page-confirm { background: #EFEFEA; padding-top: var(--sp-6); }
-  [data-theme="dark"] .page-confirm { background: #0E1512; }
-  .dash-hero {
-    max-width: 560px;
-    margin-inline: auto;
-    border-radius: 30px 30px 0 0;
-  }
-  .dash-sheet {
-    max-width: 560px;
-    margin-inline: auto;
-    padding-bottom: var(--sp-7);
-    box-shadow: 0 26px 60px -34px rgba(20,38,31,.4);
-  }
-  .dash-tabs {
-    inset-inline: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 560px;
-    border-radius: 24px 24px 0 0;
-    border: 1px solid var(--dash-line);
-    border-bottom: none;
-  }
-}
+.confirm-tail { display: flex; justify-content: center; }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 2 · EXAM — deliberately calm and low-contrast-noise
@@ -1567,18 +1431,17 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
     inset-inline-end: var(--sp-4);
   }
   .ctrl-btn { width: 34px; height: 34px; opacity: .92; }
-  /* the dashboard stays full-bleed on a phone — the hero runs edge to edge */
-  .dash-hero { padding: var(--sp-5) var(--sp-5) calc(var(--sp-8) + 20px); }
-  .dash-hero-art { width: 158px; bottom: 6px; }
-  .dash-greet { margin-top: var(--sp-6); max-width: 60%; }
-  .dash-hello { font-size: var(--fs-xl); }
-  .dash-name  { font-size: var(--fs-md); }
-  .dash-sheet { padding: var(--sp-5) var(--sp-4) 0; gap: var(--sp-4); }
-  .dash-exam { padding: var(--sp-4); }
-  .dash-exam-art { width: 108px; top: 8px; }
-  .dash-exam-title { font-size: var(--fs-md); }
-  .dash-tip { padding: var(--sp-4); gap: var(--sp-4); }
-  .dash-panel { padding: var(--sp-4); }
+  .page-confirm { padding: var(--sp-4) var(--sp-4) var(--sp-9); }
+  .confirm-header { padding: var(--sp-5) var(--sp-5) var(--sp-6); min-height: 138px; }
+  .confirm-art { width: 138px; }
+  .confirm-title  { font-size: var(--fs-xl); }
+  .exam-tile { padding: var(--sp-4); }
+  .resources-card { padding: var(--sp-5); }
+  .resource-item { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+  .resource-ic { width: 36px; height: 36px; }
+  .tile-value { font-size: var(--fs-2xl); }
+  .tile-arrow { bottom: var(--sp-3); inset-inline-start: var(--sp-4); }
+  .instructions-card { padding: var(--sp-5); }
 
   .page-results, .page-review { padding: var(--sp-7) var(--sp-4) var(--sp-9); }
   .result-hero { padding: var(--sp-7) var(--sp-5) var(--sp-6); border-radius: var(--r-xl); }
@@ -1587,11 +1450,6 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
   .result-actions, .review-actions, .modal-actions { grid-template-columns: 1fr; }
   .review-question { padding: var(--sp-5); }
   .modal-box { padding: var(--sp-7) var(--sp-5) var(--sp-6); }
-}
-
-@media (max-width: 360px) {
-  .dash-exam-actions { grid-template-columns: 1fr; }
-  .dash-pass { justify-content: center; }
 }
 
 @media (max-width: 400px) {
@@ -1650,288 +1508,182 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
 </div>
 
 <!-- ════════════════════════════════
+<!-- ════════════════════════════════
      PAGE 2: CONFIRMATION
 ════════════════════════════════ -->
 <div id="confirmPage" class="page-confirm hidden">
-
-  <!-- ══════════ HERO ══════════ -->
-  <header class="dash-hero">
-    <!-- English book on a stack, two pens, soft leaves -->
-    <svg class="dash-hero-art" viewBox="0 0 240 172" fill="none" aria-hidden="true">
-      <g opacity=".5">
-        <path d="M206 20c10-14 28-19 42-15-5 15-19 25-33 26z" fill="#9FD9BC" fill-opacity=".3"/>
-        <path d="M196 36c-13-5-27 0-34 11 11 7 26 7 35 1z" fill="#9FD9BC" fill-opacity=".22"/>
-        <path d="M46 132c-11-14-8-34 4-45 9 15 6 34-4 45z" fill="#9FD9BC" fill-opacity=".18"/>
-      </g>
-
-      <!-- two pens, resting behind the stack -->
-      <g transform="rotate(-26 60 96)">
-        <rect x="14" y="88" width="98" height="11" rx="5.5" fill="#E9EDEA"/>
-        <rect x="14" y="88" width="26" height="11" rx="5.5" fill="#2B3A33"/>
-        <path d="M112 88h9l7 5.5-7 5.5h-9z" fill="#B9C3BD"/>
-        <rect x="46" y="88" width="5" height="11" fill="#C9D2CC"/>
-      </g>
-      <g transform="rotate(-18 66 116)">
-        <rect x="26" y="112" width="92" height="10" rx="5" fill="#CFD8D2"/>
-        <rect x="26" y="112" width="24" height="10" rx="5" fill="#1F2B25"/>
-        <path d="M118 112h8l6 5-6 5h-8z" fill="#A7B2AB"/>
-      </g>
-
-      <!-- the stack: two closed books under the English one -->
-      <g transform="rotate(-8 140 112)">
-        <rect x="76" y="126" width="132" height="17" rx="5" fill="#EFE8D8"/>
-        <rect x="76" y="126" width="132" height="17" rx="5" stroke="#D8CDB5" stroke-width="1.4"/>
-        <rect x="76" y="126" width="132" height="6"  rx="3" fill="#FBF7EE"/>
-        <rect x="84" y="111" width="126" height="16" rx="5" fill="#F7F2E6"/>
-        <rect x="84" y="111" width="126" height="16" rx="5" stroke="#DCD2BC" stroke-width="1.4"/>
-        <rect x="84" y="111" width="126" height="6"  rx="3" fill="#FFFDF7"/>
-      </g>
-
-      <!-- the English book -->
-      <g transform="rotate(-8 140 78)">
-        <rect x="84" y="36" width="122" height="78" rx="8" fill="#123B2E"/>
-        <rect x="84" y="36" width="122" height="78" rx="8" fill="url(#dashBookGrad)"/>
-        <rect x="88.5" y="40.5" width="113" height="69" rx="5.5" stroke="#4E8C74" stroke-width="1.3" stroke-opacity=".55"/>
-        <!-- spine -->
-        <rect x="84" y="36" width="11" height="78" rx="5.5" fill="#0C2E23"/>
-        <!-- pages edge peeking out at the foot -->
-        <path d="M95 114h111a8 8 0 0 0 8-8v-2H95z" fill="#F4EFE2"/>
-        <text x="150" y="80" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="13" font-weight="700"
-              letter-spacing="1.2" fill="#DCF0E4" fill-opacity=".92">ENGLISH</text>
-        <rect x="126" y="88" width="48" height="2.6" rx="1.3" fill="#9FD9BC" fill-opacity=".5"/>
-      </g>
-      <defs>
-        <linearGradient id="dashBookGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stop-color="#2E6A55"/>
-          <stop offset="100%" stop-color="#0F3529"/>
-        </linearGradient>
-      </defs>
-    </svg>
-
-    <div class="dash-hero-top">
-      <div class="dash-brand">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.4 2.6a1 1 0 0 0-1.1-.2L3.1 9.6c-.9.4-.9 1.6 0 2l4.8 1.7 1.7 4.8c.3.9 1.6.9 2 0l7.2-17.2a1 1 0 0 0-.2-1.1z" fill-opacity=".92"/></svg>
-        <b>INELT</b>
-      </div>
-      <button class="dash-avatar" onclick="ExamAPI.signOut()" title="تسجيل الخروج" aria-label="تسجيل الخروج">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
-      </button>
-    </div>
-
-    <div class="dash-greet">
-      <div class="dash-hello">مرحباً بعودتك، <span class="wave">👋</span></div>
-      <div class="dash-name" id="confirmName">–</div>
-      <div class="dash-tagline">معاً نحو تحقيق هدفك</div>
-      <span class="dash-rule"></span>
-    </div>
-  </header>
-
-  <!-- ══════════ SHEET ══════════ -->
-  <div class="dash-sheet">
-
-    <!-- ── the exam: the one thing this screen is for ── -->
-    <section class="dash-card dash-exam" id="dashExam">
-      <!-- checklist and a stopwatch -->
-      <svg class="dash-exam-art" viewBox="0 0 140 132" fill="none" aria-hidden="true">
-        <path d="M18 34c-9-11-7-28 3-37 8 12 6 28-3 37z" fill="#BFE3CF" fill-opacity=".55"/>
-        <path d="M14 40c-13-2-24-16-25-30 14 1 26 14 25 30z" fill="#D8EDE1" fill-opacity=".8"/>
-        <path d="M124 94c8-10 21-14 32-11-4 12-15 20-27 20z" fill="#BFE3CF" fill-opacity=".45"/>
-        <circle cx="86" cy="44" r="40" fill="#EAF4EE" fill-opacity=".75"/>
-
-        <!-- checklist sheet -->
-        <g transform="rotate(-4 74 52)">
-          <rect x="38" y="10" width="72" height="88" rx="9" fill="#FFFFFF"/>
-          <rect x="38" y="10" width="72" height="88" rx="9" stroke="#DCEAE1" stroke-width="1.5"/>
-          <g fill="#2B7A5D">
-            <rect x="48" y="26" width="12" height="12" rx="3.4"/>
-            <rect x="48" y="47" width="12" height="12" rx="3.4"/>
-            <rect x="48" y="68" width="12" height="12" rx="3.4"/>
-          </g>
-          <g stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
-            <polyline points="50.8,31.8 53.4,34.6 57.4,29.4"/>
-            <polyline points="50.8,52.8 53.4,55.6 57.4,50.4"/>
-            <polyline points="50.8,73.8 53.4,76.6 57.4,71.4"/>
-          </g>
-          <g fill="#D6E3DC">
-            <rect x="66" y="29" width="34" height="5" rx="2.5"/>
-            <rect x="66" y="50" width="28" height="5" rx="2.5"/>
-            <rect x="66" y="71" width="32" height="5" rx="2.5"/>
-          </g>
+  <svg class="confirm-leaves" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+    <path d="M18 122c-10-16-6-38 8-50 9 18 6 39-8 50z" fill="var(--green-200)" opacity=".55"/>
+    <path d="M16 126c-17-4-30-22-30-40 18 3 32 20 30 40z" fill="var(--green-100)" opacity=".85"/>
+    <path d="M44 148c-8-13-5-31 7-41 7 15 4 32-7 41z" fill="var(--green-200)" opacity=".4"/>
+  </svg>
+  <div class="card confirm-card">
+    <div class="confirm-header">
+      <!-- Books, answer sheet and leaves, sitting behind the greeting -->
+      <svg class="confirm-art" viewBox="0 0 200 150" fill="none" aria-hidden="true">
+        <g opacity=".95">
+          <path d="M150 34c6-9 16-13 24-11-3 9-11 15-19 16z" fill="#4C8C72"/>
+          <path d="M147 44c-9-3-19 0-24 7 8 5 18 5 25 0z" fill="#3E7D64"/>
+          <path d="M166 58c5-7 14-10 21-8-3 8-10 13-17 13z" fill="#44856B"/>
+          <path d="M60 22c3-7 10-11 17-10-2 7-8 12-14 13z" fill="#4C8C72"/>
         </g>
-
-        <!-- stopwatch -->
-        <g>
-          <rect x="98" y="66" width="7" height="8" rx="2.4" fill="#1F5B49"/>
-          <circle cx="101.5" cy="95" r="25" fill="#FFFFFF"/>
-          <circle cx="101.5" cy="95" r="25" stroke="#1F5B49" stroke-width="4.5"/>
-          <circle cx="101.5" cy="95" r="17" fill="#EAF4EE"/>
-          <path d="M101.5 95V83M101.5 95l8 5" stroke="#1F5B49" stroke-width="3.4" stroke-linecap="round"/>
+        <!-- answer sheet -->
+        <g transform="rotate(-8 118 78)">
+          <rect x="88" y="26" width="62" height="86" rx="6" fill="#F7FAF8"/>
+          <rect x="88" y="26" width="62" height="86" rx="6" stroke="#D6E5DC" stroke-width="1.6"/>
+          <g fill="#2C6350">
+            <rect x="97" y="42" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="56" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="70" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="84" width="7" height="7" rx="1.6" opacity=".18"/>
+          </g>
+          <g stroke="#3E8A6B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <polyline points="98.5,45.5 100.3,47.6 103,43.4"/>
+            <polyline points="98.5,59.5 100.3,61.6 103,57.4"/>
+            <polyline points="98.5,73.5 100.3,75.6 103,71.4"/>
+            <polyline points="98.5,87.5 100.3,89.6 103,85.4"/>
+          </g>
+          <g fill="#C7D9CF">
+            <rect x="110" y="43" width="30" height="4" rx="2"/>
+            <rect x="110" y="57" width="26" height="4" rx="2"/>
+            <rect x="110" y="71" width="30" height="4" rx="2"/>
+            <rect x="110" y="85" width="22" height="4" rx="2"/>
+          </g>
+          <circle cx="136" cy="36" r="9" fill="none" stroke="#9FC4B0" stroke-width="1.4"/>
+          <text x="136" y="39.5" text-anchor="middle" font-family="Inter,sans-serif"
+                font-size="8.5" font-weight="700" fill="#2C6350">A+</text>
         </g>
+        <!-- books -->
+        <path d="M34 104h74a7 7 0 0 1 7 7v9a7 7 0 0 1-7 7H34a7 7 0 0 1-7-7v-9a7 7 0 0 1 7-7z" fill="#2E7257"/>
+        <path d="M34 104v23" stroke="#1F5B44" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M48 115h50" stroke="#EAF4EE" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+        <path d="M26 128h78a7 7 0 0 1 7 7v8a7 7 0 0 1-7 7H26a7 7 0 0 1-7-7v-8a7 7 0 0 1 7-7z" fill="#245C46"/>
+        <path d="M26 128v22" stroke="#17452F" stroke-width="2.4" stroke-linecap="round"/>
       </svg>
 
-      <div class="dash-exam-head">
-        <span class="dash-chip">الامتحان الوطني</span>
-        <h2 class="dash-exam-title">اختبار الامتحان الوطني الإنكليزي</h2>
-        <p class="dash-exam-sub">اختبر مستواك في 40 سؤالاً</p>
-      </div>
-
-      <div class="dash-facts">
-        <div class="dash-fact">
-          <div class="dash-fact-top">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 1 1 3.9 2.6c-.7.3-1.2 1-1.2 1.8v.5"/><line x1="12" y1="17.4" x2="12" y2="17.5"/></svg>
-            <b>40</b>
-          </div>
-          <span>سؤال</span>
+      <div class="confirm-header-top">
+        <div class="confirm-greeting">
+          <div class="badge badge-accent" style="margin-bottom:10px">INELT</div>
+          <h2 class="confirm-title">مرحباً بعودتك</h2>
+          <p class="confirm-subtitle" id="confirmName">–</p>
         </div>
-        <div class="dash-fact">
-          <div class="dash-fact-top">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><polyline points="12 7 12 12 15.5 14.5"/></svg>
-            <b>60</b>
-          </div>
-          <span>دقيقة</span>
-        </div>
-        <div class="dash-fact">
-          <div class="dash-fact-top">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 6.1 6.6.8-4.8 4.5 1.2 6.6L12 17.4 6.1 20.6l1.2-6.6L2.5 9.5l6.6-.8z"/></svg>
-            <b>100</b>
-          </div>
-          <span>درجة</span>
-        </div>
-      </div>
-
-      <div class="dash-exam-actions">
-        <button class="dash-cta" id="btnStartExam" onclick="startExam()">
-          <span>ابدأ الاختبار</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        <button class="icon-btn" onclick="ExamAPI.signOut()" title="تسجيل الخروج">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
-        <div class="dash-pass">
-          <span class="dash-pass-ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 5.5H4.6a.6.6 0 0 0-.6.7c.3 2.4 1.7 3.6 3 3.9M17 5.5h2.4a.6.6 0 0 1 .6.7c-.3 2.4-1.7 3.6-3 3.9"/><path d="M12 15v3M8.5 20.5h7"/></svg>
-          </span>
-          <div>
-            <div class="dash-pass-l">درجة النجاح</div>
-            <div class="dash-pass-v">50 <i>/ 100</i></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── encouragement ── -->
-    <div class="dash-tip">
-      <svg class="dash-tip-leaves" viewBox="0 0 120 100" fill="none" aria-hidden="true">
-        <path d="M34 92c-12-16-8-40 6-52 10 18 6 40-6 52z" fill="#7FBFA2" fill-opacity=".45"/>
-        <path d="M30 96c-18-4-32-24-32-44 20 3 34 22 32 44z" fill="#A9DFC3" fill-opacity=".5"/>
-        <path d="M62 100c-9-14-6-32 6-42 8 16 5 33-6 42z" fill="#7FBFA2" fill-opacity=".3"/>
-      </svg>
-      <span class="dash-tip-ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21.5h4"/><path d="M12 2.5a6.5 6.5 0 0 0-3.6 11.9c.4.3.6.7.6 1.1v.5h6v-.5c0-.4.2-.8.6-1.1A6.5 6.5 0 0 0 12 2.5z"/></svg>
-      </span>
-      <div>
-        <div class="dash-tip-t">استمر في رحلتك</div>
-        <div class="dash-tip-s">كل خطوة تقرّبك من هدفك</div>
       </div>
     </div>
 
-    <!-- ── learning resources — reserved, content lands later ── -->
-    <section class="dash-card dash-panel" id="dashRes">
-      <div class="dash-panel-head">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5h5.5A4 4 0 0 1 12 7.5v13a3 3 0 0 0-3-3H2z"/><path d="M22 3.5h-5.5A4 4 0 0 0 12 7.5v13a3 3 0 0 1 3-3h7z"/></svg>
-        <div class="dash-panel-title">مصادر التعلم</div>
-        <div class="dash-panel-note">قريباً</div>
-      </div>
-      <div class="dash-res-grid">
-        <div class="dash-res dash-res-pdf">
-          <svg class="dash-res-deco" viewBox="0 0 80 60" fill="none" aria-hidden="true">
-            <rect x="8"  y="40" width="64" height="11" rx="3" fill="#E7C98E" fill-opacity=".5"/>
-            <rect x="14" y="29" width="58" height="11" rx="3" fill="#EFD9A9" fill-opacity=".55"/>
-            <rect x="20" y="18" width="52" height="11" rx="3" fill="#F6E7C4" fill-opacity=".6"/>
-          </svg>
-          <span class="dash-res-ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2A2.2 2.2 0 0 1 6.2 3H19a1 1 0 0 1 1 1v13.4a1 1 0 0 1-1 1H6.2A2.2 2.2 0 0 0 4 20.6z"/><path d="M4 20.6A2.2 2.2 0 0 1 6.2 18.4H20V21H6.2A2.2 2.2 0 0 1 4 18.8"/><path d="M8.4 7.6h7M8.4 11h4.6"/></svg>
-          </span>
-          <div class="dash-res-name">الملزمة</div>
-          <div class="dash-res-desc">ملخّص القواعد والمفردات</div>
-          <span class="dash-res-chip">يُضاف لاحقاً</span>
+    <div class="confirm-body">
+      <div class="exam-tiles">
+        <div class="exam-tile">
+          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+          <div class="tile-value mono">60</div>
+          <div class="tile-label">دقيقة</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
-
-        <div class="dash-res dash-res-vid">
-          <svg class="dash-res-deco" viewBox="0 0 80 60" fill="none" aria-hidden="true">
-            <circle cx="24" cy="44" r="30" fill="#CFC4F2" fill-opacity=".38"/>
-            <circle cx="56" cy="54" r="20" fill="#DED6F8" fill-opacity=".45"/>
-          </svg>
-          <span class="dash-res-ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="14" height="14" rx="3.2"/><path d="M16.5 11.2 21 8.6a.7.7 0 0 1 1 .6v5.6a.7.7 0 0 1-1 .6l-4.5-2.6z"/></svg>
-          </span>
-          <div class="dash-res-name">المحاضرات</div>
-          <div class="dash-res-desc">شروحات مصوّرة لكل قسم</div>
-          <span class="dash-res-chip">يُضاف لاحقاً</span>
+        <div class="exam-tile">
+          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <div class="tile-value mono">40</div>
+          <div class="tile-label">سؤالاً</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        </div>
+        <div class="exam-tile">
+          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <div class="tile-value mono">100</div>
+          <div class="tile-label">درجة</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        </div>
+        <div class="exam-tile">
+          <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.6L22 9.3l-5.4 4.6L18.2 21 12 17.3 5.8 21l1.6-7.1L2 9.3l7.4-.7L12 2z"/></svg>
+          <div class="tile-value mono">50</div>
+          <div class="tile-label">للنجاح</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
       </div>
-    </section>
 
-    <!-- ── exam sections — each one opens single-section practice ── -->
-    <section class="dash-card dash-panel">
-      <div class="dash-panel-head">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.6"/></svg>
-        <div class="dash-panel-title">أقسام الامتحان</div>
-        <div class="dash-panel-note">تدرّب على قسم واحد</div>
+      <div class="instructions-card">
+      <div class="instructions-head">
+        <span class="instructions-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </span>
+        <div class="section-label">التعليمات</div>
       </div>
-      <div class="dash-sec-grid">
-        <a class="dash-sec dash-sec-a" href="/practice.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <div class="dash-sec-name">الوظائف اللغوية</div>
-          <div class="dash-sec-go">تدرّب</div>
-        </a>
-        <a class="dash-sec dash-sec-b" href="/practice.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          <div class="dash-sec-name">القراءة والفهم</div>
-          <div class="dash-sec-go">تدرّب</div>
-        </a>
-        <a class="dash-sec dash-sec-c" href="/practice.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>
-          <div class="dash-sec-name">القواعد</div>
-          <div class="dash-sec-go">تدرّب</div>
-        </a>
-        <a class="dash-sec dash-sec-d" href="/practice.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-          <div class="dash-sec-name">الحوار</div>
-          <div class="dash-sec-go">تدرّب</div>
-        </a>
+      <ul class="instruction-list">
+        <li class="instruction-item">
+          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          اقرأ كل سؤال بعناية قبل اختيار إجابتك
+        </li>
+        <li class="instruction-item">
+          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          يمكنك التنقل بين الأسئلة في أي وقت
+        </li>
+        <li class="instruction-item">
+          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          الأسئلة غير المجابة تُحسب خاطئة
+        </li>
+        <li class="instruction-item">
+          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          يُسلَّم الاختبار تلقائياً عند انتهاء الوقت
+        </li>
+        <li class="instruction-item">
+          <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          كل إجابة صحيحة = 2.5 درجة
+        </li>
+      </ul>
       </div>
-    </section>
+    </div>
 
-    <div class="dash-tg">
-      <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
-        <span>زورونا على التلغرام</span>
+    <div class="confirm-footer">
+      <button class="btn btn-primary btn-lg btn-block" id="btnStartExam" onclick="startExam()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>ابدأ الاختبار</span>
+        <svg class="btn-trail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      </button>
+      <a class="btn btn-ghost btn-lg btn-block" href="/practice.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>
+        <span>تدرّب على قسم واحد</span>
       </a>
     </div>
-  </div>
 
-  <!-- ══════════ TAB BAR ══════════ -->
-  <nav class="dash-tabs" aria-label="التنقل">
-    <span class="dash-tab on" aria-current="page">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
-      <span>الرئيسية</span>
-    </span>
-    <a class="dash-tab" href="#dashExam">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
-      <span>الامتحانات</span>
+    <!-- Lectures and the booklet: reserved here, content lands later. -->
+    <section class="resources-card" aria-labelledby="resourcesTitle">
+      <div class="instructions-head">
+        <span class="instructions-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <div class="section-label" id="resourcesTitle">مصادر التعلّم</div>
+      </div>
+      <ul class="resource-list">
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="15" height="16" rx="3"/><path d="M17 10.5l4.3-2.6a.6.6 0 0 1 .9.5v7.2a.6.6 0 0 1-.9.5L17 13.5z"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">المحاضرات</div>
+            <div class="resource-note">شروحات مصوّرة لكل قسم من الامتحان</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 19.5"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">الملزمة</div>
+            <div class="resource-note">ملخّص القواعد والمفردات بصيغة PDF</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="confirm-tail">
+      <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
+      <span>زورونا على التلغرام</span>
     </a>
-    <a class="dash-tab" href="#dashRes">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="14" height="14" rx="3.2"/><path d="M16.5 11.2 21 8.6a.7.7 0 0 1 1 .6v5.6a.7.7 0 0 1-1 .6l-4.5-2.6z"/></svg>
-      <span>المحاضرات</span>
-    </a>
-    <a class="dash-tab" href="#dashRes">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2A2.2 2.2 0 0 1 6.2 3H19a1 1 0 0 1 1 1v13.4a1 1 0 0 1-1 1H6.2A2.2 2.2 0 0 0 4 20.6z"/><path d="M4 20.6A2.2 2.2 0 0 1 6.2 18.4H20V21H6.2A2.2 2.2 0 0 1 4 18.8"/><path d="M8.4 7.6h7M8.4 11h4.6"/></svg>
-      <span>الملزمة</span>
-    </a>
-    <span class="dash-tab" aria-disabled="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
-      <span>حسابي</span>
-    </span>
-  </nav>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════
