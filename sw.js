@@ -14,7 +14,7 @@
    Bump CACHE_VERSION whenever the cached shell changes.
    ═══════════════════════════════════════════════════════════════════════ */
 
-const CACHE_VERSION = 'inelt-v1';
+const CACHE_VERSION = 'inelt-v2';
 const SHELL = [
   '/welcome.html',
   '/login.html',
@@ -22,7 +22,9 @@ const SHELL = [
   '/css/inelt-theme.css',
   '/manifest.json',
   '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/icons/icon-512.png',
+  '/icons/favicon-32.png',
+  '/icons/favicon-64.png'
 ];
 
 self.addEventListener('install', event => {
