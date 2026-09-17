@@ -184,16 +184,12 @@
 
   <!-- ── Setup ── -->
   <div id="setup">
-    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة والشرح بعد كل سؤال مباشرة.</p>
+    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.</p>
 
     <div class="pr-sections" id="sections"></div>
 
     <div class="pr-count-label">عدد الأسئلة</div>
     <div class="pr-counts" id="counts"></div>
-
-    <div class="pr-note">
-      <span>هذا التدريب <strong>لا يُحسب من محاولات الامتحان</strong> — تدرّب كما تشاء.</span>
-    </div>
 
     <button class="btn btn-primary btn-lg btn-block" id="startBtn">ابدأ التدريب</button>
   </div>
@@ -332,8 +328,6 @@ function answer(n) {
   });
   if (n === correct) right++;
   $('prScore').textContent = `${right} / ${i + 1}`;
-  $('prExplain').innerHTML =
-    `<div class="pr-explain"><strong>الشرح:</strong>${q.explanation || 'سيُضاف الشرح لاحقاً.'}</div>`;
   $('nextBtn').disabled = false;
 }
 
