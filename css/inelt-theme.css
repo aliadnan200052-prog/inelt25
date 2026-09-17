@@ -470,6 +470,47 @@ button { background: none; border: none; cursor: pointer; }
   box-shadow: 0 0 0 3px var(--primary-dim);
 }
 
+/* ── Telegram channel link ──
+   Used on the welcome screen and the exam dashboard. Telegram's own blue
+   marks it as leaving the site, rather than competing with the green CTA. */
+.telegram-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  padding: 11px 20px;
+  border-radius: var(--r-pill);
+  background: var(--tint-blue);
+  border: 1px solid rgba(34,158,217,.26);
+  color: #106D97;
+  font-family: var(--font-ar);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  transition: background-color var(--dur-2) var(--ease),
+              border-color var(--dur-2) var(--ease),
+              transform var(--dur-1) var(--ease);
+}
+.telegram-link:hover {
+  background: #DCEBF8;
+  border-color: rgba(34,158,217,.45);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.telegram-link:active { transform: translateY(0) scale(.99); }
+.telegram-link svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  fill: #229ED9;
+}
+[data-theme="dark"] .telegram-link {
+  background: rgba(34,158,217,.13);
+  border-color: rgba(34,158,217,.32);
+  color: #79C6EA;
+}
+[data-theme="dark"] .telegram-link:hover { background: rgba(34,158,217,.22); }
+[data-theme="dark"] .telegram-link svg { fill: #4FB3E0; }
+
 /* ── Section label ── */
 .section-label {
   font-size: var(--fs-2xs);

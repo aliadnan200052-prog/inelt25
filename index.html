@@ -290,7 +290,12 @@ body { background: var(--surface-base); }
   padding: var(--sp-6) var(--sp-7) var(--sp-7);
   border-top: 1px solid var(--border);
   background: var(--surface-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
 }
+.confirm-footer .btn { width: 100%; }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 2 · EXAM — deliberately calm and low-contrast-noise
@@ -1355,6 +1360,10 @@ body { background: var(--surface-base); }
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span>ابدأ الاختبار</span>
       </button>
+      <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
+      <span>زورونا على التلغرام</span>
+    </a>
     </div>
   </div>
 </div>
