@@ -447,51 +447,6 @@ body { background: var(--surface-base); }
 .dash-cta:active { transform: scale(.985); }
 .dash-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-/* ══════════ PROGRESS ══════════ */
-.dash-progress {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--sp-5);
-  padding: var(--sp-5);
-}
-.dash-ring { width: 74px; height: 74px; flex-shrink: 0; }
-.dash-ring .t { fill: none; stroke: var(--dash-line); stroke-width: 9; }
-.dash-ring .v {
-  fill: none; stroke: var(--g-deep); stroke-width: 9;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-.dash-ring text {
-  font-family: var(--font-en);
-  font-size: 20px; font-weight: 700;
-  fill: var(--dash-t1);
-}
-.dash-prog-title { font-size: var(--fs-md); font-weight: 700; color: var(--dash-t1); }
-.dash-prog-sub   { margin-top: 3px; font-size: var(--fs-xs); color: var(--dash-t2); }
-.dash-prog-track {
-  height: 8px;
-  margin-top: var(--sp-4);
-  border-radius: var(--r-pill);
-  background: var(--dash-line);
-  overflow: hidden;
-}
-.dash-prog-track i {
-  display: block; height: 100%;
-  border-radius: var(--r-pill);
-  background: linear-gradient(to left, var(--g-deep), var(--g-mid));
-}
-.dash-prog-ic {
-  width: 40px; height: 40px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: var(--r-sm);
-  background: var(--g-soft);
-  color: var(--g-deep);
-}
-.dash-prog-ic svg { width: 19px; height: 19px; }
-
 /* ══════════ ENCOURAGEMENT ══════════ */
 .dash-tip {
   position: relative;
@@ -1622,8 +1577,6 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
   .dash-exam { padding: var(--sp-4); }
   .dash-exam-art { width: 108px; top: 8px; }
   .dash-exam-title { font-size: var(--fs-md); }
-  .dash-progress { padding: var(--sp-4); gap: var(--sp-4); }
-  .dash-ring { width: 64px; height: 64px; }
   .dash-tip { padding: var(--sp-4); gap: var(--sp-4); }
   .dash-panel { padding: var(--sp-4); }
 
@@ -1862,24 +1815,6 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- ── progress ── -->
-    <section class="dash-card dash-progress">
-      <svg class="dash-ring" viewBox="0 0 80 80" aria-hidden="true">
-        <circle class="t" cx="40" cy="40" r="33"/>
-        <circle class="v" cx="40" cy="40" r="33"
-                stroke-dasharray="207.35" stroke-dashoffset="138.92"/>
-        <text x="40" y="47" text-anchor="middle">33%</text>
-      </svg>
-      <div>
-        <div class="dash-prog-title">تقدمك في الدراسة</div>
-        <div class="dash-prog-sub">4 من 12 قسم مكتمل</div>
-        <div class="dash-prog-track"><i style="width:33%"></i></div>
-      </div>
-      <span class="dash-prog-ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="8"/><line x1="18" y1="20" x2="18" y2="4"/></svg>
-      </span>
     </section>
 
     <!-- ── encouragement ── -->
