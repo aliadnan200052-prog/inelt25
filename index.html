@@ -135,156 +135,371 @@ body { background: var(--surface-base); }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 1 · CONFIRM (student dashboard)
+   Green greeting card with an illustration, four tinted fact tiles, a
+   boxed instruction list, then the actions.
    ─────────────────────────────────────────────────────────────────────── */
 .page-confirm {
+  position: relative;
   min-height: 100vh;
   min-height: 100dvh;
   display: grid;
-  place-items: center;
-  padding: var(--sp-9) var(--sp-5) var(--sp-8);
-}
-.confirm-card {
-  width: 100%;
-  max-width: 640px;
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-lg);
+  place-items: start center;
+  padding: var(--sp-5) var(--sp-5) var(--sp-9);
   overflow: hidden;
+}
+/* Leaves in the bottom corner of the page */
+.confirm-leaves {
+  position: absolute;
+  bottom: -14px;
+  inset-inline-start: -18px;
+  width: 190px;
+  z-index: 0;
+  pointer-events: none;
+}
+[data-theme="dark"] .confirm-leaves { opacity: .14; }
+
+/* The old card wrapper is now just a column — each block carries itself. */
+.confirm-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
 }
 
+/* ── Greeting card ── */
 .confirm-header {
   position: relative;
-  padding: var(--sp-8) var(--sp-7) var(--sp-7);
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  padding: var(--sp-6) var(--sp-6) var(--sp-7);
   background:
-    radial-gradient(110% 130% at 88% -20%, rgba(255,255,255,.12) 0%, transparent 58%),
+    radial-gradient(120% 140% at 88% -25%, rgba(255,255,255,.10) 0%, transparent 60%),
     linear-gradient(200deg, var(--green-700) 0%, var(--green-800) 100%);
   color: #fff;
-  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  min-height: 150px;
 }
-.confirm-header::before {
-  content: "";
+.confirm-art {
   position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(to bottom, rgba(255,255,255,.05) 0 1px, transparent 1px 30px);
-  mask-image: linear-gradient(to bottom, #000, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+  bottom: -8px;
+  inset-inline-start: auto;
+  inset-inline-end: 4px;
+  width: 152px;
+  opacity: .92;
   pointer-events: none;
 }
 .confirm-header-top {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--sp-5);
 }
+.confirm-greeting {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .confirm-header .badge-accent {
   background: rgba(255,255,255,.14);
-  border-color: rgba(255,255,255,.22);
+  border-color: rgba(255,255,255,.24);
   color: #fff;
   font-family: var(--font-en);
   letter-spacing: .10em;
 }
 .confirm-title {
+  position: relative;
+  display: inline-block;
   font-size: var(--fs-2xl);
   font-weight: 700;
   color: #fff;
+  padding-bottom: 7px;
+}
+/* Short accent rule under the greeting, as in the design. */
+.confirm-title::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  width: 46px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--green-300);
 }
 .confirm-subtitle {
-  margin-top: 5px;
+  margin-top: 8px;
   font-size: var(--fs-sm);
-  color: rgba(255,255,255,.74);
+  color: rgba(255,255,255,.80);
   font-family: var(--font-en);
   direction: ltr;
   unicode-bidi: isolate;
   text-align: start;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 .confirm-header .icon-btn {
   flex-shrink: 0;
-  background: rgba(255,255,255,.10);
-  border-color: rgba(255,255,255,.20);
-  color: rgba(255,255,255,.88);
-}
-.confirm-header .icon-btn:hover {
-  background: rgba(255,255,255,.20);
-  border-color: rgba(255,255,255,.34);
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.26);
   color: #fff;
 }
+.confirm-header .icon-btn:hover {
+  background: rgba(255,255,255,.22);
+  border-color: rgba(255,255,255,.40);
+}
 
-.confirm-body { padding: var(--sp-7); }
+.confirm-body { display: flex; flex-direction: column; gap: var(--sp-5); }
 
-/* Exam facts */
+/* ── Fact tiles ── */
 .exam-tiles {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--sp-4);
-  margin-bottom: var(--sp-8);
 }
 .exam-tile {
-  padding: var(--sp-6) var(--sp-3);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "icon value" "icon label";
+  align-items: center;
+  column-gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-5) calc(var(--sp-5) + 14px);
   border-radius: var(--r-lg);
   border: 1px solid transparent;
-  text-align: center;
-  transition: border-color var(--dur-2) var(--ease),
-              transform var(--dur-2) var(--ease),
-              box-shadow var(--dur-2) var(--ease);
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
-.exam-tile:hover {
-  border-color: var(--primary-border);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+.exam-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+/* A soft wave in the corner of each tile. */
+.exam-tile::after {
+  content: "";
+  position: absolute;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  bottom: -72px;
+  inset-inline-start: -44px;
+  background: rgba(255,255,255,.34);
+  pointer-events: none;
 }
-/* Pastel category tints, in the mockup's order. */
-.exam-tile:nth-child(1) { background: var(--tint-green);  }
-.exam-tile:nth-child(2) { background: var(--tint-blue);   }
-.exam-tile:nth-child(3) { background: var(--tint-purple); }
-.exam-tile:nth-child(4) { background: var(--tint-amber);  }
-.exam-tile:nth-child(1) .tile-icon { color: var(--sec-conversation); }
-.exam-tile:nth-child(2) .tile-icon { color: var(--sec-grammar); }
-.exam-tile:nth-child(3) .tile-icon { color: var(--sec-reading); }
-.exam-tile:nth-child(4) .tile-icon { color: var(--sec-functions); }
+[data-theme="dark"] .exam-tile::after { background: rgba(255,255,255,.04); }
 
+/* Icon sits in a tinted disc with the figure beside it. */
 .tile-icon {
-  margin: 0 auto 10px;
-  stroke-width: 2;
+  grid-area: icon;
+  position: relative;
+  z-index: 1;
+  box-sizing: content-box;
+  width: 18px; height: 18px;
+  padding: 11px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.66);
+  stroke-width: 2.1;
 }
+[data-theme="dark"] .tile-icon { background: rgba(255,255,255,.08); }
 .tile-value {
-  font-size: var(--fs-2xl);
+  grid-area: value;
+  position: relative;
+  z-index: 1;
+  /* .mono forces direction:ltr, which would align the figure away from the
+     icon. Follow the page direction so the figure and its label share an edge. */
+  direction: inherit;
+  text-align: start;
+  font-size: var(--fs-3xl);
   font-weight: 700;
   line-height: 1;
   color: var(--text-primary);
+  letter-spacing: -.01em;
 }
 .tile-label {
-  margin-top: 6px;
-  font-size: var(--fs-2xs);
+  grid-area: label;
+  position: relative;
+  z-index: 1;
+  text-align: start;
+  margin-top: 3px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
   color: var(--text-secondary);
 }
+.tile-arrow {
+  position: absolute;
+  z-index: 1;
+  bottom: var(--sp-4);
+  inset-inline-start: var(--sp-5);
+  width: 16px; height: 16px;
+  opacity: .55;
+}
 
-/* Instructions */
-.instruction-list {
+/* Per-tile tints, in the order the markup lists them. */
+.exam-tile:nth-child(1) { background: var(--tint-green); }
+.exam-tile:nth-child(2) { background: var(--tint-blue); }
+.exam-tile:nth-child(3) { background: var(--tint-purple); }
+.exam-tile:nth-child(4) { background: var(--tint-amber); }
+.exam-tile:nth-child(1) .tile-icon, .exam-tile:nth-child(1) .tile-arrow { color: var(--sec-conversation); }
+.exam-tile:nth-child(2) .tile-icon, .exam-tile:nth-child(2) .tile-arrow { color: var(--sec-grammar); }
+.exam-tile:nth-child(3) .tile-icon, .exam-tile:nth-child(3) .tile-arrow { color: var(--sec-reading); }
+.exam-tile:nth-child(4) .tile-icon, .exam-tile:nth-child(4) .tile-arrow { color: var(--sec-functions); }
+
+/* ── Instructions card ── */
+.instructions-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+  padding: var(--sp-6);
+}
+.instructions-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+.instructions-ic {
+  width: 38px; height: 38px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--primary-dim);
+  color: var(--primary-strong);
+}
+.instructions-ic svg { width: 18px; height: 18px; }
+.instructions-head .section-label {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6px;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.instructions-head .section-label::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  width: 34px; height: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* ── Learning resources — placeholders until the material is ready ── */
+.resources-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+  padding: var(--sp-6);
+}
+.resource-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
 }
-.instruction-item {
-  display: flex;
-  align-items: flex-start;
+/* Not links, not buttons — nothing to open yet, so nothing reacts to a tap. */
+.resource-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "ic text soon";
+  align-items: center;
   gap: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: none;
+}
+.resource-ic {
+  grid-area: ic;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--r-md);
+}
+.resource-ic svg { width: 19px; height: 19px; }
+.resource-list > li:nth-child(1) .resource-ic { background: var(--tint-purple); color: var(--sec-reading); }
+.resource-list > li:nth-child(2) .resource-ic { background: var(--tint-amber);  color: var(--sec-functions); }
+.resource-text { grid-area: text; min-width: 0; }
+.resource-name {
   font-size: var(--fs-sm);
-  line-height: 1.75;
+  font-weight: 700;
   color: var(--text-primary);
 }
+.resource-note {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+.resource-soon {
+  grid-area: soon;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.resource-soon::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warn-bright);
+  animation: soon-pulse 2.4s var(--ease) infinite;
+}
+@keyframes soon-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) {
+  .resource-soon::before { animation: none; }
+}
+/* Narrow screens: the pill drops under the text instead of squeezing it. */
+@media (max-width: 430px) {
+  .resource-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "ic text" "ic soon";
+    row-gap: var(--sp-3);
+  }
+  .resource-ic   { grid-area: ic; align-self: start; }
+  .resource-text { grid-area: text; }
+  .resource-soon { grid-area: soon; justify-self: start; }
+}
+
+.instruction-list { list-style: none; }
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+.instruction-item:last-child { border-bottom: none; padding-bottom: 0; }
+.instruction-item:first-child { padding-top: 0; }
 .instr-check {
   flex-shrink: 0;
-  margin-top: 4px;
-  width: 20px; height: 20px;
+  width: 24px; height: 24px;
   display: grid; place-items: center;
   border-radius: 50%;
   background: var(--primary-dim);
   border: 1px solid var(--primary-border);
 }
 .instr-check svg {
-  width: 11px; height: 11px;
+  width: 12px; height: 12px;
   fill: none;
   stroke: var(--primary-strong);
   stroke-width: 3.2;
@@ -292,17 +507,28 @@ body { background: var(--surface-base); }
   stroke-linejoin: round;
 }
 
+/* ── Actions ── */
 .confirm-footer {
-  padding: var(--sp-6) var(--sp-7) var(--sp-7);
-  border-top: 1px solid var(--border);
-  background: var(--surface-overlay);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sp-5);
+  gap: var(--sp-4);
+  padding: 0;
+  border: none;
+  background: none;
 }
 .confirm-footer .btn { width: 100%; }
 .confirm-footer a.btn { text-decoration: none; }
+.confirm-footer .btn-primary { box-shadow: 0 8px 20px var(--primary-glow); }
+/* The trailing arrow sits at the far edge of the primary button. */
+.confirm-footer .btn-primary { position: relative; }
+.btn-trail {
+  position: absolute;
+  inset-inline-end: var(--sp-6);
+  width: 17px; height: 17px;
+  opacity: .5;
+}
+.confirm-tail { display: flex; justify-content: center; }
 
 /* ───────────────────────────────────────────────────────────────────────
    SCREEN 2 · EXAM — deliberately calm and low-contrast-noise
@@ -1205,12 +1431,17 @@ body { background: var(--surface-base); }
     inset-inline-end: var(--sp-4);
   }
   .ctrl-btn { width: 34px; height: 34px; opacity: .92; }
-  .page-confirm { padding: var(--sp-7) var(--sp-4) var(--sp-9); }
-  .confirm-header { padding: var(--sp-7) var(--sp-5) var(--sp-6); }
-  .confirm-body   { padding: var(--sp-6) var(--sp-5); }
-  .confirm-footer { padding: var(--sp-5); }
+  .page-confirm { padding: var(--sp-4) var(--sp-4) var(--sp-9); }
+  .confirm-header { padding: var(--sp-5) var(--sp-5) var(--sp-6); min-height: 138px; }
+  .confirm-art { width: 138px; }
   .confirm-title  { font-size: var(--fs-xl); }
-  .exam-tiles { grid-template-columns: repeat(2, 1fr); }
+  .exam-tile { padding: var(--sp-4); }
+  .resources-card { padding: var(--sp-5); }
+  .resource-item { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+  .resource-ic { width: 36px; height: 36px; }
+  .tile-value { font-size: var(--fs-2xl); }
+  .tile-arrow { bottom: var(--sp-3); inset-inline-start: var(--sp-4); }
+  .instructions-card { padding: var(--sp-5); }
 
   .page-results, .page-review { padding: var(--sp-7) var(--sp-4) var(--sp-9); }
   .result-hero { padding: var(--sp-7) var(--sp-5) var(--sp-6); border-radius: var(--r-xl); }
@@ -1281,8 +1512,55 @@ body { background: var(--surface-base); }
      PAGE 2: CONFIRMATION
 ════════════════════════════════ -->
 <div id="confirmPage" class="page-confirm hidden">
+  <svg class="confirm-leaves" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+    <path d="M18 122c-10-16-6-38 8-50 9 18 6 39-8 50z" fill="var(--green-200)" opacity=".55"/>
+    <path d="M16 126c-17-4-30-22-30-40 18 3 32 20 30 40z" fill="var(--green-100)" opacity=".85"/>
+    <path d="M44 148c-8-13-5-31 7-41 7 15 4 32-7 41z" fill="var(--green-200)" opacity=".4"/>
+  </svg>
   <div class="card confirm-card">
     <div class="confirm-header">
+      <!-- Books, answer sheet and leaves, sitting behind the greeting -->
+      <svg class="confirm-art" viewBox="0 0 200 150" fill="none" aria-hidden="true">
+        <g opacity=".95">
+          <path d="M150 34c6-9 16-13 24-11-3 9-11 15-19 16z" fill="#4C8C72"/>
+          <path d="M147 44c-9-3-19 0-24 7 8 5 18 5 25 0z" fill="#3E7D64"/>
+          <path d="M166 58c5-7 14-10 21-8-3 8-10 13-17 13z" fill="#44856B"/>
+          <path d="M60 22c3-7 10-11 17-10-2 7-8 12-14 13z" fill="#4C8C72"/>
+        </g>
+        <!-- answer sheet -->
+        <g transform="rotate(-8 118 78)">
+          <rect x="88" y="26" width="62" height="86" rx="6" fill="#F7FAF8"/>
+          <rect x="88" y="26" width="62" height="86" rx="6" stroke="#D6E5DC" stroke-width="1.6"/>
+          <g fill="#2C6350">
+            <rect x="97" y="42" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="56" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="70" width="7" height="7" rx="1.6" opacity=".18"/>
+            <rect x="97" y="84" width="7" height="7" rx="1.6" opacity=".18"/>
+          </g>
+          <g stroke="#3E8A6B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <polyline points="98.5,45.5 100.3,47.6 103,43.4"/>
+            <polyline points="98.5,59.5 100.3,61.6 103,57.4"/>
+            <polyline points="98.5,73.5 100.3,75.6 103,71.4"/>
+            <polyline points="98.5,87.5 100.3,89.6 103,85.4"/>
+          </g>
+          <g fill="#C7D9CF">
+            <rect x="110" y="43" width="30" height="4" rx="2"/>
+            <rect x="110" y="57" width="26" height="4" rx="2"/>
+            <rect x="110" y="71" width="30" height="4" rx="2"/>
+            <rect x="110" y="85" width="22" height="4" rx="2"/>
+          </g>
+          <circle cx="136" cy="36" r="9" fill="none" stroke="#9FC4B0" stroke-width="1.4"/>
+          <text x="136" y="39.5" text-anchor="middle" font-family="Inter,sans-serif"
+                font-size="8.5" font-weight="700" fill="#2C6350">A+</text>
+        </g>
+        <!-- books -->
+        <path d="M34 104h74a7 7 0 0 1 7 7v9a7 7 0 0 1-7 7H34a7 7 0 0 1-7-7v-9a7 7 0 0 1 7-7z" fill="#2E7257"/>
+        <path d="M34 104v23" stroke="#1F5B44" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M48 115h50" stroke="#EAF4EE" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+        <path d="M26 128h78a7 7 0 0 1 7 7v8a7 7 0 0 1-7 7H26a7 7 0 0 1-7-7v-8a7 7 0 0 1 7-7z" fill="#245C46"/>
+        <path d="M26 128v22" stroke="#17452F" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+
       <div class="confirm-header-top">
         <div class="confirm-greeting">
           <div class="badge badge-accent" style="margin-bottom:10px">INELT</div>
@@ -1301,25 +1579,35 @@ body { background: var(--surface-base); }
           <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
           <div class="tile-value mono">60</div>
           <div class="tile-label">دقيقة</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
         <div class="exam-tile">
           <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           <div class="tile-value mono">40</div>
           <div class="tile-label">سؤالاً</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
         <div class="exam-tile">
           <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           <div class="tile-value mono">100</div>
           <div class="tile-label">درجة</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
         <div class="exam-tile">
           <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.6L22 9.3l-5.4 4.6L18.2 21 12 17.3 5.8 21l1.6-7.1L2 9.3l7.4-.7L12 2z"/></svg>
           <div class="tile-value mono">50</div>
           <div class="tile-label">للنجاح</div>
+          <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
         </div>
       </div>
 
-      <div class="section-label">التعليمات</div>
+      <div class="instructions-card">
+      <div class="instructions-head">
+        <span class="instructions-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </span>
+        <div class="section-label">التعليمات</div>
+      </div>
       <ul class="instruction-list">
         <li class="instruction-item">
           <span class="instr-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
@@ -1342,17 +1630,54 @@ body { background: var(--surface-base); }
           كل إجابة صحيحة = 2.5 درجة
         </li>
       </ul>
+      </div>
     </div>
 
     <div class="confirm-footer">
       <button class="btn btn-primary btn-lg btn-block" id="btnStartExam" onclick="startExam()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span>ابدأ الاختبار</span>
+        <svg class="btn-trail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
       </button>
       <a class="btn btn-ghost btn-lg btn-block" href="/practice.html">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .622.622l4.353-1.321a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></svg>
         <span>تدرّب على قسم واحد</span>
       </a>
+    </div>
+
+    <!-- Lectures and the booklet: reserved here, content lands later. -->
+    <section class="resources-card" aria-labelledby="resourcesTitle">
+      <div class="instructions-head">
+        <span class="instructions-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <div class="section-label" id="resourcesTitle">مصادر التعلّم</div>
+      </div>
+      <ul class="resource-list">
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="15" height="16" rx="3"/><path d="M17 10.5l4.3-2.6a.6.6 0 0 1 .9.5v7.2a.6.6 0 0 1-.9.5L17 13.5z"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">المحاضرات</div>
+            <div class="resource-note">شروحات مصوّرة لكل قسم من الامتحان</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+        <li class="resource-item">
+          <span class="resource-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 19.5"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg>
+          </span>
+          <div class="resource-text">
+            <div class="resource-name">الملزمة</div>
+            <div class="resource-note">ملخّص القواعد والمفردات بصيغة PDF</div>
+          </div>
+          <span class="resource-soon">يُضاف لاحقاً</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="confirm-tail">
       <a class="telegram-link" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-2.1 2.04c-.23.23-.42.42-.72.42z"/></svg>
       <span>زورونا على التلغرام</span>
