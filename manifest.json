@@ -4,7 +4,7 @@
   "description": "امتحان تجريبي يحاكي الامتحان الوطني العراقي للغة الإنكليزية — تدرب، راجع، حقق هدفك.",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

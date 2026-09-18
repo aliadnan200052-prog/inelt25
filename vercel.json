@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "//": [
+    "cleanUrls drops the .html from every address: /index.html becomes /,",
+    "/practice.html becomes /practice, and so on. Vercel serves the clean",
+    "form and 308-redirects the old one, so links that still carry .html —",
+    "including the Google OAuth redirect registered in Supabase — keep",
+    "working and simply land on the tidy URL."
+  ],
+  "cleanUrls": true,
+
+  "//trailingSlash": "off, so /practice never becomes /practice/",
+  "trailingSlash": false
+}
