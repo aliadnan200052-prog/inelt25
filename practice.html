@@ -17,7 +17,7 @@
 /* =====================================================================
    INELT · Practice — drill a single section, untimed.
 
-   Separate from index.html on purpose: the exam page runs live timed
+   Separate from the exam page on purpose: that one runs live timed
    attempts and this must not be able to disturb it. Practice never
    creates an attempt and never touches attempts_used.
    ===================================================================== */
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 </script>
 
 <nav class="pr-tabs" aria-label="التنقل">
-  <a class="pr-tab" href="/#dashHome">
+  <a class="pr-tab" href="/" data-go="home">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
     <span>الرئيسية</span>
   </a>
@@ -393,13 +393,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
     <span>تدرّب</span>
   </span>
-  <a class="pr-tab" href="/#dashStudy">
+  <a class="pr-tab" href="/" data-go="study">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     <span>ادرس</span>
   </a>
 </nav>
 
 <script>
+/* The dashboard's tabs are views on one page, so which one to open travels
+   in sessionStorage. A #hash would do the same job but would show in the
+   address bar, and the address stays clean. */
+document.querySelectorAll('.pr-tab[data-go]').forEach(a => a.addEventListener('click', () => {
+  try { sessionStorage.setItem('dashView', a.dataset.go); } catch (err) { /* private mode */ }
+}));
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
 }

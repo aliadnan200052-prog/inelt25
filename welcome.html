@@ -22,7 +22,7 @@
    INELT · Welcome — the entry screen for a visitor who is not signed in.
    Deliberately static: no script, no Supabase, no network call beyond
    the fonts and the shared stylesheet, so it paints instantly on a slow
-   connection. Both links hand off to /login.html, which already sends a
+   connection. Both links hand off to /login, which already sends a
    signed-in visitor straight on to the exam.
    ===================================================================== */
 
@@ -80,8 +80,9 @@
   display: block;
   width: 88px; height: 88px;
   margin: 0 auto var(--sp-5);
-  border-radius: 50%;
-  box-shadow: 0 10px 24px -10px rgba(13,74,56,.5);
+  /* The mark is a rounded tile with its own transparent corners, so the
+     shadow is taken from its alpha rather than from a clipped box. */
+  filter: drop-shadow(0 8px 10px rgba(13,74,56,.45));
 }
 .welcome-logo .num { color: var(--green-500); }   /* 3.89:1 on the cream page — AA for large text */
 [data-theme="dark"] .welcome-logo .num { color: var(--green-300); }
