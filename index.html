@@ -271,9 +271,10 @@ body { background: var(--surface-base); }
   font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--g-700);
-  direction: ltr;
-  text-align: start;
+  /* plaintext so a Latin name keeps its own order, but the block still
+     aligns with the Arabic greeting above it */
   unicode-bidi: plaintext;
+  text-align: start;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2876,12 +2877,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   // to "ابدأ الامتحان" on the confirm page is the only one now)
 
   // Skip the name/university/college registration page entirely — go
-  // straight to the exam instructions screen, using the signed-in email
-  // as the display name/greeting.
+  // straight to the exam instructions screen, greeting the student by name.
+  //
+  // Google hands the name back on the session we already hold, so this
+  // costs no extra call. E-mail sign-ups carry no name, so fall back to the
+  // part before the @, and only then to the address itself.
   const session = await ExamAPI.getSession();
   const email = session?.user?.email || 'Student';
-  sInfo = { name: email, university: '', college: '', department: '' };
-  document.getElementById('confirmName').textContent = email;
+  const meta = session?.user?.user_metadata || {};
+  const displayName =
+        String(meta.full_name || meta.name || '').trim() ||
+        (session?.user?.email || '').split('@')[0] ||
+        email;
+  sInfo = { name: displayName, university: '', college: '', department: '' };
+  document.getElementById('confirmName').textContent = displayName;
   const boot = document.getElementById('bootSkeleton');
   if (boot) boot.remove();
   document.getElementById('confirmPage').classList.remove('hidden');
