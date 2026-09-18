@@ -296,7 +296,7 @@ body { background: var(--surface-base); }
 /* ══════════ THE EXAM — the one dark block on the page ══════════ */
 .dash-exam {
   position: relative;
-  margin-top: var(--sp-4);
+  margin-top: var(--sp-6);
   padding: var(--sp-5);
   border-radius: 30px;
   background:
@@ -410,13 +410,45 @@ body { background: var(--surface-base); }
 .dash-cta:active { transform: scale(.98); }
 .dash-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
 
+/* ══════════ THE THREE VIEWS ══════════
+   Each tab shows one view and hides the others. This is :target — the tab
+   is a plain link to a hash, so nothing navigates away and the tab bar
+   below never unmounts. No script is involved. */
+.dash-view { display: none; scroll-margin-top: 400px; }  /* clamps the jump to the top */
+.dash-view:target { display: block; animation: fade-in var(--dur-3) var(--ease) both; }
+#dashHome { display: block; }
+body:has(#dashPractice:target) #dashHome,
+body:has(#dashStudy:target)    #dashHome { display: none; }
+
 /* ══════════ shared section furniture ══════════ */
 .dash-sec { margin-top: var(--d-gap); }
-/* Tab targets. The tabs scroll this page rather than leaving it, which is
-   what keeps the bar on screen — so each target needs headroom of its own. */
-.dash-sec-anchor { scroll-margin-top: var(--sp-6); }
-.dash-sec-anchor .dash-sec-head { margin-bottom: 0; }
-#dashTop { scroll-margin-top: var(--sp-6); }
+.dash-sec-first { margin-top: var(--sp-6); }
+
+/* the full exam, listed inside تدرّب — it starts on the home view */
+.dash-jump {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  background: var(--d-card);
+  border: 1px solid var(--d-hair);
+  box-shadow: var(--d-sh);
+  text-decoration: none;
+  transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+.dash-jump:hover { box-shadow: var(--d-sh-lg); }
+.dash-jump:active { transform: scale(.985); }
+.dash-jump-ic {
+  width: 42px; height: 42px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--g-100);
+  color: var(--g-700);
+}
+.dash-jump-ic svg { width: 20px; height: 20px; }
+.dash-jump-t { font-size: var(--fs-sm); font-weight: 700; color: var(--d-t1); }
+.dash-jump-s { margin-top: 3px; font-size: var(--fs-2xs); color: var(--d-t2); }
+.dash-jump-go { margin-inline-start: auto; width: 16px; height: 16px; color: var(--d-t3); flex-shrink: 0; }
 .dash-sec-head { display: flex; align-items: baseline; margin-bottom: var(--sp-4); }
 .dash-sec-title {
   font-size: var(--fs-md);
@@ -587,6 +619,19 @@ body { background: var(--surface-base); }
 .dash-tab span { font-size: 10.5px; font-weight: 600; }
 .dash-tab.is-on { background: var(--g-100); color: var(--g-700); }
 .dash-tab.is-on span { font-weight: 700; }
+/* Which tab reads as current follows whichever view is open. */
+body:has(#dashPractice:target) .dash-tab-home,
+body:has(#dashStudy:target)    .dash-tab-home {
+  background: none; color: var(--d-t3);
+}
+body:has(#dashPractice:target) .dash-tab-home span,
+body:has(#dashStudy:target)    .dash-tab-home span { font-weight: 600; }
+body:has(#dashPractice:target) .dash-tab-practice,
+body:has(#dashStudy:target)    .dash-tab-study {
+  background: var(--g-100); color: var(--g-700);
+}
+body:has(#dashPractice:target) .dash-tab-practice span,
+body:has(#dashStudy:target)    .dash-tab-study span { font-weight: 700; }
 
 /* the floating theme toggle must clear the tab bar on this screen */
 body:has(#confirmPage:not(.hidden)) .floating-controls {
@@ -1646,7 +1691,7 @@ html { scroll-behavior: smooth; }
   </radialGradient>
 </defs></svg>
 
-  <div class="dash-wrap" id="dashTop">
+  <div class="dash-wrap">
 
     <!-- ════════ TOP ════════ -->
     <div class="dash-top">
@@ -1666,7 +1711,8 @@ html { scroll-behavior: smooth; }
       </button>
     </div>
 
-    <!-- ════════ GREETING + THE BIG SCENE ════════ -->
+    <!-- ════════ الرئيسية ════════ -->
+    <div class="dash-view" id="dashHome">
     <div class="dash-greet">
       <svg class="dash-greet-art" viewBox="0 0 200 178" fill="none" aria-hidden="true">
             <!-- back wash -->
@@ -1736,15 +1782,6 @@ html { scroll-behavior: smooth; }
       </div>
     </div>
 
-    <!-- ════════ THE EXAM ════════ -->
-    <!-- ════════ تدرّب — the full exam, then a single section ════════ -->
-    <section class="dash-sec dash-sec-anchor" id="dashPractice">
-      <div class="dash-sec-head">
-        <div class="dash-sec-title">تدرّب</div>
-        <div class="dash-sec-note">اختبار كامل أو قسم واحد</div>
-      </div>
-    </section>
-
     <section class="dash-exam">
       <svg class="dash-exam-art" viewBox="0 0 130 124" fill="none" aria-hidden="true">
             <circle cx="66" cy="50" r="46" fill="#fff" fill-opacity=".06"/>
@@ -1804,6 +1841,40 @@ html { scroll-behavior: smooth; }
         </button>
       </div>
     </section>
+
+    <a class="dash-tg" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
+      <svg class="dash-tg-art" viewBox="0 0 110 76" fill="none" aria-hidden="true">
+            <path d="M4 60c14 2 26-4 34-16" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7"/>
+            <path d="M12 72c18-2 32-12 40-28" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7" opacity=".6"/>
+            <ellipse cx="66" cy="60" rx="30" ry="5" fill="#1C5D95" fill-opacity=".12"/>
+            <path d="M96 10 44 36l16 6z" fill="#8FC9EC"/>
+            <path d="M96 10 60 42l2 18 8-12 18 8z" fill="url(#gBlue)"/>
+            <path d="M60 42v18l8-12z" fill="#175584"/>
+          </svg>
+      <div class="dash-tg-t">قناة INELT على التلغرام</div>
+      <span class="dash-tg-go">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </span>
+    </a>
+    </div>
+
+    <!-- ════════ تدرّب — the full exam, then the sections ════════ -->
+    <div class="dash-view" id="dashPractice">
+      <div class="dash-sec dash-sec-first">
+        <div class="dash-sec-head">
+          <div class="dash-sec-title">تدرّب</div>
+        </div>
+      <a class="dash-jump" href="#dashHome">
+        <span class="dash-jump-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
+        </span>
+        <div>
+          <div class="dash-jump-t">الاختبار الكامل</div>
+          <div class="dash-jump-s">40 سؤال · 60 دقيقة · 100 درجة</div>
+        </div>
+        <svg class="dash-jump-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      </div>
 
     <section class="dash-sec">
       <div class="dash-sec-head">
@@ -1896,9 +1967,11 @@ html { scroll-behavior: smooth; }
       </a>
       </div>
     </section>
+    </div>
 
     <!-- ════════ ادرس — the booklet and the lectures, both still coming ════════ -->
-    <section class="dash-sec dash-sec-anchor" id="dashStudy">
+    <div class="dash-view" id="dashStudy">
+    <section class="dash-sec">
       <div class="dash-sec-head">
         <div class="dash-sec-title">ادرس</div>
         <div class="dash-sec-note">قريباً</div>
@@ -1949,35 +2022,20 @@ html { scroll-behavior: smooth; }
       </div>
       </div>
     </section>
-
-    <!-- ════════ TELEGRAM ════════ -->
-    <a class="dash-tg" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
-      <svg class="dash-tg-art" viewBox="0 0 110 76" fill="none" aria-hidden="true">
-            <path d="M4 60c14 2 26-4 34-16" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7"/>
-            <path d="M12 72c18-2 32-12 40-28" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7" opacity=".6"/>
-            <ellipse cx="66" cy="60" rx="30" ry="5" fill="#1C5D95" fill-opacity=".12"/>
-            <path d="M96 10 44 36l16 6z" fill="#8FC9EC"/>
-            <path d="M96 10 60 42l2 18 8-12 18 8z" fill="url(#gBlue)"/>
-            <path d="M60 42v18l8-12z" fill="#175584"/>
-          </svg>
-      <div class="dash-tg-t">قناة INELT على التلغرام</div>
-      <span class="dash-tg-go">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-      </span>
-    </a>
+    </div>
   </div>
 
   <!-- ════════ TAB BAR — fixed, visible at every scroll position ════════ -->
   <nav class="dash-tabs" aria-label="التنقل">
-    <a class="dash-tab is-on" href="#dashTop" aria-current="page">
+    <a class="dash-tab dash-tab-home is-on" href="#dashHome">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
       <span>الرئيسية</span>
     </a>
-    <a class="dash-tab" href="#dashPractice">
+    <a class="dash-tab dash-tab-practice" href="#dashPractice">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
       <span>تدرّب</span>
     </a>
-    <a class="dash-tab" href="#dashStudy">
+    <a class="dash-tab dash-tab-study" href="#dashStudy">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>ادرس</span>
     </a>
