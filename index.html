@@ -297,6 +297,7 @@ body { background: var(--surface-base); }
 .dash-exam {
   position: relative;
   margin-top: var(--sp-6);
+  /* .dash-block gives every block the same rhythm; this one predates it */
   padding: var(--sp-5);
   border-radius: 30px;
   background:
@@ -411,14 +412,19 @@ body { background: var(--surface-base); }
 .dash-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* ══════════ THE THREE VIEWS ══════════
-   Each tab shows one view and hides the others. This is :target — the tab
-   is a plain link to a hash, so nothing navigates away and the tab bar
-   below never unmounts. No script is involved. */
-.dash-view { display: none; scroll-margin-top: 400px; }  /* clamps the jump to the top */
-.dash-view:target { display: block; animation: fade-in var(--dur-3) var(--ease) both; }
-#dashHome { display: block; }
-body:has(#dashPractice:target) #dashHome,
-body:has(#dashStudy:target)    #dashHome { display: none; }
+   A view is a filter over the blocks, not a separate copy of them. الرئيسية
+   shows every block; تدرّب and ادرس narrow it to the ones that carry their
+   name. Driven by :target — each tab is a plain link to a hash, so nothing
+   navigates away, the tab bar below never unmounts, and no script runs. */
+.dash-anchor { display: block; height: 0; scroll-margin-top: 400px; }  /* clamps the jump to the top */
+/* A block marked practice-only waits until تدرّب is open. It is a plain
+   div, so block is the right display to give it back. */
+.dash-block[data-view="practice"] { display: none; }
+body:has(#dashPractice:target) .dash-block[data-view="practice"] { display: block; }
+/* Opening a view narrows the page to the blocks carrying its name. */
+body:has(#dashPractice:target) .dash-block:not([data-view~="practice"]),
+body:has(#dashStudy:target)    .dash-block:not([data-view~="study"]) { display: none; }
+body:has(.dash-anchor:target) .dash-block { animation: fade-in var(--dur-3) var(--ease) both; }
 
 /* ══════════ shared section furniture ══════════ */
 .dash-sec { margin-top: var(--d-gap); }
@@ -1712,8 +1718,13 @@ html { scroll-behavior: smooth; }
     </div>
 
     <!-- ════════ الرئيسية ════════ -->
-    <div class="dash-view" id="dashHome">
-    <div class="dash-greet">
+    <!-- The tabs target these; a view is a filter over the blocks below,
+         so the home view keeps everything while تدرّب and ادرس narrow it. -->
+    <span class="dash-anchor" id="dashHome"></span>
+    <span class="dash-anchor" id="dashPractice"></span>
+    <span class="dash-anchor" id="dashStudy"></span>
+
+    <div data-view="home" class="dash-block dash-greet">
       <svg class="dash-greet-art" viewBox="0 0 200 178" fill="none" aria-hidden="true">
             <!-- back wash -->
             <circle cx="118" cy="62" r="62" fill="var(--d-artwash)"/>
@@ -1782,7 +1793,7 @@ html { scroll-behavior: smooth; }
       </div>
     </div>
 
-    <section class="dash-exam">
+    <section data-view="home" class="dash-block dash-exam">
       <svg class="dash-exam-art" viewBox="0 0 130 124" fill="none" aria-hidden="true">
             <circle cx="66" cy="50" r="46" fill="#fff" fill-opacity=".06"/>
             <ellipse cx="64" cy="112" rx="50" ry="8" fill="#04170F" fill-opacity=".28"/>
@@ -1842,25 +1853,8 @@ html { scroll-behavior: smooth; }
       </div>
     </section>
 
-    <a class="dash-tg" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
-      <svg class="dash-tg-art" viewBox="0 0 110 76" fill="none" aria-hidden="true">
-            <path d="M4 60c14 2 26-4 34-16" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7"/>
-            <path d="M12 72c18-2 32-12 40-28" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7" opacity=".6"/>
-            <ellipse cx="66" cy="60" rx="30" ry="5" fill="#1C5D95" fill-opacity=".12"/>
-            <path d="M96 10 44 36l16 6z" fill="#8FC9EC"/>
-            <path d="M96 10 60 42l2 18 8-12 18 8z" fill="url(#gBlue)"/>
-            <path d="M60 42v18l8-12z" fill="#175584"/>
-          </svg>
-      <div class="dash-tg-t">قناة INELT على التلغرام</div>
-      <span class="dash-tg-go">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-      </span>
-    </a>
-    </div>
-
-    <!-- ════════ تدرّب — the full exam, then the sections ════════ -->
-    <div class="dash-view" id="dashPractice">
-      <div class="dash-sec dash-sec-first">
+    <!-- ════════ تدرّب — heads the practice view only ════════ -->
+      <div data-view="practice" class="dash-block dash-sec dash-sec-first">
         <div class="dash-sec-head">
           <div class="dash-sec-title">تدرّب</div>
         </div>
@@ -1876,7 +1870,9 @@ html { scroll-behavior: smooth; }
       </a>
       </div>
 
-    <section class="dash-sec">
+
+    <!-- ════════ اختبار القسم ════════ -->
+    <section data-view="home practice" class="dash-block dash-sec">
       <div class="dash-sec-head">
         <div class="dash-sec-title">اختبار القسم</div>
         <div class="dash-sec-note">لا يُحتسب من محاولاتك</div>
@@ -1967,11 +1963,9 @@ html { scroll-behavior: smooth; }
       </a>
       </div>
     </section>
-    </div>
 
     <!-- ════════ ادرس — the booklet and the lectures, both still coming ════════ -->
-    <div class="dash-view" id="dashStudy">
-    <section class="dash-sec">
+    <section data-view="home study" class="dash-block dash-sec">
       <div class="dash-sec-head">
         <div class="dash-sec-title">ادرس</div>
         <div class="dash-sec-note">قريباً</div>
@@ -2022,7 +2016,21 @@ html { scroll-behavior: smooth; }
       </div>
       </div>
     </section>
-    </div>
+
+    <a data-view="home" class="dash-block dash-tg" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
+      <svg class="dash-tg-art" viewBox="0 0 110 76" fill="none" aria-hidden="true">
+            <path d="M4 60c14 2 26-4 34-16" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7"/>
+            <path d="M12 72c18-2 32-12 40-28" stroke="#8CC0E4" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7" opacity=".6"/>
+            <ellipse cx="66" cy="60" rx="30" ry="5" fill="#1C5D95" fill-opacity=".12"/>
+            <path d="M96 10 44 36l16 6z" fill="#8FC9EC"/>
+            <path d="M96 10 60 42l2 18 8-12 18 8z" fill="url(#gBlue)"/>
+            <path d="M60 42v18l8-12z" fill="#175584"/>
+          </svg>
+      <div class="dash-tg-t">قناة INELT على التلغرام</div>
+      <span class="dash-tg-go">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </span>
+    </a>
   </div>
 
   <!-- ════════ TAB BAR — fixed, visible at every scroll position ════════ -->
