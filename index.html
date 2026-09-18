@@ -265,20 +265,8 @@ body { background: var(--surface-base); }
   color: var(--d-t1);
   letter-spacing: -.018em;
 }
-/* an address can be long, so it gets its own line and never wraps */
-.dash-greet-name {
-  margin-top: 4px;
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--g-700);
-  /* plaintext so a Latin name keeps its own order, but the block still
-     aligns with the Arabic greeting above it */
-  unicode-bidi: plaintext;
-  text-align: start;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+/* the name, set in the brand green inside the greeting */
+.dash-greet-hi b { color: var(--g-700); font-weight: 700; }
 .dash-greet-sub {
   margin-top: var(--sp-3);
   font-size: var(--fs-sm);
@@ -1779,8 +1767,7 @@ html { scroll-behavior: smooth; }
             </g>
           </svg>
       <div class="dash-greet-copy">
-        <h1 class="dash-greet-hi">أهلاً بك</h1>
-        <p class="dash-greet-name" id="confirmName">–</p>
+        <h1 class="dash-greet-hi">أهلاً بك، <b id="confirmName">–</b></h1>
         <p class="dash-greet-sub">جاهز تختبر مستواك اليوم؟</p>
       </div>
     </div>
@@ -2881,16 +2868,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   //
   // Google hands the name back on the session we already hold, so this
   // costs no extra call. E-mail sign-ups carry no name, so fall back to the
-  // part before the @, and only then to the address itself.
+  // part before the @, with its separators and digits read as word breaks.
   const session = await ExamAPI.getSession();
   const email = session?.user?.email || 'Student';
   const meta = session?.user?.user_metadata || {};
-  const displayName =
-        String(meta.full_name || meta.name || '').trim() ||
-        (session?.user?.email || '').split('@')[0] ||
-        email;
-  sInfo = { name: displayName, university: '', college: '', department: '' };
-  document.getElementById('confirmName').textContent = displayName;
+  const fullName = String(meta.full_name || meta.name || '').trim();
+  const handle = (session?.user?.email || '').split('@')[0]
+                   .replace(/[._+\-]+/g, ' ').replace(/\d+/g, ' ').trim();
+  // The greeting wants one word; a certificate wants the whole name.
+  const firstWord = (fullName || handle).split(/\s+/)[0] || '';
+  const firstName = firstWord
+        ? firstWord.charAt(0).toUpperCase() + firstWord.slice(1)
+        : email;
+  sInfo = { name: fullName || handle || email, university: '', college: '', department: '' };
+  document.getElementById('confirmName').textContent = firstName;
   const boot = document.getElementById('bootSkeleton');
   if (boot) boot.remove();
   document.getElementById('confirmPage').classList.remove('hidden');
