@@ -53,10 +53,11 @@ const ExamAPI = (() => {
       const { error } = await client.auth.signInWithPassword({ email, password });
       if (error) throw error;
     },
-    // NOTE: "/index.html" is what Supabase has on its Redirect URLs
-    // allow-list. Vercel then cleans it to "/". Change this only together
-    // with that setting, or Google sign-in stops being accepted.
-    async signInWithGoogle(redirectPath = "/index.html") {
+    // NOTE: this path has to be on Supabase's Redirect URLs allow-list
+    // (Authentication → URL Configuration). With "https://<domain>/**"
+    // listed, the bare "/" below is covered. Change it only together with
+    // that setting, or Google sign-in stops being accepted.
+    async signInWithGoogle(redirectPath = "/") {
       const { error } = await client.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: window.location.origin + redirectPath },

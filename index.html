@@ -223,8 +223,8 @@ body { background: var(--surface-base); }
   width: 36px; height: 36px;
   flex-shrink: 0;
   display: block;
-  border-radius: 50%;
-  box-shadow: 0 4px 10px -3px rgba(13,74,56,.45);
+  /* see .welcome-mark: the shadow follows the tile, not a circle */
+  filter: drop-shadow(0 3px 5px rgba(13,74,56,.4));
 }
 .dash-brand-name {
   font-family: var(--font-en);
@@ -401,17 +401,18 @@ body { background: var(--surface-base); }
 /* ══════════ THE THREE VIEWS ══════════
    A view is a filter over the blocks, not a separate copy of them. الرئيسية
    shows every block; تدرّب and ادرس narrow it to the ones that carry their
-   name. Driven by :target — each tab is a plain link to a hash, so nothing
-   navigates away, the tab bar below never unmounts, and no script runs. */
-.dash-anchor { display: block; height: 0; scroll-margin-top: 400px; }  /* clamps the jump to the top */
+   name. Which one is open is held in data-dash on the page: nothing
+   navigates, the tab bar below never unmounts, and the address stays a
+   bare "/" — no file name, no #hash. */
 /* A block marked practice-only waits until تدرّب is open. It is a plain
    div, so block is the right display to give it back. */
 .dash-block[data-view="practice"] { display: none; }
-body:has(#dashPractice:target) .dash-block[data-view="practice"] { display: block; }
+body[data-dash="practice"] .dash-block[data-view="practice"] { display: block; }
 /* Opening a view narrows the page to the blocks carrying its name. */
-body:has(#dashPractice:target) .dash-block:not([data-view~="practice"]),
-body:has(#dashStudy:target)    .dash-block:not([data-view~="study"]) { display: none; }
-body:has(.dash-anchor:target) .dash-block { animation: fade-in var(--dur-3) var(--ease) both; }
+body[data-dash="practice"] .dash-block:not([data-view~="practice"]),
+body[data-dash="study"]    .dash-block:not([data-view~="study"]) { display: none; }
+/* Only once a tab has actually been used, so the first paint settles once. */
+body.dash-moved .dash-block { animation: fade-in var(--dur-3) var(--ease) both; }
 
 /* ══════════ shared section furniture ══════════ */
 .dash-sec { margin-top: var(--d-gap); }
@@ -610,21 +611,15 @@ body:has(.dash-anchor:target) .dash-block { animation: fade-in var(--dur-3) var(
 }
 .dash-tab svg { width: 21px; height: 21px; }
 .dash-tab span { font-size: 10.5px; font-weight: 600; }
-.dash-tab.is-on { background: var(--g-100); color: var(--g-700); }
-.dash-tab.is-on span { font-weight: 700; }
 /* Which tab reads as current follows whichever view is open. */
-body:has(#dashPractice:target) .dash-tab-home,
-body:has(#dashStudy:target)    .dash-tab-home {
-  background: none; color: var(--d-t3);
-}
-body:has(#dashPractice:target) .dash-tab-home span,
-body:has(#dashStudy:target)    .dash-tab-home span { font-weight: 600; }
-body:has(#dashPractice:target) .dash-tab-practice,
-body:has(#dashStudy:target)    .dash-tab-study {
+body[data-dash="home"]     .dash-tab-home,
+body[data-dash="practice"] .dash-tab-practice,
+body[data-dash="study"]    .dash-tab-study {
   background: var(--g-100); color: var(--g-700);
 }
-body:has(#dashPractice:target) .dash-tab-practice span,
-body:has(#dashStudy:target)    .dash-tab-study span { font-weight: 700; }
+body[data-dash="home"]     .dash-tab-home span,
+body[data-dash="practice"] .dash-tab-practice span,
+body[data-dash="study"]    .dash-tab-study span { font-weight: 700; }
 
 /* the floating theme toggle must clear the tab bar on this screen */
 body:has(#confirmPage:not(.hidden)) .floating-controls {
@@ -1602,7 +1597,7 @@ html { scroll-behavior: smooth; }
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 </head>
-<body>
+<body data-dash="home">
 
 <!-- SVG defs for ring gradient -->
 <svg width="0" height="0" style="position:absolute;pointer-events:none;overflow:hidden">
@@ -1698,12 +1693,8 @@ html { scroll-behavior: smooth; }
     </div>
 
     <!-- ════════ الرئيسية ════════ -->
-    <!-- The tabs target these; a view is a filter over the blocks below,
-         so the home view keeps everything while تدرّب and ادرس narrow it. -->
-    <span class="dash-anchor" id="dashHome"></span>
-    <span class="dash-anchor" id="dashPractice"></span>
-    <span class="dash-anchor" id="dashStudy"></span>
-
+    <!-- A view is a filter over the blocks below, so the home view keeps
+         everything while تدرّب and ادرس narrow it. -->
     <div data-view="home" class="dash-block dash-greet">
       <svg class="dash-greet-art" viewBox="0 0 200 178" fill="none" aria-hidden="true">
             <!-- back wash -->
@@ -1837,7 +1828,7 @@ html { scroll-behavior: smooth; }
         <div class="dash-sec-head">
           <div class="dash-sec-title">تدرّب</div>
         </div>
-      <a class="dash-jump" href="#dashHome">
+      <a class="dash-jump" href="/" data-go="home">
         <span class="dash-jump-ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
         </span>
@@ -2014,20 +2005,70 @@ html { scroll-behavior: smooth; }
 
   <!-- ════════ TAB BAR — fixed, visible at every scroll position ════════ -->
   <nav class="dash-tabs" aria-label="التنقل">
-    <a class="dash-tab dash-tab-home is-on" href="#dashHome">
+    <a class="dash-tab dash-tab-home" href="/" data-go="home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
       <span>الرئيسية</span>
     </a>
-    <a class="dash-tab dash-tab-practice" href="#dashPractice">
+    <a class="dash-tab dash-tab-practice" href="/" data-go="practice">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
       <span>تدرّب</span>
     </a>
-    <a class="dash-tab dash-tab-study" href="#dashStudy">
+    <a class="dash-tab dash-tab-study" href="/" data-go="study">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>ادرس</span>
     </a>
   </nav>
 </div>
+
+<script>
+/* ── the dashboard's three tabs ────────────────────────────────────────────
+   A tab only rewrites an attribute on the page, so nothing navigates: the
+   bar never unmounts, and the address bar keeps showing a bare "/" with no
+   file name and no #hash. The links still point at "/" so that opening one
+   in a new tab, or losing this script, lands somewhere sensible.
+
+   Coming back from /practice, which view to open is handed over in
+   sessionStorage for the same reason — a #hash would show. */
+(() => {
+  const VIEWS = ['home', 'practice', 'study'];
+  const tabs  = document.querySelectorAll('.dash-tab');
+
+  const show = (view, moved) => {
+    if (VIEWS.indexOf(view) < 0) view = 'home';
+    document.body.dataset.dash = view;
+    if (moved) document.body.classList.add('dash-moved');
+    tabs.forEach(t => {
+      if (t.classList.contains('dash-tab-' + view)) t.setAttribute('aria-current', 'page');
+      else t.removeAttribute('aria-current');
+    });
+  };
+
+  document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;   // let it open elsewhere
+    e.preventDefault();
+    show(el.dataset.go, true);
+    window.scrollTo({ top: 0, behavior:
+      matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
+
+  // A link saved, or a page cached, from back when the tabs used a hash.
+  // Honour it, then wipe it off the address bar.
+  const fromHash = () => {
+    const m = /^#dash(Home|Practice|Study)$/.exec(location.hash);
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    return m ? m[1].toLowerCase() : '';
+  };
+  addEventListener('hashchange', () => { const v = fromHash(); if (v) show(v, true); });
+
+  // Arriving from another page of the site.
+  let want = '';
+  try {
+    want = sessionStorage.getItem('dashView') || '';
+    sessionStorage.removeItem('dashView');
+  } catch (err) { /* private mode: fall back to the home view */ }
+  show(want || fromHash(), false);
+})();
+</script>
 
 <!-- ════════════════════════════════
      PAGE 3: EXAM
@@ -2856,7 +2897,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Auth guard: this page requires a signed-in user. A visitor with no
   // session now meets the welcome screen first, which hands off to
-  // /login.html; a signed-in user carries straight on as before.
+  // /login; a signed-in user carries straight on as before.
   const hasSession = await ExamAPI.getSession();
   if (!hasSession) { window.location.href = '/welcome'; return; }
 
