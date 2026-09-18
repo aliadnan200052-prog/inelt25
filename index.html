@@ -2441,11 +2441,11 @@ async function startExam() {
     await selectQs();
   } catch (e) {
     if (e.code === 'attempts_exhausted') {
-      window.location.href = '/upgrade.html';
+      window.location.href = '/upgrade';
       return;
     }
     if (e.code === 'unauthorized') {
-      window.location.href = '/login.html';
+      window.location.href = '/login';
       return;
     }
     alert('تعذّر بدء الامتحان، حاول مرة أخرى. ' + (e.message || ''));
@@ -2794,7 +2794,7 @@ async function restartExam() {
   let status;
   try { status = await ExamAPI.getStatus(); } catch { status = null; }
   if (!status || !status.premium) {
-    window.location.href = '/upgrade.html';
+    window.location.href = '/upgrade';
     return;
   }
 
@@ -2858,7 +2858,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // session now meets the welcome screen first, which hands off to
   // /login.html; a signed-in user carries straight on as before.
   const hasSession = await ExamAPI.getSession();
-  if (!hasSession) { window.location.href = '/welcome.html'; return; }
+  if (!hasSession) { window.location.href = '/welcome'; return; }
 
   // (top-left floating sign-out button removed — the sign-out button next
   // to "ابدأ الامتحان" on the confirm page is the only one now)

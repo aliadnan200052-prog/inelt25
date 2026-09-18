@@ -593,7 +593,7 @@ let mode = 'signin';
 
 function getRedirect() {
   const p = new URLSearchParams(location.search).get('redirect');
-  return p && p.startsWith('/') ? p : '/index.html';
+  return p && p.startsWith('/') ? p : '/';
 }
 
 function toggleMode() {

@@ -53,6 +53,9 @@ const ExamAPI = (() => {
       const { error } = await client.auth.signInWithPassword({ email, password });
       if (error) throw error;
     },
+    // NOTE: "/index.html" is what Supabase has on its Redirect URLs
+    // allow-list. Vercel then cleans it to "/". Change this only together
+    // with that setting, or Google sign-in stops being accepted.
     async signInWithGoogle(redirectPath = "/index.html") {
       const { error } = await client.auth.signInWithOAuth({
         provider: "google",
@@ -62,15 +65,15 @@ const ExamAPI = (() => {
     },
     async signOut() {
       await client.auth.signOut();
-      window.location.href = "/login.html";
+      window.location.href = "/login";
     },
-    // Redirects to /login.html if not signed in, remembering the current
-    // page so login.html can send the user back here afterward.
+    // Redirects to /login if not signed in, remembering the current
+    // page so the login screen can send the user back here afterward.
     // Returns true if the page may proceed.
     async requireSession() {
       const session = await getSession();
       if (!session) {
-        window.location.href = "/login.html?redirect=" + encodeURIComponent(location.pathname);
+        window.location.href = "/login?redirect=" + encodeURIComponent(location.pathname);
         return false;
       }
       return true;
@@ -78,7 +81,7 @@ const ExamAPI = (() => {
     async requireAdminSession() {
       const session = await getSession();
       if (!session) {
-        window.location.href = "/login.html?redirect=" + encodeURIComponent(location.pathname);
+        window.location.href = "/login?redirect=" + encodeURIComponent(location.pathname);
         return false;
       }
       return true; // real admin check happens server-side on every admin_* call
