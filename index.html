@@ -220,14 +220,12 @@ body { background: var(--surface-base); }
 }
 .dash-brand { display: flex; align-items: center; gap: 9px; direction: ltr; }
 .dash-brand-mark {
-  width: 34px; height: 34px;
+  width: 36px; height: 36px;
   flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(160deg, var(--g-600), var(--g-800));
-  box-shadow: 0 4px 10px -3px rgba(30,103,80,.5);
+  display: block;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px -3px rgba(13,74,56,.45);
 }
-.dash-brand-mark svg { width: 17px; height: 17px; }
 .dash-brand-name {
   font-family: var(--font-en);
   font-size: var(--fs-md);
@@ -1702,14 +1700,7 @@ html { scroll-behavior: smooth; }
     <!-- ════════ TOP ════════ -->
     <div class="dash-top">
       <div class="dash-brand">
-        <div class="dash-brand-mark">
-          <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-            <rect x="4" y="4"  width="16" height="2.4" rx="1.2"/>
-            <rect x="4" y="9"  width="11" height="2.4" rx="1.2"/>
-            <rect x="4" y="14" width="14" height="2.4" rx="1.2"/>
-            <rect x="4" y="19" width="8"  height="2.4" rx="1.2"/>
-          </svg>
-        </div>
+        <img class="dash-brand-mark" src="/icons/logo.png" alt="" width="36" height="36">
         <div class="dash-brand-name">INELT</div>
       </div>
       <button class="dash-avatar" onclick="ExamAPI.signOut()" title="تسجيل الخروج" aria-label="تسجيل الخروج">
