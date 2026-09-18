@@ -77,13 +77,15 @@
   margin-bottom: var(--sp-4);
 }
 .welcome-mark {
+  /* Everything on this screen is flat two-tone illustration, so the mark is
+     the emblem tinted into the page's own greens rather than the app-icon
+     tile, which is glossy, deeper in colour, and reads as pasted on here.
+     Same artwork, same shapes — only the colour changes. */
   display: block;
-  width: 88px; height: 88px;
+  width: 96px; height: auto;
   margin: 0 auto var(--sp-5);
-  /* The mark is a rounded tile with its own transparent corners, so the
-     shadow is taken from its alpha rather than from a clipped box. */
-  filter: drop-shadow(0 8px 10px rgba(13,74,56,.45));
 }
+[data-theme="dark"] .welcome-mark { content: url("/icons/emblem-tinted-dark.png"); }
 .welcome-logo .num { color: var(--green-500); }   /* 3.89:1 on the cream page — AA for large text */
 [data-theme="dark"] .welcome-logo .num { color: var(--green-300); }
 /* The three little strokes above the wordmark, as in the design. */
@@ -215,7 +217,7 @@
 
   <div class="welcome-inner">
 
-    <img class="welcome-mark" src="/icons/logo.png" alt="" width="88" height="88">
+    <img class="welcome-mark" src="/icons/emblem-tinted.png" alt="" width="96" height="85">
 
     <div class="welcome-logo">
       Inelt<span class="num">25</span>
