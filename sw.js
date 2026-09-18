@@ -16,9 +16,9 @@
 
 const CACHE_VERSION = 'inelt-v3';
 const SHELL = [
-  '/welcome.html',
-  '/login.html',
-  '/index.html',
+  '/welcome',
+  '/login',
+  '/',
   '/css/inelt-theme.css',
   '/manifest.json',
   '/icons/icon-192.png',
@@ -69,7 +69,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_VERSION).then(c => c.put(req, copy)).catch(() => {});
           return res;
         })
-        .catch(() => caches.match(req).then(hit => hit || caches.match('/welcome.html')))
+        .catch(() => caches.match(req).then(hit => hit || caches.match('/welcome')))
     );
     return;
   }
