@@ -296,7 +296,7 @@ body { background: var(--surface-base); }
 /* ══════════ THE EXAM — the one dark block on the page ══════════ */
 .dash-exam {
   position: relative;
-  margin-top: var(--sp-6);
+  margin-top: var(--sp-4);
   padding: var(--sp-5);
   border-radius: 30px;
   background:
@@ -329,6 +329,8 @@ body { background: var(--surface-base); }
   box-shadow: 0 0 0 3px rgba(111,194,160,.25);
 }
 .dash-exam-t {
+  /* the global h1..h6 rule sets a dark colour, so state it on the card */
+  color: #fff;
   margin-top: var(--sp-4);
   font-size: var(--fs-lg);
   font-weight: 700;
@@ -410,6 +412,11 @@ body { background: var(--surface-base); }
 
 /* ══════════ shared section furniture ══════════ */
 .dash-sec { margin-top: var(--d-gap); }
+/* Tab targets. The tabs scroll this page rather than leaving it, which is
+   what keeps the bar on screen — so each target needs headroom of its own. */
+.dash-sec-anchor { scroll-margin-top: var(--sp-6); }
+.dash-sec-anchor .dash-sec-head { margin-bottom: 0; }
+#dashTop { scroll-margin-top: var(--sp-6); }
 .dash-sec-head { display: flex; align-items: baseline; margin-bottom: var(--sp-4); }
 .dash-sec-title {
   font-size: var(--fs-md);
@@ -631,8 +638,10 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
   .dash-pass { justify-content: center; }
 }
 
+html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   .dash-res-soon i { animation: none; }
+  html { scroll-behavior: auto; }
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -1637,7 +1646,7 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
   </radialGradient>
 </defs></svg>
 
-  <div class="dash-wrap">
+  <div class="dash-wrap" id="dashTop">
 
     <!-- ════════ TOP ════════ -->
     <div class="dash-top">
@@ -1728,6 +1737,14 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
     </div>
 
     <!-- ════════ THE EXAM ════════ -->
+    <!-- ════════ تدرّب — the full exam, then a single section ════════ -->
+    <section class="dash-sec dash-sec-anchor" id="dashPractice">
+      <div class="dash-sec-head">
+        <div class="dash-sec-title">تدرّب</div>
+        <div class="dash-sec-note">اختبار كامل أو قسم واحد</div>
+      </div>
+    </section>
+
     <section class="dash-exam">
       <svg class="dash-exam-art" viewBox="0 0 130 124" fill="none" aria-hidden="true">
             <circle cx="66" cy="50" r="46" fill="#fff" fill-opacity=".06"/>
@@ -1788,10 +1805,9 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
       </div>
     </section>
 
-    <!-- ════════ SECTION PRACTICE ════════ -->
     <section class="dash-sec">
       <div class="dash-sec-head">
-        <div class="dash-sec-title">تدرّب على قسم</div>
+        <div class="dash-sec-title">اختبار القسم</div>
         <div class="dash-sec-note">لا يُحتسب من محاولاتك</div>
       </div>
       <div class="dash-sections">
@@ -1881,10 +1897,10 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
       </div>
     </section>
 
-    <!-- ════════ RESOURCES — reserved, content lands later ════════ -->
-    <section class="dash-sec">
+    <!-- ════════ ادرس — the booklet and the lectures, both still coming ════════ -->
+    <section class="dash-sec dash-sec-anchor" id="dashStudy">
       <div class="dash-sec-head">
-        <div class="dash-sec-title">مصادر التعلّم</div>
+        <div class="dash-sec-title">ادرس</div>
         <div class="dash-sec-note">قريباً</div>
       </div>
       <div class="dash-res-grid">
@@ -1953,17 +1969,17 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
 
   <!-- ════════ TAB BAR — fixed, visible at every scroll position ════════ -->
   <nav class="dash-tabs" aria-label="التنقل">
-    <span class="dash-tab is-on" aria-current="page">
+    <a class="dash-tab is-on" href="#dashTop" aria-current="page">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
       <span>الرئيسية</span>
-    </span>
-    <a class="dash-tab" href="/practice.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
-      <span>التدريب</span>
     </a>
-    <a class="dash-tab" href="/upgrade.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
-      <span>حسابي</span>
+    <a class="dash-tab" href="#dashPractice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3h7A1.5 1.5 0 0 1 17 4.5V5h1.5A2.5 2.5 0 0 1 21 7.5v11A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H7v-.5A1.5 1.5 0 0 1 8.5 3z"/><path d="m8.6 13.4 2 2 4.8-4.8"/></svg>
+      <span>تدرّب</span>
+    </a>
+    <a class="dash-tab" href="#dashStudy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      <span>ادرس</span>
     </a>
   </nav>
 </div>
