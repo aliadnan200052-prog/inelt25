@@ -412,7 +412,7 @@
         </div>
       </div>
 
-      <button class="btn-buy" id="buyBtn" onclick="buy()">
+      <button class="btn-buy" id="buyBtn">
         <span class="spinner"></span>
         <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="btn-label">الترقية الآن</span>
@@ -433,40 +433,7 @@
 <script src="/js/vendor/supabase-js-2.116.0.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
-<script>
-async function buy() {
-  const btn = document.getElementById('buyBtn');
-  btn.disabled = true;
-  btn.classList.add('loading');
-  btn.querySelector('.btn-label').textContent = 'جارٍ التحويل...';
-  try {
-    await ExamAPI.startCheckout(); // redirects to Stripe Checkout
-  } catch (e) {
-    alert('تعذّر بدء عملية الدفع: ' + (e.message || ''));
-    btn.disabled = false;
-    btn.classList.remove('loading');
-    btn.querySelector('.btn-label').textContent = 'الترقية الآن';
-  }
-}
-
-(async () => {
-  const ok = await ExamAPI.requireSession();
-  if (!ok) return;
-  try {
-    const status = await ExamAPI.getStatus();
-    if (status.premium) window.location.href = '/';
-  } catch {}
-})();
-</script>
-<script>
-/* Register the service worker so the site can be installed to the home
-   screen. Wrapped in a guard: if registration fails the site carries on
-   exactly as before. */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
-</script>
+<script src="/js/page/upgrade.js"></script>
+<script src="/js/sw-register.js"></script>
 </body>
 </html>

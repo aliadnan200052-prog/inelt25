@@ -324,15 +324,6 @@
   </div>
 </div>
 
-<script>
-/* Register the service worker so the site can be installed to the home
-   screen. Wrapped in a guard: if registration fails the site carries on
-   exactly as before. */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
-</script>
+<script src="/js/sw-register.js"></script>
 </body>
 </html>
