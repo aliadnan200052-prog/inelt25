@@ -537,14 +537,14 @@
         <p class="form-subtitle" id="subtitle">أهلاً بعودتك — أكمل حيث توقفت</p>
       </div>
 
-      <button class="btn-google" onclick="ExamAPI.signInWithGoogle(getRedirect())">
+      <button class="btn-google" id="googleBtn">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         الدخول باستخدام Google
       </button>
 
       <div class="divider">أو باستخدام البريد الإلكتروني</div>
 
-      <form id="form" onsubmit="return false">
+      <form id="form">
         <div class="field-group">
           <label class="field-label">البريد الإلكتروني</label>
           <div class="input-wrap">
@@ -561,7 +561,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-primary" id="submitBtn" onclick="submitForm()">
+        <button type="submit" class="btn-primary" id="submitBtn">
           <span class="spinner"></span>
           <span class="btn-label">دخول</span>
         </button>
@@ -574,7 +574,7 @@
 
       <div class="form-footer">
         <span class="form-footer-text" id="toggleText">ليس لديك حساب؟</span>
-        <button class="form-footer-link" id="toggleLink" onclick="toggleMode()">إنشاء حساب</button>
+        <button class="form-footer-link" id="toggleLink">إنشاء حساب</button>
       </div>
 
       <div class="security-note">
@@ -588,72 +588,7 @@
 <script src="/js/vendor/supabase-js-2.116.0.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
-<script>
-let mode = 'signin';
-
-function getRedirect() {
-  const p = new URLSearchParams(location.search).get('redirect');
-  // A leading "/" is not enough: "//evil.com" and "/\\evil.com" are read as
-  // protocol-relative URLs, so ?redirect= would send a freshly signed-in
-  // student to another site. Only a path on this origin is accepted.
-  return p && /^\/(?![\/\\])/.test(p) ? p : '/';
-}
-
-function toggleMode() {
-  mode = mode === 'signin' ? 'signup' : 'signin';
-  document.getElementById('title').textContent = mode === 'signin' ? 'تسجيل الدخول' : 'إنشاء حساب';
-  document.getElementById('subtitle').textContent = mode === 'signin' ? 'أهلاً بعودتك — أكمل حيث توقفت' : 'أنشئ حسابك للبدء';
-  document.querySelector('.btn-label').textContent = mode === 'signin' ? 'دخول' : 'إنشاء حساب';
-  document.getElementById('toggleText').textContent = mode === 'signin' ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
-  document.getElementById('toggleLink').textContent = mode === 'signin' ? 'إنشاء حساب' : 'تسجيل الدخول';
-  document.getElementById('errorBox').classList.remove('visible');
-}
-
-async function submitForm() {
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const errorBox = document.getElementById('errorBox');
-  const errorText = document.getElementById('errorText');
-  const btn = document.getElementById('submitBtn');
-
-  errorBox.classList.remove('visible');
-  btn.classList.add('loading');
-  btn.disabled = true;
-
-  try {
-    if (mode === 'signin') {
-      await ExamAPI.signInWithPassword(email, password);
-    } else {
-      await ExamAPI.signUpWithPassword(email, password);
-      alert('تم إنشاء الحساب! يمكنك الآن تسجيل الدخول (قد تحتاج لتأكيد بريدك الإلكتروني أولاً حسب إعدادات المشروع).');
-      toggleMode();
-      btn.classList.remove('loading');
-      btn.disabled = false;
-      return;
-    }
-    window.location.href = getRedirect();
-  } catch (e) {
-    errorText.textContent = e.message || 'حدث خطأ، حاول مرة أخرى';
-    errorBox.classList.add('visible');
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
-}
-
-(async () => {
-  const session = await ExamAPI.getSession();
-  if (session) window.location.href = getRedirect();
-})();
-</script>
-<script>
-/* Register the service worker so the site can be installed to the home
-   screen. Wrapped in a guard: if registration fails the site carries on
-   exactly as before. */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
-</script>
+<script src="/js/page/login.js"></script>
+<script src="/js/sw-register.js"></script>
 </body>
 </html>
