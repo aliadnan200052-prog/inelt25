@@ -609,6 +609,8 @@ body.dash-moved .dash-block { animation: fade-in var(--dur-3) var(--ease) both; 
   color: var(--d-t3);
   text-decoration: none;
 }
+.dash-col { display: contents; }           /* a real column only at ≥1100px */
+.rail-head, .rail-out { display: none; }   /* rail mode only — see ≥1100px */
 .dash-tab svg { width: 21px; height: 21px; }
 .dash-tab span { font-size: 10.5px; font-weight: 600; }
 /* Which tab reads as current follows whichever view is open. */
@@ -638,6 +640,20 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
   /* the title stops wrapping here, so the head must still clear the drawing */
   .dash-exam-head { min-height: 126px; }
 }
+/* 620 used to hold until 900, so a portrait tablet sat on a 600px column
+   with 168px of its width unused. */
+@media (min-width: 740px) {
+  .dash-wrap { max-width: 680px; }
+}
+/* ادرس holds two cards and nothing else, so on a tablet they stop being a
+   pair of thumbnails at the top of an empty screen and become full-width
+   panels. Only in that view: on الرئيسية they sit beside other blocks and
+   should stay compact. */
+@media (min-width: 740px) and (max-width: 999px) {
+  body[data-dash="study"] .dash-res-grid { grid-template-columns: 1fr; }
+  body[data-dash="study"] .dash-res { min-height: 236px; padding: var(--sp-5); }
+  body[data-dash="study"] .dash-res-art { height: 124px; }
+}
 @media (min-width: 900px) {
   .page-confirm { padding-top: var(--sp-7); }
   .dash-wrap { max-width: 760px; }
@@ -654,6 +670,153 @@ body:has(#confirmPage:not(.hidden)) .floating-controls {
 @media (min-width: 1200px) {
   .dash-wrap { max-width: 820px; }
   .dash-greet-art { width: 268px; }
+}
+
+/* ══════════ ≥1100px — THE RAIL AND THE CANVAS ══════════
+   Below this the three destinations are a floating pill at the foot of the
+   screen, which is where a thumb expects them. Above it the same <nav>
+   becomes a full-height rail on the start edge, and the page beside it
+   stops being a phone column marooned in the middle of a desktop: at 1920
+   it was using 43% of the width, and on ادرس 32% of the height.
+
+   Each view then gets the shape that suits it. الرئيسية has enough blocks
+   for two columns; تدرّب puts the full exam beside the four sections; ادرس
+   has only two cards, so they grow into panels and the short views centre
+   themselves rather than hanging from the top of an empty screen. */
+/* ≥1000px: the canvas. A tablet in landscape gets the two-column shape
+   too — only the navigation waits for 1100px, because a bar at the foot of
+   the screen is still the right thing for a touch device. */
+@media (min-width: 1000px) {
+  .dash-wrap { max-width: 980px; padding-inline: var(--sp-7); }
+  .dash-wrap .dash-block { margin-top: 0; }   /* the grid gap spaces them now */
+  /* The brand row is a child of the wrap, so it becomes a cell the moment a
+     view turns the wrap into a grid. It is a header: give it the whole row.
+     Above 1100px it is hidden entirely and the rail carries the brand. */
+  .dash-top { grid-column: 1 / -1; }
+
+  /* ── تدرّب: the full exam as a tall card beside the four sections ── */
+  body[data-dash="practice"] .dash-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+    gap: var(--sp-6);
+    align-items: stretch;
+  }
+  body[data-dash="practice"] .dash-sections { grid-template-columns: 1fr 1fr; }
+  /* a thin strip at this width, so it becomes a panel that fills its column */
+  body[data-dash="practice"] .dash-jump {
+    flex-direction: column; align-items: flex-start; justify-content: space-between;
+    height: 100%;
+    padding: var(--sp-8) var(--sp-7);
+    gap: var(--sp-5);
+    text-align: start;
+  }
+  body[data-dash="practice"] .dash-jump-ic { width: 62px; height: 62px; border-radius: 20px; }
+  body[data-dash="practice"] .dash-jump-ic svg { width: 30px; height: 30px; }
+  body[data-dash="practice"] .dash-jump-t { font-size: var(--fs-lg); }
+  body[data-dash="practice"] .dash-jump-s { margin-top: 6px; font-size: var(--fs-sm); }
+  /* the row's small chevron becomes the panel's own go button */
+  body[data-dash="practice"] .dash-jump-go {
+    margin-inline-start: 0;
+    width: 42px; height: 42px;
+    padding: 11px;
+    border-radius: 50%;
+    background: var(--g-100);
+    color: var(--g-700);
+  }
+
+  /* ── ادرس: two cards only, so they become panels ── */
+  body[data-dash="study"] .dash-wrap { max-width: 940px; }
+  body[data-dash="study"] .dash-res { min-height: 360px; padding: var(--sp-6); }
+  body[data-dash="study"] .dash-res-art { height: 170px; }
+  body[data-dash="study"] .dash-res-name { margin-top: var(--sp-5); font-size: var(--fs-md); }
+  body[data-dash="study"] .dash-res-desc { font-size: var(--fs-sm); }
+}
+
+@media (min-width: 1100px) {
+  :root { --rail: 252px; }
+
+  .page-confirm {
+    display: flex; flex-direction: column;
+    min-height: 100dvh;
+    padding: var(--sp-8) 0;
+    padding-inline-start: var(--rail);
+  }
+  /* auto margins, not justify-content: a view taller than the screen then
+     starts at the top instead of having its head cut off. Only once the
+     brand row is gone — centring a page header looks like a mistake. */
+  .dash-wrap { max-width: 1180px; margin: auto; padding-inline: var(--sp-8); }
+  .dash-top { display: none; }              /* the rail carries the brand */
+
+  /* ── الرئيسية: two stacks side by side ──
+     Only once the rail is here: in the 1000–1099 band the canvas is not
+     wide enough for two columns without squeezing the four tiles into a
+     2×2, which comes out taller than the single row it replaces.
+     A grid of loose blocks aligns its rows across both columns, which
+     leaves a hole under whichever block is shorter. Each column flows on
+     its own instead, so nothing has to line up with its neighbour. */
+  body[data-dash="home"] .dash-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+    gap: var(--sp-6);
+    align-items: start;
+  }
+  body[data-dash="home"] .dash-col {
+    display: flex; flex-direction: column; gap: var(--sp-6);
+  }
+  body[data-dash="home"] .dash-sections,
+  body[data-dash="home"] .dash-res-grid { grid-template-columns: 1fr 1fr; }
+
+  /* ── the rail ── */
+  .dash-tabs {
+    top: 0; bottom: 0;
+    inset-inline-start: 0; inset-inline-end: auto;   /* start = right, in RTL */
+    width: var(--rail); max-width: none; margin-inline: 0;
+    display: flex; flex-direction: column; gap: 4px;
+    padding: var(--sp-6) var(--sp-5) var(--sp-5);
+    border: 0; border-inline-end: 1px solid var(--d-hair);
+    border-radius: 0;
+    background: var(--d-card);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+  [data-theme="dark"] .dash-tabs { background: var(--d-card); border-color: var(--d-hair); }
+  .rail-head {
+    display: flex; align-items: center; gap: 10px;
+    direction: ltr;
+    padding: 2px var(--sp-3) var(--sp-7);
+  }
+  .rail-head .dash-brand-mark { width: 34px; height: 34px; }
+  .dash-tab {
+    flex-direction: row; justify-content: flex-start;
+    gap: 11px;
+    padding: 11px var(--sp-3);
+    border-radius: 14px;
+  }
+  .dash-tab span { font-size: var(--fs-sm); }
+  .dash-tab:hover { background: var(--d-hair); }
+  .rail-out {
+    display: flex; align-items: center; gap: 11px;
+    margin-top: auto;
+    align-self: flex-start;      /* leaves the end of the line for the theme toggle */
+    padding: 11px var(--sp-3);
+    border: 0; border-radius: 14px;
+    background: none; cursor: pointer;
+    font-family: inherit; font-size: var(--fs-sm); font-weight: 600;
+    color: var(--d-t3);
+  }
+  .rail-out svg { width: 20px; height: 20px; }
+  .rail-out:hover { background: var(--d-hair); color: var(--d-t1); }
+  /* the theme toggle joins the foot of the rail, beside the sign-out row */
+  body:has(#confirmPage:not(.hidden)) .floating-controls {
+    top: auto;
+    bottom: calc(var(--sp-5) + 3px);            /* centres it on the sign-out row */
+    inset-inline-start: calc(var(--rail) - 38px - var(--sp-5));
+    z-index: 61;                 /* the rail is opaque and comes later in the DOM */
+  }
+
+  /* the section tiles carry the extra room as height, not as blank space */
+  .dash-tile { padding: var(--sp-5); }
+  .dash-tile-art { width: 60px; height: 60px; }
 }
 
 @media (max-width: 420px) {
@@ -1592,8 +1755,29 @@ html { scroll-behavior: smooth; }
   .question-grid { grid-template-columns: repeat(6, 1fr); }
   .exam-title { font-size: var(--fs-xs); }
 }
+/* ══════════ ≥1100px — THE OTHER SCREENS ══════════
+   These were already centred columns rather than stretched ones, so they
+   only need the width a desktop actually has: the four score facts read
+   as a row instead of a 2×2, section performance goes four across, and
+   the exam's two columns get more room for the passage. */
+@media (min-width: 1100px) {
+  .results-container { max-width: 1000px; }
+  .score-section { gap: var(--sp-9); }
+  .score-facts    { grid-template-columns: repeat(4, 1fr); }
+  .section-grid   { grid-template-columns: repeat(4, 1fr); }
+  .result-actions,
+  .review-actions { grid-template-columns: repeat(2, minmax(0, 260px)); justify-content: center; }
+  .review-container { max-width: 940px; }
+}
+@media (min-width: 1500px) {
+  .exam-body, .exam-header-inner { max-width: 1400px; }
+  /* at this width the passage and the stem can carry their full reading size */
+  .passage-body { font-size: var(--fs-md); }
+  .question-text { font-size: var(--fs-xl); }
+}
+
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/vendor/supabase-js-2.116.0.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 </head>
@@ -1695,6 +1879,11 @@ html { scroll-behavior: smooth; }
     <!-- ════════ الرئيسية ════════ -->
     <!-- A view is a filter over the blocks below, so the home view keeps
          everything while تدرّب and ادرس narrow it. -->
+    <!-- Two columns for the wide canvas. They are display:contents below
+         1100px, so on a phone and a tablet the blocks lay out exactly as if
+         these wrappers were not here, and the view filter below still reads
+         each .dash-block directly. -->
+    <div class="dash-col">
     <div data-view="home" class="dash-block dash-greet">
       <svg class="dash-greet-art" viewBox="0 0 200 178" fill="none" aria-hidden="true">
             <!-- back wash -->
@@ -1822,6 +2011,9 @@ html { scroll-behavior: smooth; }
         </button>
       </div>
     </section>
+
+    </div>
+    <div class="dash-col">
 
     <!-- ════════ تدرّب — heads the practice view only ════════ -->
       <div data-view="practice" class="dash-block dash-sec dash-sec-first">
@@ -2001,10 +2193,18 @@ html { scroll-behavior: smooth; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
       </span>
     </a>
+    </div>
   </div>
 
   <!-- ════════ TAB BAR — fixed, visible at every scroll position ════════ -->
   <nav class="dash-tabs" aria-label="التنقل">
+    <!-- Rail only. Below 1100px the brand and the sign-out button live in
+         .dash-top at the head of the page instead; exactly one of each pair
+         is ever displayed, so nothing is announced twice. -->
+    <div class="rail-head" aria-hidden="true">
+      <img class="dash-brand-mark" src="/icons/logo.png" alt="" width="34" height="34">
+      <div class="dash-brand-name">INELT</div>
+    </div>
     <a class="dash-tab dash-tab-home" href="/" data-go="home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 20z"/><path d="M9.2 21.6v-7.4h5.6v7.4"/></svg>
       <span>الرئيسية</span>
@@ -2017,6 +2217,10 @@ html { scroll-behavior: smooth; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>ادرس</span>
     </a>
+    <button class="rail-out" onclick="ExamAPI.signOut()" title="تسجيل الخروج">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span>تسجيل الخروج</span>
+    </button>
   </nav>
 </div>
 
@@ -2320,6 +2524,20 @@ function resetState() {
   if (tI) { clearInterval(tI); tI=null }
   res={correct:0,wrong:0,score:0,pct:0,passed:false};
 }
+/* ── Output escaping ──────────────────────────────────────────────────────
+   Question text, options and reading passages are written by whoever can
+   write to the question bank, and they land in innerHTML below. Anything
+   unescaped there runs as HTML in every student's browser, and the auth
+   token lives in localStorage — so an injected script is an account
+   takeover, not a cosmetic bug. admin.html has always escaped its table;
+   these pages now do the same.
+   A section name is used to look up a colour and an icon, so it is pinned
+   to the four known values: an unknown key could otherwise reach through
+   the prototype and reach the style attribute. */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const secKey = s => (SECTION_KEYS.indexOf(s) >= 0 ? s : null);
+const SECTION_KEYS = ['Reading Comprehension', 'Grammar', 'Functions', 'Conversation'];
 const sNames = {
   "Reading Comprehension":"القراءة والفهم",
   "Grammar":"القواعد",
@@ -2536,7 +2754,7 @@ function renderQ() {
     optHTML += `
       <div class="option ${sel}" onclick="selAns(${i})">
         <div class="option-key">${keys[i]}</div>
-        <div class="option-text">${q.options[i]}</div>
+        <div class="option-text">${esc(q.options[i])}</div>
         <div class="option-check">
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
@@ -2553,18 +2771,19 @@ function renderQ() {
           <span class="passage-label-text"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> نص القراءة <span class="passage-progress en">${posInSection}/${readingQs.length}</span></span>
           <button type="button" class="passage-toggle" onclick="togglePassage()">${passageOpen ? 'إخفاء النص ▲' : 'عرض النص ▼'}</button>
         </div>
-        <div class="passage-body${passageOpen ? '' : ' collapsed'}">${passage}</div>
+        <div class="passage-body${passageOpen ? '' : ' collapsed'}">${esc(passage)}</div>
       </div>`;
   }
 
-  const badgeColor = sColors[q.section];
+  const sk = secKey(q.section);
+  const badgeColor = sk ? sColors[sk] : 'var(--text-secondary)';
   card.innerHTML = `
     <div class="question-meta">
-      <div class="section-badge" style="background:${badgeColor}1a;border-color:${badgeColor}40;color:${badgeColor}">${sIcons[q.section]} ${sNames[q.section]}</div>
+      <div class="section-badge" style="background:${badgeColor}1a;border-color:${badgeColor}40;color:${badgeColor}">${sk ? sIcons[sk] + ' ' + sNames[sk] : esc(q.section)}</div>
       <div class="question-counter en">${cQ+1} / ${total()}</div>
     </div>
     ${passageHTML}
-    <div class="question-text">${q.question}</div>
+    <div class="question-text">${esc(q.question)}</div>
     <div class="options-list">${optHTML}</div>`;
 
   // Keep the header's section indicator in sync with the question on screen.
@@ -2574,7 +2793,7 @@ function renderQ() {
     indicator.style.background = `${badgeColor}1a`;
     indicator.style.borderColor = `${badgeColor}40`;
     indicator.style.color = badgeColor;
-    indicator.innerHTML = `${sIcons[q.section]} ${sNames[q.section]}`;
+    indicator.innerHTML = sk ? `${sIcons[sk]} ${sNames[sk]}` : esc(q.section);
   }
 
   // Nav buttons
@@ -2755,11 +2974,11 @@ async function submitExam(auto) {
   for (let i = 0; i < entries.length; i++) {
     const [sec, st] = entries[i];
     const p = Math.round(st.c / st.t * 100);
-    const col = sColors[sec];
+    const col = secKey(sec) ? sColors[sec] : 'var(--text-secondary)';
     spH += `
       <div class="section-card">
         <div class="section-card-top">
-          <div class="section-name">${sIcons[sec]} ${sNames[sec]}</div>
+          <div class="section-name">${secKey(sec) ? sIcons[sec] + ' ' + sNames[sec] : esc(sec)}</div>
           <div class="section-score-chip">${st.c}/${st.t}</div>
         </div>
         <div class="section-bar">
@@ -2805,16 +3024,16 @@ function showReviewPage() {
       let lbl = keys[j];
       if (j === ca) { optCls += ' correct-answer'; lbl += ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><polyline points="20 6 9 17 4 12"/></svg>' }
       else if (j === ua && !isCor) { optCls += ' wrong-selected'; lbl += ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' }
-      optH += `<div class="${optCls}"><span class="review-opt-key">${lbl}</span><span>${q.options[j]}</span></div>`;
+      optH += `<div class="${optCls}"><span class="review-opt-key">${lbl}</span><span>${esc(q.options[j])}</span></div>`;
     }
 
     h += `
       <div class="review-question ${cls}">
         <div class="review-q-header">
-          <span class="review-q-number">سؤال ${i+1} — ${sNames[q.section]}</span>
+          <span class="review-q-number">سؤال ${i+1} — ${secKey(q.section) ? sNames[q.section] : esc(q.section)}</span>
           ${badge}
         </div>
-        <div class="review-q-text">${q.question}</div>
+        <div class="review-q-text">${esc(q.question)}</div>
         <div class="review-options">${optH}</div>
       </div>`;
   }
