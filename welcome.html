@@ -195,6 +195,34 @@
 @media (min-height: 900px) and (min-width: 768px) {
   .welcome-art { max-width: 400px; }
 }
+/* ── ≥1000px: the screen stops being a tall phone column and becomes a
+      hero — the wordmark, the promise and the call to action on the
+      reading side, the illustration facing it. ───────────────────────── */
+@media (min-width: 1000px) {
+  .welcome-shell { padding: var(--sp-9) var(--sp-10) var(--sp-10); }
+  .welcome-inner {
+    max-width: 960px;
+    align-items: flex-start;
+    text-align: start;
+    padding-inline-end: 48%;        /* end is the left here: the art's half */
+  }
+  .welcome-mark { margin-inline: 0; }
+  .welcome-title, .welcome-note { text-wrap: balance; }
+  /* the art used to separate these two lines; it sits alongside now */
+  .welcome-note { margin-top: var(--sp-6); margin-bottom: var(--sp-8); }
+  .welcome-art {
+    position: absolute;
+    inset-inline-end: 0;            /* the left edge, in RTL */
+    top: 0; bottom: 0;
+    width: 46%; max-width: 480px;
+    margin: 0;
+    display: flex; align-items: center;
+    /* No transform for the centring: rise-in ends on transform:none and
+       would wipe it out the moment the animation finished. */
+  }
+  .welcome-cta { width: auto; min-width: 280px; }
+  .welcome-wave { height: 34vh; }
+}
 @media (max-height: 700px) {
   .welcome-art { max-width: 210px; margin: var(--sp-5) 0 var(--sp-4); }
   .welcome-note { margin-bottom: var(--sp-5); }
