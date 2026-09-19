@@ -85,7 +85,17 @@ const ExamAPI = (() => {
         window.location.href = "/login?redirect=" + encodeURIComponent(location.pathname);
         return false;
       }
-      return true; // real admin check happens server-side on every admin_* call
+      // Every admin_* function verifies the caller in the database, so a
+      // student calling one just gets "forbidden". This asks the database
+      // the same question before the page renders anything, so a signed-in
+      // student never even sees the admin screen. It fails closed: anything
+      // other than a clean answer sends the visitor away.
+      const { data, error } = await client.rpc("admin_count_questions");
+      if (error || data == null || data.error) {
+        window.location.href = "/";
+        return false;
+      }
+      return true;
     },
 
     // ── Student account status ───────────────────────────

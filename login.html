@@ -593,7 +593,10 @@ let mode = 'signin';
 
 function getRedirect() {
   const p = new URLSearchParams(location.search).get('redirect');
-  return p && p.startsWith('/') ? p : '/';
+  // A leading "/" is not enough: "//evil.com" and "/\\evil.com" are read as
+  // protocol-relative URLs, so ?redirect= would send a freshly signed-in
+  // student to another site. Only a path on this origin is accepted.
+  return p && /^\/(?![\/\\])/.test(p) ? p : '/';
 }
 
 function toggleMode() {

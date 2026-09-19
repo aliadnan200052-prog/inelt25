@@ -304,6 +304,13 @@ async function start() {
   window.scrollTo(0, 0);
 }
 
+/* Question text, options and passages come from the question bank and go
+   into innerHTML below. Escape them: unescaped, they run as HTML in the
+   student's browser, where the auth token is. See index.html for the same
+   helper. */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
 function renderQ() {
   const q = qs[i];
   answered = false;
@@ -316,7 +323,7 @@ function renderQ() {
   const opts = (q.options || []).map((o, n) =>
     `<div class="pr-opt" data-n="${n}" onclick="answer(${n})">
        <div class="pr-key">${KEYS[n]}</div>
-       <div class="pr-text">${o}</div>
+       <div class="pr-text">${esc(o)}</div>
        <div class="pr-mark">
          <svg class="tick" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
          <svg class="x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -324,8 +331,8 @@ function renderQ() {
      </div>`).join('');
 
   $('prCard').innerHTML =
-    (passage ? `<div class="pr-passage">${passage}</div>` : '') +
-    `<div class="pr-q">${q.question}</div>
+    (passage ? `<div class="pr-passage">${esc(passage)}</div>` : '') +
+    `<div class="pr-q">${esc(q.question)}</div>
      <div class="pr-opts" id="prOpts">${opts}</div>
      <div id="prExplain"></div>`;
 }
