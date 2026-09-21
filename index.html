@@ -1722,7 +1722,12 @@ html { scroll-behavior: smooth; }
   .exam-subtitle { display: none; }
   /* Section name moves into the question card on small screens. */
   .section-indicator.show { display: none; }
-  .timer-wrap { padding: 7px 11px; }
+  /* It was the indicator's auto margins that held the brand and the timer
+     apart, so hiding it left the timer stuck against the brand with the
+     rest of the row empty. Give the timer its own auto margin: start is the
+     right here, so the free space goes there and the timer sits at the far
+     left. */
+  .timer-wrap { padding: 7px 11px; margin-inline-start: auto; }
   .timer-display { font-size: var(--fs-md); }
   .exam-body { padding: var(--sp-5) var(--sp-4) var(--sp-9); gap: var(--sp-5); }
   .question-card { padding: var(--sp-5); border-radius: var(--r-lg); }
