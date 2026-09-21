@@ -869,11 +869,13 @@ html { scroll-behavior: smooth; }
 .exam-logo {
   width: 36px; height: 36px;
   flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: var(--r-sm);
-  background: var(--primary-strong);
+  display: block;
+  /* The mark is a rounded tile with its own transparent corners, so it needs
+     no box behind it and the shadow comes off its alpha — same as
+     .dash-brand-mark. It used to be four grey bars on a green square, which
+     was a placeholder, not the brand. */
+  filter: drop-shadow(0 3px 5px rgba(13,74,56,.4));
 }
-.exam-logo svg { width: 19px; height: 19px; fill: #fff; }
 .exam-title {
   font-size: var(--fs-sm);
   font-weight: 700;
@@ -2234,14 +2236,7 @@ html { scroll-behavior: smooth; }
   <header class="exam-header">
     <div class="exam-header-inner">
       <div class="exam-brand">
-        <div class="exam-logo">
-          <svg viewBox="0 0 24 24">
-            <rect x="4" y="4" width="16" height="2" rx="1"/>
-            <rect x="4" y="9" width="12" height="2" rx="1"/>
-            <rect x="4" y="14" width="14" height="2" rx="1"/>
-            <rect x="4" y="19" width="9" height="2" rx="1"/>
-          </svg>
-        </div>
+        <img class="exam-logo" src="/icons/logo.png" alt="" width="36" height="36">
         <div>
           <div class="exam-title">اختبار INELT</div>
           <div class="exam-subtitle en">Iraqi National English Exam</div>
