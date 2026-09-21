@@ -680,7 +680,9 @@ on('dashSignOut',       'click', () => ExamAPI.signOut());
 on('railSignOut',       'click', () => ExamAPI.signOut());
 on('btnStartExam',      'click', startExam);
 on('prevBtn',           'click', goToPrevious);
-on('nextBtn',           'click', goToNext);
+// nextBtn is deliberately NOT bound here: updateProg() owns its handler and
+// swaps it between goToNext and showSubmitModal on the last question. A
+// listener here would fire on top of that onclick and skip a question.
 on('openSubmitBtn',     'click', showSubmitModal);
 on('cancelSubmitBtn',   'click', closeSubmitModal);
 on('confirmSubmitBtn',  'click', () => submitExam());   // not (submitExam): the
