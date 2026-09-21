@@ -51,7 +51,11 @@ window.humanError = function (err) {
   const paint = () => {
     const off = !navigator.onLine;
     document.documentElement.classList.toggle('is-offline', off);
-    if (!off || !document.body) return;
+    if (!document.body) return;
+    // Back online: take the bar out. Leaving it in place meant it stayed on
+    // screen until the page was reloaded — and once the class went, so did
+    // the padding holding the page clear of it, so it covered the top.
+    if (!off) { if (bar && bar.isConnected) bar.remove(); return; }
     if (!bar) {
       bar = document.createElement('div');
       bar.id = 'offlineBar';
