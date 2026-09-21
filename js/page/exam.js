@@ -401,6 +401,10 @@ function closeSubmitModal() {
    SUBMIT & RESULTS
 ════════════════════════════════════════════ */
 async function submitExam(auto) {
+  // Only the timer running out submits automatically, and it says so with
+  // a literal true. Anything else — a click handler handing over its event,
+  // say — is a student pressing the button.
+  auto = auto === true;
   if (submitted) return;
   submitted = true;
   if (tI) clearInterval(tI);
@@ -679,7 +683,8 @@ on('prevBtn',           'click', goToPrevious);
 on('nextBtn',           'click', goToNext);
 on('openSubmitBtn',     'click', showSubmitModal);
 on('cancelSubmitBtn',   'click', closeSubmitModal);
-on('confirmSubmitBtn',  'click', submitExam);
+on('confirmSubmitBtn',  'click', () => submitExam());   // not (submitExam): the
+                                    // event object would arrive as `auto`
 on('reviewBtn',         'click', showReviewPage);
 on('backToResultsBtn',  'click', backToResults);
 document.querySelectorAll('.restart-btn').forEach(b => b.addEventListener('click', restartExam));
