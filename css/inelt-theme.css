@@ -622,7 +622,10 @@ button { background: none; border: none; cursor: pointer; }
   inset-inline: 0;
   top: 0;
   z-index: 9999;
-  display: flex;
+  /* Hidden unless the page is marked offline. The script removes the
+     element too; this is the second, independent reason it cannot show
+     while the connection is up. */
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -635,6 +638,11 @@ button { background: none; border: none; cursor: pointer; }
   font-weight: 600;
   line-height: 1.5;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+}
+html.is-offline #offlineBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #offlineBar svg { width: 15px; height: 15px; flex-shrink: 0; }
 [data-theme="dark"] #offlineBar { background: #E0AC5A; color: #241A08; }
