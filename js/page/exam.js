@@ -206,7 +206,8 @@ async function startExam() {
       window.location.href = '/login';
       return;
     }
-    alert('تعذّر بدء الامتحان، حاول مرة أخرى. ' + (e.message || ''));
+    console.error('startExam failed:', e);
+    alert('تعذّر بدء الامتحان. ' + (humanError(e) || 'حاول مرة أخرى.'));
     if (btn) btn.disabled = false;
     return;
   }
@@ -415,7 +416,9 @@ async function submitExam(auto) {
   } catch (e) {
     submitted = false;
     if (tR > 0 && !auto) startTimer();
-    alert('تعذّر إرسال الامتحان، تحقق من اتصالك وحاول مرة أخرى. ' + (e.message || ''));
+    console.error('submitExam failed:', e);
+    alert('تعذّر إرسال الامتحان. ' + (humanError(e) || 'تحقّق من اتصالك وحاول مرة أخرى.')
+          + '\n\nإجاباتك محفوظة — أعد المحاولة من نفس النافذة.');
     return;
   }
 
