@@ -42,7 +42,8 @@ async function submitForm() {
     }
     window.location.href = getRedirect();
   } catch (e) {
-    errorText.textContent = e.message || 'حدث خطأ، حاول مرة أخرى';
+    console.error('auth failed:', e);
+    errorText.textContent = humanError(e) || 'حدث خطأ، حاول مرة أخرى';
     errorBox.classList.add('visible');
     btn.classList.remove('loading');
     btn.disabled = false;

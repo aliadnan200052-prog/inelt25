@@ -6,7 +6,8 @@ async function buy() {
   try {
     await ExamAPI.startCheckout(); // redirects to Stripe Checkout
   } catch (e) {
-    alert('تعذّر بدء عملية الدفع: ' + (e.message || ''));
+    console.error('checkout failed:', e);
+    alert('تعذّر بدء عملية الدفع. ' + (humanError(e) || 'حاول مرة أخرى.'));
     btn.disabled = false;
     btn.classList.remove('loading');
     btn.querySelector('.btn-label').textContent = 'الترقية الآن';

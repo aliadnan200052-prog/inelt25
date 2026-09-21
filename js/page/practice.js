@@ -43,7 +43,8 @@ async function start() {
   try {
     data = await ExamAPI.startPractice(api, count);
   } catch (e) {
-    alert('تعذّر بدء التدريب. ' + (e.message || ''));
+    console.error('startPractice failed:', e);
+    alert('تعذّر بدء التدريب. ' + (humanError(e) || 'حاول مرة أخرى.'));
     btn.disabled = false;
     return;
   }
