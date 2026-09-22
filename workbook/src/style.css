@@ -1,0 +1,340 @@
+/* ============================================================
+   INELT 25 — National English Exam Workbook
+   Editorial design system
+   ============================================================ */
+
+:root{
+  --ink:#1B2420;
+  --ink-soft:#4A5A53;
+  --ink-mute:#78877F;
+  --emerald:#0E5B43;
+  --emerald-dk:#093A2B;
+  --emerald-md:#16785A;
+  --emerald-lt:#E8F1ED;
+  --emerald-xlt:#F4F9F7;
+  --line:#D9E5DF;
+  --line-soft:#E9F0ED;
+  --paper:#FFFFFF;
+}
+
+/* ---------- page masters ---------- */
+@page{
+  size:A4;
+  margin:22mm 15mm 18mm 15mm;
+
+  @top-left{
+    content:string(partname);
+    font-family:"Lato","Noto Sans Arabic",sans-serif;
+    font-size:7.4pt; letter-spacing:.10em; text-transform:uppercase;
+    color:#8A9992; vertical-align:bottom; padding-bottom:3mm;
+  }
+  @top-right{
+    content:"الامتحان الوطني الانكليزي";
+    font-family:"Noto Sans Arabic",sans-serif;
+    font-size:8.4pt; color:#0E5B43; font-weight:700;
+    vertical-align:bottom; padding-bottom:2.6mm;
+  }
+  @bottom-left{
+    content:"07702556147";
+    font-family:"Lato",sans-serif; font-size:7.2pt; letter-spacing:.08em;
+    color:#9AA8A1; vertical-align:top; padding-top:4mm;
+  }
+  @bottom-center{
+    content:counter(page);
+    font-family:"Lato",sans-serif; font-size:8.6pt; font-weight:700;
+    color:#0E5B43; vertical-align:top; padding-top:3.6mm;
+  }
+  @bottom-right{
+    content:"inelt25";
+    font-family:"Lato",sans-serif; font-size:7.2pt; letter-spacing:.08em;
+    color:#9AA8A1; vertical-align:top; padding-top:4mm;
+  }
+}
+
+@page cover{ margin:0; @top-left{content:none} @top-right{content:none}
+  @bottom-left{content:none} @bottom-center{content:none} @bottom-right{content:none} }
+
+@page front{ margin:22mm 15mm 18mm 15mm;
+  @top-left{content:none} @top-right{content:none}
+  @bottom-left{content:none} @bottom-center{content:none} @bottom-right{content:none} }
+
+@page opener{ margin:0;
+  @top-left{content:none} @top-right{content:none}
+  @bottom-left{content:none} @bottom-center{content:none} @bottom-right{content:none} }
+
+/* ---------- base ---------- */
+*{box-sizing:border-box}
+html{ -weasy-hyphens:none }
+body{
+  margin:0; color:var(--ink);
+  font-family:"Lato","Noto Sans Arabic",sans-serif;
+  font-size:10.2pt; line-height:1.55;
+  background:var(--paper);
+}
+b,strong{font-weight:700}
+
+/* horizontal rules of the grid */
+.rule{height:.7pt;background:var(--line);margin:0}
+
+/* ============================================================
+   COVER
+   ============================================================ */
+.cover{page:cover; height:297mm; width:210mm; position:relative;
+  background:var(--emerald-dk); color:#fff; overflow:hidden;}
+.cover .band{
+  position:absolute; left:0; right:0; top:0; height:222mm;
+  background:linear-gradient(180deg,#12654C 0%,#0D5340 52%,#073122 100%);
+}
+.cover .hair{position:absolute; left:18mm; right:18mm; height:.8pt; background:rgba(255,255,255,.28)}
+.cover .mark{position:absolute; left:50%; top:34mm; width:46mm; margin-left:-23mm; opacity:.97}
+.cover .kicker{
+  position:absolute; left:0; right:0; top:92mm; text-align:center;
+  font-family:"Lato",sans-serif; font-size:8.6pt; letter-spacing:.42em;
+  text-transform:uppercase; color:rgba(255,255,255,.72);
+}
+.cover h1{
+  position:absolute; left:14mm; right:14mm; top:104mm; margin:0; text-align:center;
+  font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:37pt; font-weight:700; line-height:1.34; letter-spacing:0;
+}
+.cover .sub{
+  position:absolute; left:0; right:0; top:150mm; text-align:center;
+  font-family:"Lato",sans-serif; font-size:13pt; letter-spacing:.30em;
+  text-transform:uppercase; color:#8FD3BA;
+}
+.cover .author{
+  position:absolute; left:0; right:0; top:172mm; text-align:center;
+  font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:15pt; font-weight:700; color:#fff;
+}
+.cover .authorline{position:absolute; left:50%; margin-left:-14mm; width:28mm; top:165mm;
+  height:.9pt; background:rgba(255,255,255,.45)}
+.cover .foot{
+  position:absolute; left:0; right:0; top:222mm; bottom:0; background:#fff; color:var(--ink);
+}
+.cover .foot .inner{position:absolute; left:18mm; right:18mm; top:19mm; text-align:center}
+.cover .foot .lbl{font-family:"Lato",sans-serif; font-size:7.6pt; letter-spacing:.34em;
+  text-transform:uppercase; color:var(--ink-mute); margin-bottom:7mm}
+.cover .contact{display:flex; justify-content:center; gap:0}
+.cover .contact .c{padding:0 12mm; font-family:"Lato",sans-serif; font-size:12.5pt;
+  font-weight:700; color:var(--emerald); letter-spacing:.06em}
+.cover .contact .c:first-child{border-right:.9pt solid var(--line)}
+.cover .contact .t{display:block; font-size:7pt; font-weight:400; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ink-mute); margin-bottom:2.4mm}
+
+/* ============================================================
+   CONTENTS
+   ============================================================ */
+.front{page:front}
+.toc-head{margin:0 0 2mm 0}
+.toc-head .en{font-family:"Lato",sans-serif; font-size:8pt; letter-spacing:.34em;
+  text-transform:uppercase; color:var(--ink-mute)}
+.toc-head .ar{font-family:"Noto Sans Arabic",sans-serif; direction:rtl; text-align:right;
+  font-size:24pt; font-weight:700; color:var(--emerald); margin-top:1mm}
+.toc-head .bar{width:26mm; height:2.6pt; background:var(--emerald); margin-top:3mm; float:right}
+.toc{clear:both; margin-top:11mm; border-top:.8pt solid var(--line)}
+.toc .row{display:flex; align-items:baseline; border-bottom:.6pt solid var(--line-soft);
+  padding:3.4mm 0}
+.toc .num{flex:0 0 12mm; font-family:"Lato",sans-serif; font-size:8.4pt; font-weight:700;
+  color:var(--emerald-md); letter-spacing:.06em}
+.toc .e{flex:1 1 auto; font-family:"Lato",sans-serif; font-size:10.4pt; font-weight:700;
+  color:var(--ink); text-decoration:none}
+.toc .a{flex:0 0 auto; font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:9.8pt; color:var(--ink-soft); padding:0 6mm}
+.toc .dots{flex:1 1 auto; min-width:6mm}
+.toc .pg{flex:0 0 10mm; text-align:right; font-family:"Lato",sans-serif; font-size:9.6pt;
+  font-weight:700; color:var(--emerald); text-decoration:none}
+
+
+/* ============================================================
+   PART OPENER
+   ============================================================ */
+.opener{page:opener; page-break-before:always; height:297mm; width:210mm; position:relative;
+  background:#0D5340; overflow:hidden;}
+.opener .top{position:absolute;left:0;right:0;top:0;bottom:0;
+  background:linear-gradient(180deg,#12654C 0%,#0D5340 55%,#08402F 100%)}
+.opener .mono{position:absolute; right:20mm; top:28mm; width:22mm; opacity:.30}
+.opener .hairT{position:absolute; left:20mm; right:20mm; top:20mm; height:.8pt;
+  background:rgba(255,255,255,.22)}
+.opener .plabel{position:absolute; left:20mm; top:118mm;
+  font-family:"Lato",sans-serif; font-size:8.4pt; letter-spacing:.42em;
+  text-transform:uppercase; color:rgba(255,255,255,.62)}
+.opener .pen{position:absolute; left:20mm; right:38mm; top:128mm; margin:0;
+  font-family:"Lato",sans-serif; font-size:29pt; font-weight:700; line-height:1.16; color:#fff}
+.opener .prule{position:absolute; left:20mm; top:168mm; width:30mm; height:2.4pt; background:#8FD3BA}
+.opener .par{position:absolute; left:20mm; right:20mm; top:176mm; direction:rtl; text-align:right;
+  font-family:"Noto Sans Arabic",sans-serif; font-size:24pt; font-weight:700; color:#A9E2CB}
+.opener .meta{position:absolute; left:20mm; right:20mm; bottom:32mm;
+  border-top:.8pt solid rgba(255,255,255,.22); padding-top:5mm;
+  display:flex; justify-content:space-between;
+  font-family:"Lato",sans-serif; font-size:7.6pt; letter-spacing:.26em; text-transform:uppercase;
+  color:rgba(255,255,255,.60)}
+.opener .foot{position:absolute; left:20mm; right:20mm; bottom:20mm;
+  font-family:"Noto Sans Arabic",sans-serif; direction:rtl; text-align:right;
+  font-size:9pt; color:rgba(255,255,255,.60)}
+
+/* ============================================================
+   CONTENT BLOCKS
+   ============================================================ */
+section.body{page-break-before:always}
+section.body.cont{page-break-before:auto}
+
+/* topic heading (numbered) */
+.h2{margin:8mm 0 4mm 0; page-break-after:avoid; page-break-inside:avoid;
+  border-top:1.6pt solid var(--emerald); padding-top:3.2mm;}
+.h2:first-child{margin-top:0}
+.h2 .row{display:flex; align-items:center}
+.h2 .n{flex:0 0 auto; min-width:7.6mm; height:7.6mm; border-radius:50%;
+  background:var(--emerald); color:#fff; font-family:"Lato",sans-serif; font-weight:700;
+  font-size:9.6pt; text-align:center; line-height:7.6mm; margin-right:3.6mm}
+.h2 .en{flex:1 1 auto; font-family:"Lato",sans-serif; font-size:15pt; font-weight:700;
+  color:var(--emerald-dk); line-height:1.2}
+.h2 .ar{flex:0 0 auto; font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:14pt; font-weight:700; color:var(--emerald); padding-left:4mm}
+
+/* sub heading (lettered) */
+.h3{margin:6.4mm 0 3mm 0; page-break-after:avoid; page-break-inside:avoid;
+  display:flex; align-items:center; gap:0;
+  background:var(--emerald-lt); border-left:2.6pt solid var(--emerald);
+  padding:2.2mm 3.4mm;}
+.h3 .en{flex:1 1 auto; font-family:"Lato",sans-serif; font-size:11.4pt; font-weight:700;
+  color:var(--emerald-dk)}
+.h3 .ar{flex:0 0 auto; font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:10.6pt; font-weight:700; color:var(--emerald-md)}
+
+/* arabic paragraph */
+p.ar{direction:rtl; text-align:right; margin:0 0 2.6mm 0;
+  font-family:"Noto Sans Arabic",sans-serif; font-size:10.1pt; line-height:1.85;
+  color:var(--ink); text-align:justify; text-align-last:right}
+p.ar b{color:var(--emerald-dk)}
+p.en{margin:0 0 2.6mm 0; font-size:10.2pt; line-height:1.6}
+
+/* word bank */
+.bank{margin:3mm 0 3.4mm 0; padding:2.6mm 3.4mm; background:var(--emerald-xlt);
+  border:.7pt solid var(--line); border-radius:1.6mm; text-align:center;
+  font-family:"Lato",sans-serif; font-size:10pt; font-weight:600; color:var(--emerald-dk);
+  letter-spacing:.012em; page-break-inside:avoid}
+.bank.rtl{direction:rtl; font-family:"Noto Sans Arabic",sans-serif}
+
+/* examples */
+.ex{margin:0 0 1.2mm 0; border-left:1.8pt solid var(--emerald-lt); padding:1.5mm 0 1.5mm 3.2mm;
+  page-break-inside:avoid}
+.ex .row{display:flex; align-items:baseline; gap:0}
+.ex .e{flex:1 1 58%; font-family:"Lato",sans-serif; font-size:10.2pt; color:var(--ink)}
+.ex .e b{color:var(--emerald-dk)}
+.ex .a{flex:0 1 42%; direction:rtl; text-align:right; padding-left:4mm;
+  font-family:"Noto Sans Arabic",sans-serif; font-size:9.5pt; color:var(--ink-soft)}
+.ex .a b{color:var(--emerald-md)}
+.exgroup{margin:0 0 3.4mm 0; page-break-inside:avoid}
+
+/* formula strip */
+.formula{margin:4mm 0 4.2mm 0; padding:3.4mm 4mm; background:var(--emerald);
+  border-radius:1.8mm; text-align:center; direction:rtl;
+  font-family:"Noto Sans Arabic",sans-serif; font-size:12.4pt; font-weight:700; color:#fff;
+  letter-spacing:.01em; page-break-inside:avoid}
+.formula .lbl{display:block; font-family:"Lato",sans-serif; direction:ltr; font-size:6.8pt;
+  font-weight:700; letter-spacing:.34em; text-transform:uppercase;
+  color:rgba(255,255,255,.62); margin-bottom:1.6mm}
+
+/* note / tip card */
+.note{margin:3.4mm 0; padding:3mm 3.6mm 3mm 3.6mm; background:var(--emerald-xlt);
+  border:.7pt solid var(--line); border-right:2.6pt solid var(--emerald-md);
+  border-radius:1.6mm; direction:rtl; text-align:right; page-break-inside:avoid}
+.note p{margin:0 0 1mm 0; font-family:"Noto Sans Arabic",sans-serif; font-size:9.6pt;
+  line-height:1.8; color:var(--ink-soft)}
+.note p:last-child{margin-bottom:0}
+.note p b{color:var(--emerald-dk)}
+.note .en{direction:ltr; text-align:left; font-family:"Lato",sans-serif; font-size:9.6pt}
+
+/* ---------- questions ---------- */
+.qwrap{margin:4.6mm 0 0 0}
+.qbar{display:flex; align-items:center; margin:6mm 0 3mm 0; page-break-after:avoid}
+.qbar .l{flex:0 0 auto; font-family:"Lato",sans-serif; font-size:7.6pt; font-weight:700;
+  letter-spacing:.30em; text-transform:uppercase; color:var(--emerald); padding-right:3mm}
+.qbar .r{flex:1 1 auto; height:.8pt; background:var(--line)}
+.qbar .ar{flex:0 0 auto; direction:rtl; font-family:"Noto Sans Arabic",sans-serif;
+  font-size:8.6pt; font-weight:700; color:var(--emerald-md); padding-left:3mm}
+
+.q{border:.7pt solid var(--line); border-radius:2mm; padding:2.6mm 3.4mm 2.3mm 3.4mm;
+  margin:0 0 2.8mm 0; page-break-inside:avoid; background:#fff}
+.q .stem{display:flex; align-items:baseline; margin-bottom:1.8mm}
+.q .qn{flex:0 0 auto; font-family:"Lato",sans-serif; font-size:8.2pt; font-weight:700;
+  color:#fff; background:var(--emerald); border-radius:1mm; padding:.5mm 1.7mm;
+  margin-right:2.6mm; letter-spacing:.04em}
+.q .qt{flex:1 1 auto; font-family:"Lato",sans-serif; font-size:10.1pt; font-weight:600;
+  line-height:1.5; color:var(--ink)}
+.q .qt b{font-weight:800; color:var(--emerald-dk)}
+.opts{margin:0}
+.opt{display:flex; align-items:baseline; padding:.7mm 0 .7mm 0;
+  font-family:"Lato",sans-serif; font-size:9.7pt; color:var(--ink-soft)}
+.opt .m{flex:0 0 3.2mm; height:3.2mm; border:.8pt solid var(--line); border-radius:50%;
+  margin-right:2.6mm; margin-top:1.1mm; align-self:flex-start}
+.opt .tx{flex:1 1 auto}
+.opt.ok{color:var(--emerald-dk); font-weight:700}
+.opt.ok .m{background:var(--emerald); border-color:var(--emerald)}
+.qcols{display:flex; gap:0}
+.qcols > *{flex:1 1 50%}
+.qcols > *:first-child{padding-right:2.4mm}
+.qcols > *:last-child{padding-left:2.4mm}
+
+/* ---------- tables ---------- */
+.tblwrap{margin:4mm 0 4.2mm 0; page-break-inside:avoid}
+.tcap{font-family:"Noto Sans Arabic",sans-serif; direction:rtl; text-align:right;
+  font-size:10.4pt; font-weight:700; color:var(--emerald-dk); margin-bottom:2.4mm}
+.tcap .en{font-family:"Lato",sans-serif; direction:ltr; float:left; font-size:8pt;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--ink-mute); font-weight:700;
+  padding-top:1.2mm}
+table{width:100%; border-collapse:collapse; font-size:9.4pt;
+  border:.7pt solid var(--line); border-radius:0}
+thead th{background:var(--emerald); color:#fff; font-weight:700; padding:2.2mm 2.4mm;
+  text-align:center; font-size:9.2pt; line-height:1.4; border-right:.7pt solid rgba(255,255,255,.18)}
+thead th:last-child{border-right:none}
+thead th.ar{font-family:"Noto Sans Arabic",sans-serif; direction:rtl}
+tbody td{padding:1.9mm 2.4mm; border-top:.7pt solid var(--line-soft);
+  border-right:.7pt solid var(--line-soft); text-align:center; vertical-align:middle;
+  line-height:1.5}
+tbody td:last-child{border-right:none}
+tbody tr:nth-child(even){background:var(--emerald-xlt)}
+td.ar{font-family:"Noto Sans Arabic",sans-serif; direction:rtl; text-align:right; font-size:9.2pt}
+td.arc{font-family:"Noto Sans Arabic",sans-serif; direction:rtl; text-align:center; font-size:9.2pt}
+td.en{font-family:"Lato",sans-serif}
+td.enl{font-family:"Lato",sans-serif; text-align:left}
+td.key{font-family:"Lato",sans-serif; font-weight:700; color:var(--emerald-dk)}
+td.num{font-family:"Lato",sans-serif; font-weight:700; color:var(--emerald); width:9mm}
+td b{color:var(--emerald-dk)}
+table.tight tbody td{padding:1.5mm 2mm}
+
+/* bidi-isolated lines inside table cells */
+.li-ar{display:block; direction:rtl; unicode-bidi:isolate;
+  font-family:"Noto Sans Arabic",sans-serif; text-align:center}
+.li-en{display:block; direction:ltr; unicode-bidi:isolate;
+  font-family:"Lato",sans-serif; text-align:center}
+td.arc .li-ar, td.arc .li-en{text-align:center}
+
+.grp{page-break-inside:avoid}
+
+/* ---------- closing page ---------- */
+.backcover{page:opener; page-break-before:always; width:210mm; height:297mm; position:relative;
+  background:#0B4A38; overflow:hidden}
+.backcover .bg{position:absolute; left:0; right:0; top:0; bottom:0;
+  background:linear-gradient(180deg,#12654C 0%,#0C4C3A 60%,#07301F 100%)}
+.backcover .mark{position:absolute; left:50%; margin-left:-19mm; top:88mm; width:38mm; opacity:.96}
+.backcover .t1{position:absolute; left:16mm; right:16mm; top:132mm; text-align:center;
+  font-family:"Noto Sans Arabic",sans-serif; direction:rtl;
+  font-size:20pt; font-weight:700; color:#fff}
+.backcover .t2{position:absolute; left:0; right:0; top:148mm; text-align:center;
+  font-family:"Lato",sans-serif; font-size:9.6pt; letter-spacing:.34em;
+  text-transform:uppercase; color:#8FD3BA}
+.backcover .line{position:absolute; left:50%; margin-left:-14mm; width:28mm; top:160mm;
+  height:.9pt; background:rgba(255,255,255,.4)}
+.backcover .t3{position:absolute; left:0; right:0; top:166mm; text-align:center;
+  font-family:"Noto Sans Arabic",sans-serif; direction:rtl; font-size:12pt;
+  font-weight:700; color:rgba(255,255,255,.88)}
+.backcover .contact{position:absolute; left:0; right:0; bottom:38mm; text-align:center}
+.backcover .contact .lbl{font-family:"Lato",sans-serif; font-size:7.4pt; letter-spacing:.34em;
+  text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:5mm}
+.backcover .contact .c{display:inline-block; padding:0 10mm;
+  font-family:"Lato",sans-serif; font-size:12pt; font-weight:700; color:#fff; letter-spacing:.06em}
+.backcover .contact .c + .c{border-left:.9pt solid rgba(255,255,255,.28)}
+.backcover .contact .t{display:block; font-size:6.8pt; font-weight:400; letter-spacing:.22em;
+  text-transform:uppercase; color:rgba(255,255,255,.52); margin-bottom:2.2mm}
