@@ -14,6 +14,8 @@ const patterns: Record<Pattern, number | number[]> = {
 export function haptic(kind: Pattern = "tap") {
   if (typeof navigator === "undefined" || !("vibrate" in navigator)) return;
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+  // Browsers reject vibration before the first user gesture.
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
   try {
     navigator.vibrate(patterns[kind]);
   } catch {

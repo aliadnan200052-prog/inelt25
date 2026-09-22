@@ -40,6 +40,16 @@ export const mockConversation: ConversationService = {
     await wait(400);
     const step = scene.dialogue[stepIndex];
     const lines: CharacterLine[] = [];
+
+    // The rescue phrase never costs progress: repeat the question, simpler.
+    const norm = (t: string) => t.toLowerCase().replace(/[^a-z ]/g, "").trim();
+    if (step && norm(learnerText) === norm(scene.rescuePhrase.text)) {
+      return {
+        lines: [{ text: "Of course, no problem." }, { text: step.prompt }],
+        nextStepIndex: stepIndex,
+        done: false,
+      };
+    }
     let correction: Correction | undefined;
 
     const hit = findRecast(scene.recasts, learnerText);
@@ -61,5 +71,28 @@ export const mockConversation: ConversationService = {
     else lines.push({ text: scene.closing });
 
     return { lines, correction, nextStepIndex, done: !next };
+  },
+
+  async summarizeSession(scene, history) {
+    const learner = history.filter((m) => m.from === "learner");
+    const corrections = learner.map((m) => m.correction).filter((c): c is Correction => !!c);
+    const all = learner.map((m) => m.text.toLowerCase()).join(" ");
+    const goalMet = learner.length >= scene.dialogue.length;
+
+    const wentWell: string[] = [];
+    if (goalMet) wentWell.push(`You reached your goal: ${scene.goal.charAt(0).toLowerCase()}${scene.goal.slice(1)}`);
+    if (/please/.test(all)) wentWell.push("You said “please” naturally, which sounds warm and polite");
+    if (/thanks|thank you/.test(all)) wentWell.push("You closed the conversation politely");
+    if (learner.every((m) => !/[\u0600-\u06FF]/.test(m.text))) wentWell.push("You stayed in English the whole time");
+    if (wentWell.length < 2) wentWell.push("You kept the conversation going. That's the hardest part");
+
+    return {
+      sceneId: scene.id,
+      goalMet,
+      turns: learner.length,
+      wentWell: wentWell.slice(0, 3),
+      focus: corrections[0],
+      phrasesAdded: [...scene.keyPhrases.slice(0, 2), scene.rescuePhrase],
+    };
   },
 };

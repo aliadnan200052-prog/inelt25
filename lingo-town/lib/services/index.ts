@@ -18,5 +18,7 @@ export const speechToText: SpeechService["speechToText"] = (input) => speech.spe
 export const textToSpeech: SpeechService["textToSpeech"] = (text, opts) => speech.textToSpeech(text, opts);
 export const getCharacterReply: ConversationService["getCharacterReply"] = (input) =>
   conversation.getCharacterReply(input);
+export const summarizeSession: ConversationService["summarizeSession"] = (scene, history) =>
+  conversation.summarizeSession(scene, history);
 
 export type * from "./types";

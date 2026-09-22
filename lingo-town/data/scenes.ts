@@ -63,7 +63,7 @@ export const scenes: Scene[] = [
       {
         id: "order",
         prompt: "Morning! Welcome in. What can I get for you?",
-        hint: { text: "Could I have a …, please?", meaningAr: "هل يمكنني الحصول على …، من فضلك؟" },
+        hint: { text: "Could I have a latte, please?", meaningAr: "هل يمكنني الحصول على لاتيه، من فضلك؟" },
         sampleAnswer: "I want a latte.",
         reply: "Lovely, one latte coming up.",
       },
@@ -96,7 +96,7 @@ export const scenes: Scene[] = [
         better: "I'd like",
         recast: "you'd like a latte",
         replyTemplate: "Lovely, so {recast}. Coming right up.",
-        explanationAr: "«I want» تبدو مباشرة جداً عند الطلب. «I'd like…» أو «Could I have…» أكثر لطفاً وطبيعية.",
+        explanationAr: "«I want» تبدو مباشرة جداً عند الطلب. «I'd like» أو «Could I have» أكثر لطفاً وطبيعية.",
       },
       {
         id: "give-me",
@@ -104,7 +104,7 @@ export const scenes: Scene[] = [
         better: "Could I get",
         recast: "you'd like a latte",
         replyTemplate: "Sure, {recast}? No problem at all.",
-        explanationAr: "«Give me» تبدو كأمر. استخدم «Could I get…» لتبدو مهذباً.",
+        explanationAr: "«Give me» تبدو كأمر. استخدم «Could I get» لتبدو مهذباً.",
       },
       {
         id: "how-much-it-is",

@@ -1,4 +1,4 @@
-import type { ChatMessage, Correction, Highlight, Scene } from "@/data/types";
+import type { ChatMessage, Correction, Highlight, Scene, SessionSummary } from "@/data/types";
 
 /* ------------------------------------------------------------------ */
 /* Contracts for the pluggable services. Swap the mock implementation  */
@@ -66,4 +66,6 @@ export interface SpeechService {
 
 export interface ConversationService {
   getCharacterReply(input: CharacterReplyInput): Promise<CharacterReply>;
+  /** Builds the Review screen: wins first, then one focused correction. */
+  summarizeSession(scene: Scene, history: ChatMessage[]): Promise<SessionSummary>;
 }

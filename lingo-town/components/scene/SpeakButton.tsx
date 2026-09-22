@@ -12,12 +12,15 @@ export function SpeakButton({
   onPress,
   label,
   tone = "teal",
+  size = "md",
   className,
 }: {
   speaking: boolean;
   onPress: () => void;
   label: string;
   tone?: "teal" | "terra";
+  /** "sm" keeps a 44px touch target around a quieter 32px disc. */
+  size?: "md" | "sm";
   className?: string;
 }) {
   return (
@@ -31,16 +34,24 @@ export function SpeakButton({
         haptic("soft");
         onPress();
       }}
-      className={cn(
-        "inline-grid size-11 shrink-0 place-items-center rounded-full transition-colors",
-        tone === "teal" &&
-          (speaking ? "bg-teal text-on-teal" : "bg-teal-soft text-teal-pressed hover:bg-teal/15 dark:text-teal"),
-        tone === "terra" &&
-          (speaking ? "bg-terra text-white" : "bg-surface text-terra-deep shadow-soft hover:bg-surface-2"),
-        className,
-      )}
+      className={cn("group inline-grid size-11 shrink-0 place-items-center rounded-full", className)}
     >
-      {speaking ? <Bars /> : <Volume2 className="size-5" aria-hidden />}
+      <span
+        className={cn(
+          "grid place-items-center rounded-full transition-colors",
+          size === "sm" ? "size-8 [&_svg]:size-4" : "size-11",
+          tone === "teal" &&
+            (speaking
+              ? "bg-teal text-on-teal"
+              : size === "sm"
+                ? "text-muted group-hover:bg-teal-soft group-hover:text-teal-pressed"
+                : "bg-teal-soft text-teal-pressed group-hover:bg-teal/15 dark:text-teal"),
+          tone === "terra" &&
+            (speaking ? "bg-terra text-white" : "bg-surface text-terra-deep shadow-soft group-hover:bg-surface-2"),
+        )}
+      >
+        {speaking ? <Bars /> : <Volume2 className="size-5" aria-hidden />}
+      </span>
     </motion.button>
   );
 }
