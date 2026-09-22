@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { TalkScreen } from "@/components/talk/TalkScreen";
+import { Suspense } from "react";
+import { TalkRoute } from "@/components/talk/TalkRoute";
 import { getScene, scenes } from "@/data/scenes";
 
 export function generateStaticParams() {
@@ -9,9 +10,12 @@ export function generateStaticParams() {
 
 export const metadata: Metadata = { title: "Talk" };
 
-export default async function TalkPage({ params, searchParams }: PageProps<"/scene/[sceneId]/talk">) {
+export default async function TalkPage({ params }: PageProps<"/scene/[sceneId]/talk">) {
   const { sceneId } = await params;
-  const { level } = await searchParams;
   if (!getScene(sceneId)) notFound();
-  return <TalkScreen key={String(level)} sceneId={sceneId} harder={level === "harder"} />;
+  return (
+    <Suspense>
+      <TalkRoute sceneId={sceneId} />
+    </Suspense>
+  );
 }

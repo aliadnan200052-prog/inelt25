@@ -165,6 +165,9 @@ export function TalkScreen({ sceneId, harder = false }: { sceneId: string; harde
       </TopBar>
 
       <div className="pb-[calc(280px+env(safe-area-inset-bottom))] pt-3">
+        <h1 className="sr-only">
+          {scene.title}: talking with {character.name}
+        </h1>
         <div className="mx-auto mb-5 max-w-[22rem] rounded-2xl border border-dashed border-line-strong px-4 py-3 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted">Your goal</p>
           <p className="mt-0.5 text-sm text-ink">{scene.goal}</p>

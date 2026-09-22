@@ -30,7 +30,7 @@ export function TownMap({ places, highlightPlaceId }: Props) {
 
   return (
     <div className="relative overflow-hidden rounded-card border border-line bg-surface shadow-card">
-      <div className="relative aspect-[6/5] w-full">
+      <div className="@container relative aspect-[6/5] w-full">
         <MapArt places={places} />
 
         <ul className="absolute inset-0" aria-label="Places in town">
@@ -40,8 +40,8 @@ export function TownMap({ places, highlightPlaceId }: Props) {
             const today = p.id === highlightPlaceId;
             const marker = (
               <>
-                {/* invisible hit area over the building */}
-                <span aria-hidden className="block h-14 w-16" />
+                {/* invisible hit area over the building; scales with the map */}
+                <span aria-hidden className="block h-[15.5cqw] w-[18cqw] min-w-16" />
                 <span
                   className={cn(
                     "relative inline-flex min-h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold shadow-soft transition-colors",
@@ -66,7 +66,7 @@ export function TownMap({ places, highlightPlaceId }: Props) {
               <li
                 key={p.id}
                 className="absolute flex flex-col items-center"
-                style={{ left: `${p.map.x}%`, top: `${p.map.y}%`, transform: "translate(-50%, -3.5rem)" }}
+                style={{ left: `${p.map.x}%`, top: `${p.map.y}%`, transform: "translate(-50%, -15.5cqw)" }}
               >
                 {locked ? (
                   <button

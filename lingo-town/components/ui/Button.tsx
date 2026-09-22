@@ -11,7 +11,7 @@ type Variant = "primary" | "secondary" | "accent" | "ghost" | "soft";
 type Size = "lg" | "md" | "sm";
 
 const base =
-  "relative inline-flex select-none items-center justify-center gap-2 rounded-btn font-sans font-bold tracking-[-0.005em] transition-[background-color,box-shadow,color] duration-200 disabled:pointer-events-none disabled:opacity-50";
+  "relative inline-flex select-none items-center whitespace-nowrap justify-center gap-2 rounded-btn font-sans font-bold tracking-[-0.005em] transition-[background-color,box-shadow,color] duration-200 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   primary: "bg-teal text-on-teal shadow-teal hover:bg-teal-pressed active:bg-teal-pressed",

@@ -192,3 +192,8 @@ export const getScene = (id: string) => scenes.find((s) => s.id === id);
 
 /** The scene featured on the Town screen as "Today's scene". */
 export const todaysSceneId = "cafe-order";
+
+/** Every phrase in town, keyed by id (phrasebook lookups). */
+export const phrasesById = new Map(
+  scenes.flatMap((s) => [...s.keyPhrases, s.rescuePhrase]).map((p) => [p.id, p] as const),
+);
