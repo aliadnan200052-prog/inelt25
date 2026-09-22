@@ -1,0 +1,278 @@
+@import "tailwindcss";
+
+/* Dark mode follows the OS by default; `data-theme` on <html> overrides it. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Design tokens — raw values live here as CSS variables so both      */
+/* Tailwind utilities and inline SVG illustrations can use them.      */
+/* ------------------------------------------------------------------ */
+:root {
+  --lt-bg: #f6f1e7;
+  --lt-bg-deep: #efe7d8;
+  --lt-surface: #fffdf8;
+  --lt-surface-2: #fbf7ef;
+  --lt-border: #e3d9c6;
+  --lt-border-strong: #d4c7ae;
+
+  --lt-ink: #1f2a2e;
+  --lt-muted: #5b6668; /* 5.6:1 on cream */
+  --lt-faint: #7d8688; /* decorative / large text only */
+
+  --lt-teal: #2f6b66;
+  --lt-teal-pressed: #234f4b;
+  --lt-teal-soft: #d6e6e3;
+  --lt-on-teal: #fffdf8;
+
+  --lt-terra: #c0562f;
+  --lt-terra-deep: #8e3a1c;
+  --lt-terra-soft: #fbebdd;
+
+  --lt-sun: #e9b949;
+  --lt-sun-soft: #f7e7bd;
+  --lt-leaf: #6f8f5b;
+  --lt-leaf-soft: #dfe7cf;
+  --lt-sky: #dce9e6;
+  --lt-roof: #a8482a;
+  --lt-wall: #f3e3c7;
+
+  --lt-shadow-color: 44 36 22;
+  --lt-shadow-sm: 0 1px 2px rgb(var(--lt-shadow-color) / 0.06), 0 2px 6px rgb(var(--lt-shadow-color) / 0.05);
+  --lt-shadow-md: 0 1px 2px rgb(var(--lt-shadow-color) / 0.05), 0 4px 10px rgb(var(--lt-shadow-color) / 0.06),
+    0 12px 28px -8px rgb(var(--lt-shadow-color) / 0.1);
+  --lt-shadow-lg: 0 2px 4px rgb(var(--lt-shadow-color) / 0.05), 0 10px 24px rgb(var(--lt-shadow-color) / 0.08),
+    0 28px 56px -16px rgb(var(--lt-shadow-color) / 0.16);
+  --lt-shadow-teal: 0 2px 4px rgb(35 79 75 / 0.18), 0 10px 24px -6px rgb(35 79 75 / 0.35);
+
+  color-scheme: light;
+}
+
+/* Dark palette: deep ink-green night, same hues lifted for contrast.
+   Duplicated for the explicit toggle and the OS preference. */
+:root[data-theme="dark"] {
+  --lt-bg: #141b1c;
+  --lt-bg-deep: #0f1516;
+  --lt-surface: #1c2526;
+  --lt-surface-2: #212b2c;
+  --lt-border: #2f3b3b;
+  --lt-border-strong: #3d4b4a;
+  --lt-ink: #f1ebdf;
+  --lt-muted: #b3b9b4;
+  --lt-faint: #8a928e;
+  --lt-teal: #6fb3ab;
+  --lt-teal-pressed: #5a9b93;
+  --lt-teal-soft: #203a38;
+  --lt-on-teal: #0f1f1e;
+  --lt-terra: #e0805a;
+  --lt-terra-deep: #f0a585;
+  --lt-terra-soft: #3a2519;
+  --lt-sun: #e3b650;
+  --lt-sun-soft: #3a311b;
+  --lt-leaf: #8fae7a;
+  --lt-leaf-soft: #253022;
+  --lt-sky: #1a2627;
+  --lt-roof: #b75a3a;
+  --lt-wall: #3a3226;
+  --lt-shadow-color: 0 0 0;
+  --lt-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --lt-shadow-md: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 20px -6px rgb(0 0 0 / 0.45);
+  --lt-shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 20px 44px -12px rgb(0 0 0 / 0.6);
+  --lt-shadow-teal: 0 2px 4px rgb(0 0 0 / 0.3), 0 10px 24px -6px rgb(111 179 171 / 0.25);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lt-bg: #141b1c;
+    --lt-bg-deep: #0f1516;
+    --lt-surface: #1c2526;
+    --lt-surface-2: #212b2c;
+    --lt-border: #2f3b3b;
+    --lt-border-strong: #3d4b4a;
+    --lt-ink: #f1ebdf;
+    --lt-muted: #b3b9b4;
+    --lt-faint: #8a928e;
+    --lt-teal: #6fb3ab;
+    --lt-teal-pressed: #5a9b93;
+    --lt-teal-soft: #203a38;
+    --lt-on-teal: #0f1f1e;
+    --lt-terra: #e0805a;
+    --lt-terra-deep: #f0a585;
+    --lt-terra-soft: #3a2519;
+    --lt-sun: #e3b650;
+    --lt-sun-soft: #3a311b;
+    --lt-leaf: #8fae7a;
+    --lt-leaf-soft: #253022;
+    --lt-sky: #1a2627;
+    --lt-roof: #b75a3a;
+    --lt-wall: #3a3226;
+    --lt-shadow-color: 0 0 0;
+    --lt-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --lt-shadow-md: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 20px -6px rgb(0 0 0 / 0.45);
+    --lt-shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 20px 44px -12px rgb(0 0 0 / 0.6);
+    --lt-shadow-teal: 0 2px 4px rgb(0 0 0 / 0.3), 0 10px 24px -6px rgb(111 179 171 / 0.25);
+    color-scheme: dark;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Tailwind theme — this block is the Tailwind v4 config.             */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --color-cream: var(--lt-bg);
+  --color-cream-deep: var(--lt-bg-deep);
+  --color-surface: var(--lt-surface);
+  --color-surface-2: var(--lt-surface-2);
+  --color-line: var(--lt-border);
+  --color-line-strong: var(--lt-border-strong);
+  --color-ink: var(--lt-ink);
+  --color-muted: var(--lt-muted);
+  --color-faint: var(--lt-faint);
+  --color-teal: var(--lt-teal);
+  --color-teal-pressed: var(--lt-teal-pressed);
+  --color-teal-soft: var(--lt-teal-soft);
+  --color-on-teal: var(--lt-on-teal);
+  --color-terra: var(--lt-terra);
+  --color-terra-deep: var(--lt-terra-deep);
+  --color-terra-soft: var(--lt-terra-soft);
+  --color-sun: var(--lt-sun);
+  --color-sun-soft: var(--lt-sun-soft);
+  --color-leaf: var(--lt-leaf);
+  --color-leaf-soft: var(--lt-leaf-soft);
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), "Noto Sans Arabic", Tahoma, sans-serif;
+
+  /* Type scale: 12 / 14 / 16 / 20 / 28 / 34 */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.35rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.55rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.75rem;
+  --text-xl--line-height: 2.1rem;
+  --text-xl--letter-spacing: -0.015em;
+  --text-2xl: 2.125rem;
+  --text-2xl--line-height: 2.45rem;
+  --text-2xl--letter-spacing: -0.022em;
+
+  --radius-card: 22px;
+  --radius-card-sm: 18px;
+  --radius-btn: 16px;
+
+  --shadow-soft: var(--lt-shadow-sm);
+  --shadow-card: var(--lt-shadow-md);
+  --shadow-lift: var(--lt-shadow-lg);
+  --shadow-teal: var(--lt-shadow-teal);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    background: var(--lt-bg);
+  }
+  body {
+    background: var(--lt-bg);
+    color: var(--lt-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  [lang="ar"] {
+    font-family: var(--font-arabic);
+    letter-spacing: 0;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--lt-teal);
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
+  button {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--lt-teal-soft);
+    color: var(--lt-ink);
+  }
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* A very faint paper grain so large cream areas don't feel flat. */
+  .paper {
+    background-image: radial-gradient(rgb(var(--lt-shadow-color) / 0.035) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Soft ring that breathes out from "today" markers. */
+@keyframes lt-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lt-teal) 45%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--lt-teal) 0%, transparent);
+  }
+}
+.lt-pulse {
+  animation: lt-pulse 2.4s var(--ease-out-soft) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
