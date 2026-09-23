@@ -1,0 +1,147 @@
+{
+  "id": "a1-u2-l1",
+  "context": {
+    "situation": "You're in a café in London with a friend. You want a drink and something to eat.",
+    "situation_ar": "أنت في مقهى في لندن مع صديق. تريد مشروبًا وشيئًا تأكله.",
+    "goal": "Order food and drinks politely, answer the server's questions and ask the price.",
+    "goal_ar": "أن تطلب الطعام والمشروبات بأدب، وتجيب عن أسئلة النادل، وتسأل عن السعر."
+  },
+  "input": {
+    "videoId": null,
+    "title": "At the café counter",
+    "script": [
+      { "s": "Server", "t": "Hi there. What can I get you?" },
+      { "s": "Maya", "t": "Hi. Can I have a latte, please?" },
+      { "s": "Server", "t": "Sure. What size? Small, medium or large?" },
+      { "s": "Maya", "t": "Medium, please." },
+      { "s": "Server", "t": "Anything else?" },
+      { "s": "Maya", "t": "Yes, I'd like a cheese sandwich and some water." },
+      { "s": "Server", "t": "Is that to eat in or take away?" },
+      { "s": "Maya", "t": "To eat in. How much is that?" },
+      { "s": "Server", "t": "That's eight pounds fifty, please." },
+      { "s": "Maya", "t": "Here you are." },
+      { "s": "Server", "t": "Thanks. I'll bring it to your table." }
+    ],
+    "gist": [
+      { "id": "a1c-g1", "type": "mcq", "skill": "listening", "kind": "gist",
+        "prompt": "What does Maya order?", "options": ["A drink, a sandwich and water", "Only a coffee", "A cake and tea"], "answer": 0 }
+    ],
+    "detail": [
+      { "id": "a1c-d1", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "What size is her latte?", "options": ["Medium", "Small", "Large"], "answer": 0 },
+      { "id": "a1c-d2", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "Where will she eat?", "options": ["In the café", "At home", "In the park"], "answer": 0,
+        "explain": { "1": "\"To eat in\" means she stays in the café.", "2": "\"To eat in\" means she stays in the café." } },
+      { "id": "a1c-d3", "type": "gap", "skill": "listening", "kind": "detail", "prompt": "How much is it?", "text": "Eight pounds ___.", "answers": ["fifty", "50"] }
+    ]
+  },
+  "vocabulary": ["what-can-i-get-you", "can-i-have", "id-like", "anything-else", "eat-in-take-away", "how-much-is-that", "here-you-are"],
+  "recycle": ["thank-you"],
+  "notice": [
+    {
+      "quote": "Can I have a latte, please? … I'd like a cheese sandwich and some water.",
+      "question": { "id": "a1c-n1", "type": "mcq", "skill": "grammar",
+        "prompt": "Why \"a sandwich\" but \"some water\"?", "prompt_ar": "لماذا a sandwich ولكن some water؟",
+        "options": ["We can count sandwiches, but not water.", "Water is more expensive.", "There's no reason."], "answer": 0, "items": ["a-an-some"] },
+      "explain": "a/an + things we count (a sandwich, an apple). some + things we don't count (some water, some milk).",
+      "explain_ar": "a/an مع المعدود، و some مع غير المعدود."
+    },
+    {
+      "quote": "Can I have …, please? / I'd like …",
+      "question": { "id": "a1c-n2", "type": "recall", "skill": "vocabulary",
+        "prompt": "\"I'd like\" is short for…", "answers": ["I would like"], "items": ["id-like"] },
+      "explain": "Both are polite ways to order. \"I want…\" can sound rude to a server.",
+      "explain_ar": "كلاهما مهذب للطلب. I want قد تبدو غير مهذبة."
+    }
+  ],
+  "grammar": {
+    "item": "a-an-some",
+    "title": "a / an / some",
+    "context": "Can I have a latte? … I'd like a cheese sandwich and some water.",
+    "pattern": "a + consonant sound · an + vowel sound · some + uncountable / plural",
+    "examples": ["a coffee, a cake", "an orange juice, an egg", "some water, some milk", "some chips, some biscuits"],
+    "explain": "Use a/an for one thing you can count. Use some for things you don't count, or for plurals.",
+    "explain_ar": "a/an لشيء واحد معدود، و some لغير المعدود أو للجمع."
+  },
+  "practice": [
+    { "id": "a1c-p1", "type": "gap", "skill": "grammar", "prompt": "a, an or some?", "text": "Can I have ___ orange juice, please?", "answers": ["an"], "items": ["a-an-some"],
+      "errors": [{ "match": "^a$", "why": "\"Orange\" starts with a vowel sound, so we say an.", "why_ar": "orange تبدأ بصوت متحرك، لذلك an." }] },
+    { "id": "a1c-p2", "type": "gap", "skill": "grammar", "prompt": "a, an or some?", "text": "I'd like ___ milk in my tea.", "answers": ["some"], "items": ["a-an-some"],
+      "errors": [{ "match": "^an?$", "why": "Milk is uncountable, so we use some.", "why_ar": "milk غير معدود، لذلك some." }] },
+    { "id": "a1c-p3", "type": "order", "skill": "vocabulary", "prompt": "Put the words in order.", "tokens": ["a", "Can", "have", "I", "tea", "please"], "answers": ["Can I have a tea please"], "items": ["can-i-have"] },
+    { "id": "a1c-p4", "type": "match", "skill": "vocabulary", "prompt": "Match the server's question to your answer.",
+      "pairs": [["What can I get you?", "A cappuccino, please."], ["Anything else?", "No, that's all, thanks."], ["To eat in or take away?", "Take away, please."], ["That's four pounds.", "Here you are."]],
+      "items": ["what-can-i-get-you", "anything-else", "eat-in-take-away", "here-you-are"] },
+    { "id": "a1c-p5", "type": "transform", "skill": "vocabulary", "prompt": "Make it more polite.", "source": "I want a coffee.",
+      "answers": ["Can I have a coffee, please?", "I'd like a coffee, please.", "Could I have a coffee, please?", "I'd like a coffee.", "Can I have a coffee?", "Can I get a coffee, please?"],
+      "items": ["can-i-have", "id-like"], "why": "Start with \"Can I have…\" or \"I'd like…\" and add please.", "why_ar": "ابدأ بـ Can I have أو I'd like وأضف please." }
+  ],
+  "pronunciation": [
+    { "id": "a1c-pr1", "type": "connected", "title": "Linked words", "tip": "In fast speech, words join together. \"Can I have a\" sounds like one word: /kənaɪhævə/.",
+      "tip_ar": "في الكلام السريع تتصل الكلمات ببعضها.",
+      "items": [
+        { "text": "Can I have a tea?", "note": "can-I-ha-va" },
+        { "text": "Anything else?", "note": "a-ny-thin-gelse" },
+        { "text": "Here you are.", "note": "hear-ya-rah" }
+      ] },
+    { "id": "a1c-pr2", "type": "shadow", "title": "Order like Maya", "tip": "Smile and use a friendly, rising tone for \"please?\"",
+      "lines": ["Can I have a latte, please?", "I'd like a cheese sandwich and some water.", "How much is that?"] }
+  ],
+  "retrieval": [
+    { "id": "a1c-r1", "type": "recall", "skill": "vocabulary", "prompt": "What does the server say first? (5 words)", "answers": ["What can I get you?", "What can I get you"], "items": ["what-can-i-get-you"] },
+    { "id": "a1c-r2", "type": "recall", "skill": "vocabulary", "prompt": "Ask the price (4 words).", "answers": ["How much is that?", "How much is it?", "How much is this?"], "items": ["how-much-is-that"] },
+    { "id": "a1c-r3", "type": "gap", "skill": "grammar", "prompt": "Complete from memory.", "text": "I'd like a cheese sandwich and ___ water.", "answers": ["some"], "items": ["a-an-some"] },
+    { "id": "a1c-r4", "type": "produce", "skill": "vocabulary", "prompt": "Order your favourite drink and something to eat.",
+      "target": ["can i have", "i'd like", "i would like", "could i have", "can i get"], "targetLabel": "Can I have … / I'd like …", "sample": "Can I have a mint tea and a piece of cake, please?", "minWords": 5, "items": ["can-i-have", "id-like"] }
+  ],
+  "speaking": {
+    "controlled": { "instruction": "Listen and repeat.", "lines": ["Can I have a latte, please?", "Medium, please.", "To eat in.", "How much is that?"] },
+    "guided": { "instruction": "Order using the frame.", "frame": ["Hi. Can I have ___, please?", "I'd also like ___.", "To eat in / Take away, please.", "How much is that?"],
+      "checklist": ["A drink", "Something to eat", "Eat in or take away", "The price"] },
+    "free": { "instruction": "You're at a café with a friend who doesn't speak English. Order for both of you.",
+      "instruction_ar": "أنت في مقهى مع صديق لا يتكلم الإنجليزية. اطلب لكما معًا.",
+      "prepSeconds": 30, "maxSeconds": 60, "checklist": ["Two drinks", "Food", "Polite forms", "Price"], "useful": ["Can I have…?", "I'd like…", "…for my friend.", "That's all, thanks."] }
+  },
+  "interaction": {
+    "setting": "A café", "studentRole": "Customer", "characterRole": "Server", "character": "Tom",
+    "goals": [
+      { "id": "drink", "label": "Order a drink", "patterns": ["coffee|tea|latte|cappuccino|juice|water|cola|hot chocolate|espresso|lemonade"] },
+      { "id": "food", "label": "Order something to eat", "patterns": ["sandwich|cake|muffin|croissant|salad|soup|cookie|biscuit|pizza|burger|toast|wrap"] },
+      { "id": "polite", "label": "Order politely", "patterns": ["can i have", "i'd like", "i would like", "could i have", "please", "can i get"] },
+      { "id": "price", "label": "Ask the price", "patterns": ["how much"] }
+    ],
+    "start": "t1",
+    "turns": [
+      { "id": "t1", "say": "Hi there! What can I get you?",
+        "expect": [
+          { "patterns": ["coffee|tea|latte|cappuccino|juice|water|cola|hot chocolate|espresso|lemonade"], "reply": "Sure. Small, medium or large?", "next": "t2" },
+          { "patterns": ["sandwich|cake|muffin|croissant|salad|soup|cookie|biscuit|pizza|burger|toast|wrap"], "reply": "Good choice. And to drink?", "next": "t1b" }
+        ],
+        "fallback": { "reply": "What would you like to drink?", "hint": "Try: Can I have a tea, please?" }, "model": "Can I have a cappuccino, please?" },
+      { "id": "t1b", "say": "",
+        "expect": [{ "patterns": ["coffee|tea|latte|cappuccino|juice|water|cola|hot chocolate|espresso|lemonade"], "reply": "Small, medium or large?", "next": "t2" },
+                   { "patterns": ["nothing", "no thanks", "no, thank", "that's all"], "reply": "No problem.", "next": "t4" }],
+        "fallback": { "reply": "Would you like a drink?", "hint": "Try: A coffee, please." }, "model": "An orange juice, please." },
+      { "id": "t2", "say": "",
+        "expect": [{ "patterns": ["small|medium|large|big|regular"], "reply": "Great. Anything else?", "next": "t3" }],
+        "fallback": { "reply": "What size? Small, medium or large?", "hint": "Try: Medium, please." }, "model": "Medium, please." },
+      { "id": "t3", "say": "",
+        "expect": [
+          { "patterns": ["sandwich|cake|muffin|croissant|salad|soup|cookie|biscuit|pizza|burger|toast|wrap"], "reply": "Sure.", "next": "t4" },
+          { "patterns": ["no", "that's all", "nothing", "that's it"], "reply": "OK.", "next": "t4" }
+        ],
+        "fallback": { "reply": "Anything to eat? We have sandwiches, cakes and muffins.", "hint": "Try: Yes, I'd like a muffin. / No, that's all, thanks." }, "model": "Yes, I'd like a chocolate muffin, please." },
+      { "id": "t4", "say": "Is that to eat in or take away?",
+        "expect": [{ "patterns": ["eat in|here|take away|takeaway|to go|take it"], "reply": "Perfect.", "next": "t5" }],
+        "fallback": { "reply": "Are you eating here, or taking it with you?", "hint": "Try: To eat in, please. / Take away, please." }, "model": "To eat in, please." },
+      { "id": "t5", "say": "Can I get you anything else?",
+        "expect": [
+          { "patterns": ["how much"], "reply": "That's six pounds twenty, please.", "next": "t6" },
+          { "patterns": ["no", "that's all", "nothing"], "reply": "OK, that's six pounds twenty.", "next": "t6" }
+        ],
+        "fallback": { "reply": "Anything else?", "hint": "Try: No, thanks. How much is that?" }, "model": "No, thanks. How much is that?" },
+      { "id": "t6", "say": "",
+        "expect": [{ "patterns": ["here you are", "here", "card", "cash", "ok", "thank"], "reply": "Thank you! Enjoy!", "next": "end" }],
+        "fallback": { "reply": "Cash or card?", "hint": "Try: Here you are." }, "model": "Here you are." }
+    ],
+    "useful": ["Can I have…, please?", "I'd like…", "To eat in / Take away, please.", "How much is that?", "Here you are."]
+  }
+}

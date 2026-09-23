@@ -1,0 +1,134 @@
+{
+  "id": "c1-u1-l1",
+  "context": {
+    "situation": "In a university seminar on education policy, the group is discussing whether universities should ban phones in lectures. The tutor expects you to make careful, evidence-based points and to challenge others respectfully.",
+    "situation_ar": "في حلقة نقاش جامعية عن السياسات التعليمية، يناقش الطلاب ما إذا كان يجب منع الهواتف في المحاضرات. يتوقع الأستاذ نقاطًا دقيقة مبنية على الأدلة ونقدًا محترمًا.",
+    "goal": "Make tentative academic claims, refer to evidence, concede points and challenge arguments politely.",
+    "goal_ar": "أن تطرح ادعاءات أكاديمية متحفظة، وتستند إلى الأدلة، وتتنازل عن بعض النقاط، وتعترض بأدب."
+  },
+  "input": {
+    "videoId": null,
+    "title": "Seminar: phones in lectures",
+    "script": [
+      { "s": "Tutor", "t": "Right, let's pick up from last week. Should universities ban phones in lectures? Lena, would you like to start?" },
+      { "s": "Lena", "t": "Sure. The evidence suggests that even having a phone on the desk can reduce attention, so it could be argued that a ban would benefit most students." },
+      { "s": "Marcus", "t": "I take your point, but I think we need to be careful here. Most of those studies were done in lab conditions, not in real lecture halls." },
+      { "s": "Lena", "t": "That's fair, although several classroom studies seem to point in the same direction." },
+      { "s": "Marcus", "t": "To some extent, yes. But a blanket ban raises the question of who it actually hurts. Some students rely on their phones for translation or accessibility apps." },
+      { "s": "Tutor", "t": "Let me play devil's advocate for a moment. Isn't that an argument for exceptions rather than against a ban altogether?" },
+      { "s": "Marcus", "t": "Possibly. But bear in mind that exceptions would require students to disclose private information, which many would be reluctant to do." },
+      { "s": "Lena", "t": "So perhaps the real issue is less the phones themselves than how lectures are designed. If students were more actively involved, they might be less tempted to check them." },
+      { "s": "Tutor", "t": "Interesting shift. So the question becomes whether a ban treats the symptom rather than the cause." }
+    ],
+    "gist": [
+      { "id": "c1s-g1", "type": "mcq", "skill": "listening", "kind": "gist", "prompt": "How does the discussion develop?",
+        "options": ["From whether to ban phones to whether a ban addresses the real cause", "From disagreement to a unanimous decision to ban phones", "From phones to a discussion of exam results"], "answer": 0 }
+    ],
+    "detail": [
+      { "id": "c1s-d1", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "What is Marcus's first criticism of Lena's evidence?",
+        "options": ["Much of it comes from lab settings rather than real lectures.", "It is too old.", "It only looks at school children."], "answer": 0 },
+      { "id": "c1s-d2", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "Why does Marcus think exceptions are problematic?",
+        "options": ["Students would have to reveal private information.", "They are expensive to manage.", "Lecturers would ignore them."], "answer": 0 }
+    ],
+    "inference": [
+      { "id": "c1s-i1", "type": "mcq", "skill": "listening", "kind": "inference", "prompt": "Why does the tutor say he'll \"play devil's advocate\"?",
+        "options": ["He is testing Marcus's argument, not necessarily stating his own view.", "He strongly supports a ban.", "He wants to end the discussion."], "answer": 0, "items": ["play-devils-advocate"] },
+      { "id": "c1s-i2", "type": "mcq", "skill": "listening", "kind": "inference", "prompt": "What is implied by \"treats the symptom rather than the cause\"?",
+        "options": ["Distraction may result from lecture design, so banning phones may not solve the underlying problem.", "Phones cause health problems.", "The ban should be stricter."], "answer": 0 }
+    ]
+  },
+  "vocabulary": ["the-evidence-suggests", "it-could-be-argued", "i-take-your-point", "to-some-extent", "raises-the-question", "play-devils-advocate", "bear-in-mind", "less-x-than-y"],
+  "recycle": ["make-a-decision", "contrast-linkers", "it-depends-on"],
+  "notice": [
+    {
+      "quote": "The evidence suggests that… it could be argued that a ban would benefit most students. … several classroom studies seem to point in the same direction.",
+      "question": { "id": "c1s-n1", "type": "mcq", "skill": "grammar",
+        "prompt": "Why doesn't Lena say \"A ban will help students\"?",
+        "options": ["Academic claims are usually hedged, so they're harder to attack and more accurate.", "She doesn't believe her own argument.", "Because it's a question."], "answer": 0, "items": ["hedging"] },
+      "explain": "Hedging (suggests, could be argued, seem to, most, perhaps) signals precision about how strong your evidence is — it isn't weakness.",
+      "explain_ar": "التحفظ في الكلام الأكاديمي يعني الدقة في قوة الدليل، وليس ضعفًا."
+    },
+    {
+      "quote": "Perhaps the real issue is less the phones themselves than how lectures are designed.",
+      "question": { "id": "c1s-n2", "type": "mcq", "skill": "grammar",
+        "prompt": "What does \"less X than Y\" do here?", "options": ["It shifts the focus: Y matters more than X.", "It compares prices.", "It means X and Y are equal."], "answer": 0, "items": ["less-x-than-y"] },
+      "explain": "\"The issue is less X than Y\" is an elegant way to reframe a debate.",
+      "explain_ar": "صيغة لإعادة تأطير النقاش: Y أهم من X."
+    }
+  ],
+  "grammar": {
+    "item": "hedging",
+    "title": "Hedging claims",
+    "context": "The evidence suggests that… It could be argued that… Several studies seem to point in the same direction.",
+    "pattern": "may / might / could + verb · seem / appear / tend + to · It could be argued that… · The evidence suggests that… · most / many / to some extent",
+    "examples": ["This may be partly due to lecture design.", "Students tend to check their phones when they are passive.", "It could be argued that bans infringe on autonomy.", "The findings appear to support a more nuanced view."],
+    "explain": "Match the strength of the claim to the strength of the evidence. Combine one or two hedges — not five.",
+    "explain_ar": "اجعل قوة الادعاء بقدر قوة الدليل، واستخدم أداة تحفظ أو اثنتين فقط."
+  },
+  "practice": [
+    { "id": "c1s-p1", "type": "transform", "skill": "grammar", "prompt": "Hedge the claim using \"tend to\".", "source": "Students check their phones when lectures are boring.",
+      "answers": ["Students tend to check their phones when lectures are boring.", "Students tend to check their phones when lectures are boring"], "items": ["hedging"] },
+    { "id": "c1s-p2", "type": "transform", "skill": "grammar", "prompt": "Start with \"It could be argued that…\"", "source": "A ban protects students from distraction.",
+      "answers": ["It could be argued that a ban protects students from distraction.", "It could be argued that a ban would protect students from distraction.", "It could be argued that a ban might protect students from distraction."], "items": ["it-could-be-argued", "hedging"] },
+    { "id": "c1s-p3", "type": "gap", "skill": "vocabulary", "prompt": "Complete.", "text": "This raises the ___ of whether rules alone can change behaviour.", "answers": ["question"], "items": ["raises-the-question"],
+      "errors": [{ "match": "^(issue|problem)$", "why": "Close — but the fixed phrase is \"raises the question of\".", "why_ar": "التعبير الثابت raises the question of." }] },
+    { "id": "c1s-p4", "type": "gap", "skill": "vocabulary", "prompt": "Complete.", "text": "Bear ___ mind that many students work part-time.", "answers": ["in"], "items": ["bear-in-mind"] },
+    { "id": "c1s-p5", "type": "match", "skill": "vocabulary", "prompt": "Match the phrase to its function in a seminar.",
+      "pairs": [["I take your point, but…", "concede, then challenge"], ["Let me play devil's advocate.", "argue a side to test it"], ["Bear in mind that…", "add an important consideration"], ["The evidence suggests…", "support a claim with research"], ["To some extent.", "agree only partly"]],
+      "items": ["i-take-your-point", "play-devils-advocate", "bear-in-mind", "the-evidence-suggests", "to-some-extent"] },
+    { "id": "c1s-p6", "type": "correct", "skill": "grammar", "prompt": "The claim is too strong for the evidence. Rewrite it with ONE hedge.", "sentence": "Phones destroy students' attention.",
+      "answers": ["Phones may reduce students' attention.", "Phones can reduce students' attention.", "Phones might reduce students' attention.", "Phones may affect students' attention.", "Phones seem to reduce students' attention.", "Phones tend to reduce students' attention.", "Phones can affect students' attention.", "Phones may damage students' attention.", "Phones might affect students' attention."],
+      "items": ["hedging"], "why": "Use a modal (may/might/can) or seem/tend to, and a less extreme verb (reduce/affect).", "why_ar": "استخدم may/might/can أو seem/tend to مع فعل أقل حدة." }
+  ],
+  "pronunciation": [
+    { "id": "c1s-pr1", "type": "sentence-stress", "title": "Stress to signal the contrast", "tip": "In \"less X than Y\", both X and Y carry stress.",
+      "sentences": [{ "text": "The issue is less the phones than the lectures.", "stressed": [1, 3, 5, 8] }] },
+    { "id": "c1s-pr2", "type": "intonation", "title": "Tentative tone", "tip": "A fall-rise on hedges (\"To some extent…\") signals a reservation to come.",
+      "items": [{ "text": "To some extent…", "pattern": "rise" }, { "text": "That's a fair point.", "pattern": "fall" }] },
+    { "id": "c1s-pr3", "type": "shadow", "title": "Shadowing", "tip": "Measured pace, pause briefly before the key point.",
+      "lines": ["The evidence suggests that even having a phone on the desk can reduce attention.", "I take your point, but I think we need to be careful here.", "Bear in mind that exceptions would require students to disclose private information."] }
+  ],
+  "retrieval": [
+    { "id": "c1s-r1", "type": "recall", "skill": "vocabulary", "prompt": "Concede a point politely before challenging it (4 words + \"but\").", "answers": ["I take your point, but", "I take your point but", "I take your point"], "items": ["i-take-your-point"] },
+    { "id": "c1s-r2", "type": "gap", "skill": "vocabulary", "prompt": "Complete from memory.", "text": "Let me play devil's ___ for a moment.", "answers": ["advocate"], "items": ["play-devils-advocate"] },
+    { "id": "c1s-r3", "type": "produce", "skill": "grammar", "prompt": "Make a hedged claim about whether universities should make an informed decision to ban phones — and add a consideration with \"bear in mind\".",
+      "target": ["\\b(may|might|could|seem|seems|appear|appears|tend|tends|suggests|arguably|likely)\\b"], "targetLabel": "a hedge (may, might, seem to…)",
+      "sample": "A ban might improve concentration for some students; however, bear in mind that others rely on their phones for accessibility.", "minWords": 15, "items": ["hedging", "bear-in-mind"] }
+  ],
+  "speaking": {
+    "controlled": { "instruction": "Listen and repeat with the same measured tone.", "lines": ["The evidence suggests that…", "It could be argued that a ban would benefit most students.", "I take your point, but we need to be careful here.", "That raises the question of who it actually hurts."] },
+    "guided": { "instruction": "Make a seminar contribution with this structure.", "frame": ["I'd like to pick up on ___'s point about ___.", "The evidence suggests that ___.", "That said, bear in mind that ___.", "So perhaps the real issue is less ___ than ___."],
+      "checklist": ["Link to a previous speaker", "A hedged claim", "Evidence", "A counter-consideration", "A reframing"] },
+    "free": { "instruction": "Seminar question: \"Universities should ban phones in lectures.\" Present a nuanced position in about 90 seconds.",
+      "prepSeconds": 90, "maxSeconds": 120, "checklist": ["Hedged position", "Evidence or example", "Concede one point", "Challenge one argument", "Nuanced conclusion"],
+      "useful": ["It could be argued that…", "The evidence seems to suggest…", "I take the point that…, but…", "This raises the question of…", "On balance…"] }
+  },
+  "interaction": {
+    "setting": "University seminar", "studentRole": "Seminar participant", "characterRole": "Fellow student who supports a total ban", "character": "Lena",
+    "goals": [
+      { "id": "hedge", "label": "Make a hedged claim", "patterns": ["\\b(may|might|could|seem|seems|tend|tends|arguably|likely|suggests|to some extent|perhaps)\\b"] },
+      { "id": "evidence", "label": "Refer to evidence or an example", "patterns": ["evidence|study|studies|research|data|for example|for instance|in my experience|findings"] },
+      { "id": "concede", "label": "Concede a point", "patterns": ["take your point|fair point|that's fair|i accept|granted|admittedly|to some extent|you're right that|i agree that"] },
+      { "id": "challenge", "label": "Challenge politely", "patterns": ["but|however|although|question|i'm not convinced|i wonder|bear in mind|on the other hand|yet"] }
+    ],
+    "start": "t1",
+    "turns": [
+      { "id": "t1", "say": "I honestly think a total ban is the only option. Phones ruin concentration. What's your view?",
+        "expect": [{ "patterns": ["think|view|argue|may|might|could|seem|depends|perhaps|not sure|agree|disagree|ban"], "reply": "Hmm. But the research is pretty clear, isn't it?", "next": "t2" }],
+        "fallback": { "reply": "Do you agree with a ban or not?", "hint": "Try: It could be argued that a ban…, but…" }, "model": "It could be argued that a ban would help some students, but I'm not sure it's the only option." },
+      { "id": "t2", "say": "",
+        "expect": [{ "patterns": ["evidence|study|studies|research|lab|data|real|example|instance|context|conditions"], "reply": "OK, that's a fair criticism of the studies. But surely lecturers can't compete with a phone?", "next": "t3" }],
+        "fallback": { "reply": "What's wrong with the research?", "hint": "Try: The evidence mostly comes from lab studies, which may not reflect real lectures." }, "model": "The evidence mostly comes from lab studies, which may not reflect real lectures." },
+      { "id": "t3", "say": "",
+        "expect": [{ "patterns": ["point|fair|true|granted|admittedly|extent|agree|but|however|design|interactive|engag|active"], "reply": "So you're saying the problem is the lectures, not the phones?", "next": "t4" }],
+        "fallback": { "reply": "Don't you agree that phones are more exciting than a lecture?", "hint": "Try: I take your point, but perhaps the real issue is how lectures are designed." }, "model": "I take your point, but perhaps the real issue is less the phones than how passive many lectures are." },
+      { "id": "t4", "say": "",
+        "expect": [{ "patterns": ["partly|extent|not entirely|both|less|rather|question|bear in mind|symptom|cause|exactly|yes|in a sense"], "reply": "Interesting. I suppose a ban would still be easier to enforce, though.", "next": "t5" }],
+        "fallback": { "reply": "Is it the phones or the lectures?", "hint": "Try: Partly. It raises the question of whether a ban treats the symptom rather than the cause." }, "model": "Partly. It raises the question of whether a ban treats the symptom rather than the cause." },
+      { "id": "t5", "say": "",
+        "expect": [{ "patterns": ["easier|but|however|bear in mind|accessib|exception|privacy|decision|informed|balance|although|true"], "reply": "Fair enough — I think you've convinced me it's more complicated than I thought.", "next": "end" }],
+        "fallback": { "reply": "Isn't easier to enforce a good reason?", "hint": "Try: Admittedly, it's easier to enforce. However, bear in mind that…" }, "model": "Admittedly, it would be easier to enforce. However, bear in mind that some students rely on their phones for accessibility." }
+    ],
+    "useful": ["It could be argued that…", "The evidence suggests… although…", "I take your point, but…", "This raises the question of…", "Bear in mind that…"]
+  }
+}

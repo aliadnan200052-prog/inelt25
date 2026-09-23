@@ -1,0 +1,119 @@
+{
+  "id": "a2-u1-l1",
+  "context": {
+    "situation": "A colleague wants to start a study group with you before work. First you need to compare your daily routines.",
+    "situation_ar": "زميل يريد أن تبدآ مجموعة دراسة قبل العمل. أولًا تحتاجان إلى مقارنة روتينكما اليومي.",
+    "goal": "Describe your typical day and say how often you do things.",
+    "goal_ar": "أن تصف يومك المعتاد وتقول كم مرة تفعل الأشياء."
+  },
+  "input": {
+    "videoId": null,
+    "title": "A typical day",
+    "script": [
+      { "s": "Hassan", "t": "So, what time do you usually get up?" },
+      { "s": "Emma", "t": "On weekdays? Around half past six. I'm not a morning person, though." },
+      { "s": "Hassan", "t": "Half six! That's early. Do you have breakfast at home?" },
+      { "s": "Emma", "t": "Not really. I usually just have a coffee, and then I leave home at seven fifteen." },
+      { "s": "Hassan", "t": "How do you get to work?" },
+      { "s": "Emma", "t": "I catch the bus. It takes about forty minutes, so I often read on the way." },
+      { "s": "Hassan", "t": "And when do you get home?" },
+      { "s": "Emma", "t": "At about six. I sometimes go to the gym first, but I never go to bed late. I'm always tired by ten!" },
+      { "s": "Hassan", "t": "OK, so mornings before work are no good for you." },
+      { "s": "Emma", "t": "No, but my lunch break is free. What about twelve thirty?" }
+    ],
+    "gist": [
+      { "id": "a2r-g1", "type": "mcq", "skill": "listening", "kind": "gist", "prompt": "Why are they talking about their routines?",
+        "options": ["To find a good time to meet", "Because Emma is late for work", "To plan a holiday"], "answer": 0 }
+    ],
+    "detail": [
+      { "id": "a2r-d1", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "What does Emma usually have in the morning?", "options": ["Just a coffee", "A big breakfast", "Nothing at all"], "answer": 0 },
+      { "id": "a2r-d2", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "How does she get to work?", "options": ["By bus", "By car", "She walks"], "answer": 0 },
+      { "id": "a2r-d3", "type": "gap", "skill": "listening", "kind": "detail", "prompt": "Complete what Emma says.", "text": "I ___ go to bed late.", "answers": ["never"], "items": ["frequency-adverbs"] }
+    ]
+  },
+  "vocabulary": ["get-up", "have-breakfast", "leave-home", "catch-the-bus", "get-home", "go-to-bed", "on-the-way"],
+  "recycle": ["do-you-questions", "live-in"],
+  "notice": [
+    {
+      "quote": "I usually just have a coffee … I often read on the way … I never go to bed late.",
+      "question": { "id": "a2r-n1", "type": "mcq", "skill": "grammar",
+        "prompt": "Where do usually / often / never go?", "prompt_ar": "أين تأتي usually / often / never؟",
+        "options": ["Before the main verb", "At the end of the sentence", "Before \"I\""], "answer": 0, "items": ["frequency-adverbs"] },
+      "explain": "Frequency words go before the main verb (I often read), but after be (I'm always tired).",
+      "explain_ar": "كلمات التكرار تأتي قبل الفعل الرئيسي، وبعد فعل be."
+    },
+    {
+      "quote": "I'm always tired by ten!",
+      "question": { "id": "a2r-n2", "type": "order", "skill": "grammar", "prompt": "Put the words in order.",
+        "tokens": ["always", "I'm", "tired"], "answers": ["I'm always tired"], "items": ["frequency-adverbs"] },
+      "explain": "With am / is / are, the frequency word comes AFTER the verb.",
+      "explain_ar": "مع am/is/are تأتي كلمة التكرار بعد الفعل."
+    }
+  ],
+  "grammar": {
+    "item": "frequency-adverbs",
+    "title": "How often: always, usually, often, sometimes, never",
+    "context": "I usually just have a coffee. I often read on the way. I'm always tired by ten.",
+    "pattern": "subject + always / usually / often / sometimes / never + verb   ·   subject + be + always …",
+    "examples": ["I usually get up at seven.", "She never has breakfast.", "We sometimes go to the gym.", "He's often late."],
+    "explain": "Put the frequency word before the main verb, but after am / is / are.",
+    "explain_ar": "ضع كلمة التكرار قبل الفعل الرئيسي، وبعد am/is/are."
+  },
+  "practice": [
+    { "id": "a2r-p1", "type": "order", "skill": "grammar", "prompt": "Put the words in order.", "tokens": ["usually", "I", "at", "get up", "seven"], "answers": ["I usually get up at seven"], "items": ["frequency-adverbs", "get-up"] },
+    { "id": "a2r-p2", "type": "correct", "skill": "grammar", "prompt": "Correct the sentence.", "sentence": "I have always breakfast at home.", "answers": ["I always have breakfast at home."], "items": ["frequency-adverbs", "have-breakfast"],
+      "why": "The frequency word goes before the main verb: always have.", "why_ar": "كلمة التكرار قبل الفعل الرئيسي." },
+    { "id": "a2r-p3", "type": "gap", "skill": "grammar", "prompt": "Complete with the correct verb form.", "text": "My brother ___ (catch) the bus at eight.", "answers": ["catches"], "items": ["catch-the-bus"],
+      "errors": [{ "match": "^catch$", "why": "He/she/it + -es in the present simple: he catches.", "why_ar": "مع he/she/it نضيف es: catches." }] },
+    { "id": "a2r-p4", "type": "match", "skill": "vocabulary", "prompt": "Match the verbs and the words.",
+      "pairs": [["get", "up"], ["have", "breakfast"], ["catch", "the bus"], ["go", "to bed"], ["leave", "home"]],
+      "items": ["get-up", "have-breakfast", "catch-the-bus", "go-to-bed", "leave-home"] },
+    { "id": "a2r-p5", "type": "gap", "skill": "vocabulary", "prompt": "Complete.", "text": "I listen to podcasts on the ___ to work.", "answers": ["way"], "items": ["on-the-way"] },
+    { "id": "a2r-p6", "type": "dictation", "skill": "listening", "prompt": "Listen and write.", "text": "I usually leave home at seven fifteen.", "items": ["leave-home", "frequency-adverbs"] }
+  ],
+  "pronunciation": [
+    { "id": "a2r-pr1", "type": "sound-choice", "title": "The -s ending", "tip": "The -s ending has three sounds: /s/ (works), /z/ (goes), /ɪz/ (catches).",
+      "tip_ar": "نهاية -s لها ثلاثة أصوات.",
+      "options": ["/s/", "/z/", "/ɪz/"],
+      "words": [{ "word": "gets", "answer": 0 }, { "word": "leaves", "answer": 1 }, { "word": "catches", "answer": 2 }, { "word": "reads", "answer": 1 }, { "word": "watches", "answer": 2 }, { "word": "works", "answer": 0 }] },
+    { "id": "a2r-pr2", "type": "shadow", "title": "Shadowing", "tip": "Keep the rhythm: strong words long, small words short.",
+      "lines": ["I usually get up at half past six.", "I catch the bus, and I often read on the way.", "I never go to bed late."] }
+  ],
+  "retrieval": [
+    { "id": "a2r-r1", "type": "gap", "skill": "vocabulary", "prompt": "Complete from memory.", "text": "I ___ the bus. It takes about forty minutes.", "answers": ["catch", "take", "get"], "items": ["catch-the-bus"] },
+    { "id": "a2r-r2", "type": "recall", "skill": "vocabulary", "prompt": "The opposite of \"leave home\" at the end of the day: \"I ___ home at six.\"", "answers": ["get", "get home", "come", "come home"], "items": ["get-home"] },
+    { "id": "a2r-r3", "type": "produce", "skill": "grammar", "prompt": "Write two sentences about your mornings with usually, often, sometimes or never.",
+      "target": ["\\b(always|usually|often|sometimes|never|rarely)\\b \\w+"], "targetLabel": "usually / often / never + verb", "sample": "I usually get up at six. I never have breakfast.", "minWords": 8, "items": ["frequency-adverbs"] }
+  ],
+  "speaking": {
+    "controlled": { "instruction": "Listen and repeat.", "lines": ["What time do you usually get up?", "I leave home at seven fifteen.", "I catch the bus.", "I'm always tired by ten!"] },
+    "guided": { "instruction": "Describe your weekday using the frame.", "frame": ["On weekdays I usually get up at ___.", "I (never / sometimes) have breakfast.", "I leave home at ___ and I ___ to work/university.", "I get home at ___ and I go to bed at ___."],
+      "checklist": ["Morning", "Journey", "Evening", "2+ frequency words"] },
+    "free": { "instruction": "Tell a friend about your typical weekday and your favourite part of the day.",
+      "prepSeconds": 30, "maxSeconds": 75, "checklist": ["Times", "Frequency words", "One opinion (my favourite part is…)"], "useful": ["usually / often / sometimes / never", "on the way", "My favourite part of the day is…"] }
+  },
+  "interaction": {
+    "setting": "Planning a study group", "studentRole": "You", "characterRole": "Colleague", "character": "Hassan",
+    "goals": [
+      { "id": "morning", "label": "Describe your mornings", "patterns": ["get up|wake up|breakfast|leave home|morning"] },
+      { "id": "frequency", "label": "Use a frequency word", "patterns": ["\\b(always|usually|often|sometimes|never)\\b"] },
+      { "id": "time", "label": "Agree on a time", "patterns": ["\\d|o'clock|half past|quarter|lunch|evening|morning|pm|am\\b"] }
+    ],
+    "start": "t1",
+    "turns": [
+      { "id": "t1", "say": "So, what time do you usually get up?",
+        "expect": [{ "patterns": ["\\d|o'clock|half|quarter|early|late|six|seven|eight|nine|five"], "reply": "I see. Do you have breakfast at home?", "next": "t2" }],
+        "fallback": { "reply": "What time do you get up? Early or late?", "hint": "Try: I usually get up at seven." }, "model": "I usually get up at half past six." },
+      { "id": "t2", "say": "",
+        "expect": [{ "patterns": ["yes|no|never|sometimes|usually|always|coffee|tea|breakfast"], "reply": "And how do you get to work or university?", "next": "t3" }],
+        "fallback": { "reply": "Breakfast — at home or not?", "hint": "Try: I sometimes have breakfast at home." }, "model": "I never have breakfast. I just have tea." },
+      { "id": "t3", "say": "",
+        "expect": [{ "patterns": ["bus|car|walk|taxi|train|drive|bike|metro|foot"], "reply": "OK. So when are you free? Mornings before work, or lunchtime?", "next": "t4" }],
+        "fallback": { "reply": "By bus? By car?", "hint": "Try: I catch the bus. / I drive." }, "model": "I catch the bus. It takes twenty minutes." },
+      { "id": "t4", "say": "",
+        "expect": [{ "patterns": ["\\d|o'clock|half|lunch|morning|evening|after|before|monday|tuesday|wednesday|thursday|friday|saturday|sunday"], "reply": "Great, that works for me. See you then!", "next": "end" }],
+        "fallback": { "reply": "What time is good for you?", "hint": "Try: What about twelve thirty? / I'm free at lunchtime." }, "model": "Lunchtime is good. What about twelve thirty?" }
+    ],
+    "useful": ["I usually…", "I never…", "I'm free at…", "What about…?"]
+  }
+}

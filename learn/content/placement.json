@@ -1,0 +1,149 @@
+{
+  "note": "Staircase placement: 3 items per skill per level; pass a block with 2/3 to move up. Speaking is not measured.",
+  "sections": {
+    "grammar": {
+      "A1": { "items": [
+        { "id": "pg-a1-1", "type": "mcq", "prompt": "___ you from Iraq?", "options": ["Are", "Do", "Is"], "answer": 0 },
+        { "id": "pg-a1-2", "type": "mcq", "prompt": "She ___ in a hospital.", "options": ["works", "work", "working"], "answer": 0 },
+        { "id": "pg-a1-3", "type": "mcq", "prompt": "Can I have ___ orange juice, please?", "options": ["an", "a", "some a"], "answer": 0 }
+      ] },
+      "A2": { "items": [
+        { "id": "pg-a2-1", "type": "mcq", "prompt": "I ___ to the cinema last weekend.", "options": ["went", "go", "have gone"], "answer": 0 },
+        { "id": "pg-a2-2", "type": "mcq", "prompt": "Choose the correct sentence.", "options": ["I usually get up at seven.", "I get usually up at seven.", "Usually I get at seven up."], "answer": 0 },
+        { "id": "pg-a2-3", "type": "mcq", "prompt": "Look at those clouds. It ___ rain.", "options": ["is going to", "goes to", "is raining to"], "answer": 0 }
+      ] },
+      "B1": { "items": [
+        { "id": "pg-b1-1", "type": "mcq", "prompt": "I ___ my keys. Can you help me look for them?", "options": ["have lost", "lost yesterday", "am losing"], "answer": 0 },
+        { "id": "pg-b1-2", "type": "mcq", "prompt": "If it ___ tomorrow, we'll stay at home.", "options": ["rains", "will rain", "would rain"], "answer": 0 },
+        { "id": "pg-b1-3", "type": "mcq", "prompt": "She's lived here ___ 2019.", "options": ["since", "for", "from"], "answer": 0 }
+      ] },
+      "B2": { "items": [
+        { "id": "pg-b2-1", "type": "mcq", "prompt": "I've been ___ for this company for five years.", "options": ["working", "worked", "work"], "answer": 0 },
+        { "id": "pg-b2-2", "type": "mcq", "prompt": "___ it was expensive, the course was worth it.", "options": ["Although", "However", "Despite"], "answer": 0 },
+        { "id": "pg-b2-3", "type": "mcq", "prompt": "If I ___ about the meeting, I would have come.", "options": ["had known", "knew", "would know"], "answer": 0 }
+      ] },
+      "C1": { "items": [
+        { "id": "pg-c1-1", "type": "mcq", "prompt": "Not only ___ late, but he also forgot the documents.", "options": ["did he arrive", "he arrived", "arrived he"], "answer": 0 },
+        { "id": "pg-c1-2", "type": "mcq", "prompt": "The results ___ to support the original hypothesis, though more data is needed.", "options": ["appear", "are appearing", "have appeared to be"], "answer": 0 },
+        { "id": "pg-c1-3", "type": "mcq", "prompt": "Had we known the risks, we ___ the project.", "options": ["would never have started", "never started", "would never start"], "answer": 0 }
+      ] }
+    },
+    "vocabulary": {
+      "A1": { "items": [
+        { "id": "pv-a1-1", "type": "mcq", "prompt": "The opposite of \"hot\" is…", "options": ["cold", "tall", "slow"], "answer": 0 },
+        { "id": "pv-a1-2", "type": "mcq", "prompt": "You drink coffee from a…", "options": ["cup", "plate", "fork"], "answer": 0 },
+        { "id": "pv-a1-3", "type": "mcq", "prompt": "Your mother's sister is your…", "options": ["aunt", "cousin", "niece"], "answer": 0 }
+      ] },
+      "A2": { "items": [
+        { "id": "pv-a2-1", "type": "mcq", "prompt": "I always ___ breakfast at home.", "options": ["have", "make", "do"], "answer": 0 },
+        { "id": "pv-a2-2", "type": "mcq", "prompt": "Hurry, or we'll ___ the bus!", "options": ["miss", "lose", "forget"], "answer": 0 },
+        { "id": "pv-a2-3", "type": "mcq", "prompt": "How about going to the park? — Sounds ___!", "options": ["good", "well", "nicely"], "answer": 0 }
+      ] },
+      "B1": { "items": [
+        { "id": "pv-b1-1", "type": "mcq", "prompt": "It's a hard choice, but I have to ___ a decision today.", "options": ["make", "do", "take out"], "answer": 0 },
+        { "id": "pv-b1-2", "type": "mcq", "prompt": "Sorry, we're fully ___ tonight. There are no tables.", "options": ["booked", "reserved up", "filled in"], "answer": 0 },
+        { "id": "pv-b1-3", "type": "mcq", "prompt": "The plane will ___ off in ten minutes.", "options": ["take", "get", "go"], "answer": 0 }
+      ] },
+      "B2": { "items": [
+        { "id": "pv-b2-1", "type": "mcq", "prompt": "I'm responsible ___ training new staff.", "options": ["for", "of", "about"], "answer": 0 },
+        { "id": "pv-b2-2", "type": "mcq", "prompt": "Before choosing, she carefully ___ up the pros and cons.", "options": ["weighed", "measured", "counted"], "answer": 0 },
+        { "id": "pv-b2-3", "type": "mcq", "prompt": "I see your ___, but I still think it's too risky.", "options": ["point", "view", "idea"], "answer": 0 }
+      ] },
+      "C1": { "items": [
+        { "id": "pv-c1-1", "type": "mcq", "prompt": "Let me play devil's ___ for a moment.", "options": ["advocate", "lawyer", "defender"], "answer": 0 },
+        { "id": "pv-c1-2", "type": "mcq", "prompt": "The report ___ the question of who is accountable.", "options": ["raises", "rises", "arises"], "answer": 0 },
+        { "id": "pv-c1-3", "type": "mcq", "prompt": "Her argument was compelling, but it didn't ___ scrutiny.", "options": ["withstand", "withhold", "undergo off"], "answer": 0 }
+      ] }
+    },
+    "reading": {
+      "A1": { "text": "Hi, I'm Rania. I'm 22 and I'm from Mosul. I live with my sister in a small flat. I'm a student. I study English at university. I like reading and cooking.",
+        "items": [
+          { "id": "pr-a1-1", "type": "mcq", "prompt": "Who does Rania live with?", "options": ["Her sister", "Her parents", "Alone"], "answer": 0 },
+          { "id": "pr-a1-2", "type": "mcq", "prompt": "What does she study?", "options": ["English", "Cooking", "Medicine"], "answer": 0 },
+          { "id": "pr-a1-3", "type": "mcq", "prompt": "How old is she?", "options": ["22", "12", "20"], "answer": 0 }
+        ] },
+      "A2": { "text": "On weekdays Samir gets up at six because his job starts at seven thirty. He usually takes the bus, but on Thursdays his colleague drives him to work. In the evening he is often tired, so he rarely goes out. At the weekend he visits his parents and plays football with his cousins.",
+        "items": [
+          { "id": "pr-a2-1", "type": "mcq", "prompt": "Why does Samir get up at six?", "options": ["His job starts early.", "He plays football.", "He visits his parents."], "answer": 0 },
+          { "id": "pr-a2-2", "type": "mcq", "prompt": "How does he get to work on Thursdays?", "options": ["By car with a colleague", "By bus", "He walks"], "answer": 0 },
+          { "id": "pr-a2-3", "type": "mcq", "prompt": "What does he usually do on weekday evenings?", "options": ["He stays in.", "He goes out with friends.", "He plays football."], "answer": 0 }
+        ] },
+      "B1": { "text": "Dear Ms Collins, I am writing about my order (#4471). I ordered a desk lamp on 3 May, and the website said it would arrive within five days. It has now been two weeks and it still hasn't arrived. I have tried calling your customer service line three times, but nobody answered. Could you please tell me when I can expect the lamp, or refund my money? Yours sincerely, Hadi Karimi",
+        "items": [
+          { "id": "pr-b1-1", "type": "mcq", "prompt": "What is the main purpose of the email?", "options": ["To complain and ask for a solution", "To order a new lamp", "To thank the company"], "answer": 0 },
+          { "id": "pr-b1-2", "type": "mcq", "prompt": "What has Hadi already done?", "options": ["Phoned several times without success", "Visited the shop", "Cancelled the order"], "answer": 0 },
+          { "id": "pr-b1-3", "type": "mcq", "prompt": "Which option does Hadi NOT suggest?", "options": ["A discount on his next order", "A delivery date", "A refund"], "answer": 0 }
+        ] },
+      "B2": { "text": "Four-day working weeks are often presented as a win for everyone: employees are happier and productivity stays the same. Trials in several countries have produced encouraging results. However, critics point out that most trials involved office workers who volunteered, and that the effects may fade once the novelty wears off. Sectors such as healthcare, where shifts must be covered around the clock, face obvious practical obstacles.",
+        "items": [
+          { "id": "pr-b2-1", "type": "mcq", "prompt": "What is the writer's overall position?", "options": ["Cautiously balanced", "Strongly in favour", "Completely against"], "answer": 0 },
+          { "id": "pr-b2-2", "type": "mcq", "prompt": "Why might trial results be misleading, according to critics?", "options": ["Participants chose to take part and the effect may be temporary.", "The trials were too long.", "Only healthcare workers took part."], "answer": 0 },
+          { "id": "pr-b2-3", "type": "mcq", "prompt": "\"Once the novelty wears off\" means…", "options": ["when it stops feeling new", "when the rules change", "when workers get paid more"], "answer": 0 }
+        ] },
+      "C1": { "text": "It is tempting to read the decline in newspaper circulation as evidence that people care less about the news. Yet the data tell a more complicated story: overall news consumption has, if anything, increased, albeit fragmented across platforms whose business models reward attention rather than accuracy. The problem, then, is less a lack of interest than an ecosystem in which the most engaging content is not necessarily the most reliable.",
+        "items": [
+          { "id": "pr-c1-1", "type": "mcq", "prompt": "What misconception does the writer challenge?", "options": ["That falling circulation means less interest in news", "That news is mostly accurate", "That platforms reward accuracy"], "answer": 0 },
+          { "id": "pr-c1-2", "type": "mcq", "prompt": "\"Albeit\" introduces…", "options": ["a qualification", "a cause", "an example"], "answer": 0 },
+          { "id": "pr-c1-3", "type": "mcq", "prompt": "According to the writer, the real problem is…", "options": ["incentives that favour engagement over reliability", "a lack of interest in the news", "the cost of newspapers"], "answer": 0 }
+        ] }
+    },
+    "listening": {
+      "A1": { "script": [
+          { "s": "Woman", "t": "Hello. Can I have a tea, please?" },
+          { "s": "Man", "t": "Sure. Small or large?" },
+          { "s": "Woman", "t": "Small, please. How much is it?" },
+          { "s": "Man", "t": "Two pounds." }
+        ],
+        "items": [
+          { "id": "pl-a1-1", "type": "mcq", "prompt": "What does the woman order?", "options": ["A small tea", "A large tea", "A coffee"], "answer": 0 },
+          { "id": "pl-a1-2", "type": "mcq", "prompt": "How much is it?", "options": ["Two pounds", "Ten pounds", "Twelve pounds"], "answer": 0 },
+          { "id": "pl-a1-3", "type": "mcq", "prompt": "Where are they?", "options": ["In a café", "At a bank", "At school"], "answer": 0 }
+        ] },
+      "A2": { "script": [
+          { "s": "Man", "t": "Are you doing anything on Friday evening?" },
+          { "s": "Woman", "t": "I'm having dinner with my parents, but I'm free on Saturday." },
+          { "s": "Man", "t": "Great. How about the cinema on Saturday at eight?" },
+          { "s": "Woman", "t": "Eight is a bit late for me. What about six?" },
+          { "s": "Man", "t": "OK, six it is." }
+        ],
+        "items": [
+          { "id": "pl-a2-1", "type": "mcq", "prompt": "What is the woman doing on Friday?", "options": ["Having dinner with her parents", "Going to the cinema", "Working late"], "answer": 0 },
+          { "id": "pl-a2-2", "type": "mcq", "prompt": "When will they meet?", "options": ["Saturday at six", "Saturday at eight", "Friday at six"], "answer": 0 },
+          { "id": "pl-a2-3", "type": "mcq", "prompt": "Why does she change the time?", "options": ["Eight is too late for her.", "The film starts at six.", "She's busy at eight on Friday."], "answer": 0 }
+        ] },
+      "B1": { "script": [
+          { "s": "Agent", "t": "I'm afraid your connecting flight has already left." },
+          { "s": "Passenger", "t": "But my first flight was delayed! That's not my fault." },
+          { "s": "Agent", "t": "I understand. I can book you on the next one at nine, and we'll cover a hotel for tonight." },
+          { "s": "Passenger", "t": "Nine tonight or nine tomorrow morning?" },
+          { "s": "Agent", "t": "Tomorrow morning, I'm afraid. That's why we're offering the hotel." }
+        ],
+        "items": [
+          { "id": "pl-b1-1", "type": "mcq", "prompt": "Why did the passenger miss the connection?", "options": ["The first flight was late.", "He went to the wrong gate.", "He overslept."], "answer": 0 },
+          { "id": "pl-b1-2", "type": "mcq", "prompt": "When is the new flight?", "options": ["Tomorrow at nine a.m.", "Tonight at nine", "In one hour"], "answer": 0 },
+          { "id": "pl-b1-3", "type": "mcq", "prompt": "What does the airline offer?", "options": ["A hotel for the night", "A refund", "A business-class seat"], "answer": 0 }
+        ] },
+      "B2": { "script": [
+          { "s": "Host", "t": "So, is remote work here to stay?" },
+          { "s": "Guest", "t": "I'd say hybrid is here to stay. Fully remote works well for experienced staff, but junior people tend to miss out on the informal learning that happens in an office." },
+          { "s": "Host", "t": "So you'd bring everyone back?" },
+          { "s": "Guest", "t": "Not at all. I'd let teams decide, as long as new starters get proper time with colleagues." }
+        ],
+        "items": [
+          { "id": "pl-b2-1", "type": "mcq", "prompt": "What is the guest's main view?", "options": ["A flexible hybrid model is best.", "Everyone should return to the office.", "Fully remote is best for all."], "answer": 0 },
+          { "id": "pl-b2-2", "type": "mcq", "prompt": "Who does the guest think loses out from fully remote work?", "options": ["Junior staff", "Managers", "Experienced staff"], "answer": 0 },
+          { "id": "pl-b2-3", "type": "mcq", "prompt": "\"Not at all\" is used to…", "options": ["strongly reject the host's interpretation", "agree politely", "change the topic"], "answer": 0 }
+        ] },
+      "C1": { "script": [
+          { "s": "Lecturer", "t": "It's tempting to conclude that the policy failed. But bear in mind that the comparison group was drawn from a considerably wealthier region, so the gap we observe may say more about the baseline than about the intervention itself." },
+          { "s": "Student", "t": "So the results are meaningless?" },
+          { "s": "Lecturer", "t": "I wouldn't go that far. They're inconclusive, which isn't the same thing." }
+        ],
+        "items": [
+          { "id": "pl-c1-1", "type": "mcq", "prompt": "What is the lecturer's concern?", "options": ["The two groups were not comparable.", "The data was lost.", "The policy was too expensive."], "answer": 0 },
+          { "id": "pl-c1-2", "type": "mcq", "prompt": "How does the lecturer respond to the student?", "options": ["She corrects an overstatement.", "She fully agrees.", "She changes the subject."], "answer": 0 },
+          { "id": "pl-c1-3", "type": "mcq", "prompt": "\"Inconclusive\" means…", "options": ["not enough to reach a firm conclusion", "clearly negative", "completely positive"], "answer": 0 }
+        ] }
+    }
+  }
+}

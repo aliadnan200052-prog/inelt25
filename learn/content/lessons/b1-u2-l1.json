@@ -1,0 +1,141 @@
+{
+  "id": "b1-u2-l1",
+  "context": {
+    "situation": "You've had toothache for three days. You phone a dental clinic to get an appointment, but you work until five every day.",
+    "situation_ar": "لديك ألم في الأسنان منذ ثلاثة أيام. تتصل بعيادة أسنان لتحصل على موعد، لكنك تعمل حتى الخامسة كل يوم.",
+    "goal": "Make, check and change an appointment on the phone, using polite requests.",
+    "goal_ar": "أن تحجز موعدًا وتؤكده وتغيّره عبر الهاتف باستخدام طلبات مهذبة."
+  },
+  "input": {
+    "videoId": null,
+    "title": "Calling the clinic",
+    "script": [
+      { "s": "Receptionist", "t": "Good morning, Riverside Dental Clinic. Jenny speaking." },
+      { "s": "Amir", "t": "Hi. I'd like to make an appointment, please. I've had toothache since Sunday." },
+      { "s": "Receptionist", "t": "Oh dear. Are you already a patient with us?" },
+      { "s": "Amir", "t": "No, it's my first time." },
+      { "s": "Receptionist", "t": "OK. Could you give me your full name?" },
+      { "s": "Amir", "t": "Amir Saleh. That's S-A-L-E-H." },
+      { "s": "Receptionist", "t": "Thanks. We've got something tomorrow at two fifteen. Does that suit you?" },
+      { "s": "Amir", "t": "I'm afraid I work until five. Would it be possible to come a bit later?" },
+      { "s": "Receptionist", "t": "Let me check… Tomorrow evening we're fully booked, but I can offer Thursday at five thirty." },
+      { "s": "Amir", "t": "Thursday at half five is perfect. Could you send me a text to confirm?" },
+      { "s": "Receptionist", "t": "Of course. And if you need to reschedule, just call us at least a day before." },
+      { "s": "Amir", "t": "Great. Thanks very much." }
+    ],
+    "gist": [
+      { "id": "b1d-g1", "type": "mcq", "skill": "listening", "kind": "gist", "prompt": "What happens in the call?",
+        "options": ["Amir books an appointment for Thursday evening.", "Amir changes an old appointment.", "Amir can't get an appointment this week."], "answer": 0 }
+    ],
+    "detail": [
+      { "id": "b1d-d1", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "Why doesn't Amir take the 2:15 appointment?", "options": ["He's at work until five.", "It's too early in the morning.", "He has another appointment."], "answer": 0 },
+      { "id": "b1d-d2", "type": "gap", "skill": "listening", "kind": "detail", "prompt": "Complete.", "text": "Tomorrow evening the clinic is fully ___.", "answers": ["booked"], "items": ["fully-booked"] },
+      { "id": "b1d-d3", "type": "mcq", "skill": "listening", "kind": "detail", "prompt": "How will the clinic confirm?", "options": ["By text message", "By email", "They will call him"], "answer": 0 }
+    ],
+    "inference": [
+      { "id": "b1d-i1", "type": "mcq", "skill": "listening", "kind": "inference", "prompt": "Why does the receptionist say \"Oh dear\"?",
+        "options": ["To show sympathy about his pain", "Because she made a mistake", "Because the clinic is closed"], "answer": 0 }
+    ]
+  },
+  "vocabulary": ["make-an-appointment", "does-that-suit-you", "would-it-be-possible", "fully-booked", "reschedule", "let-me-check"],
+  "recycle": ["im-afraid", "id-like", "present-perfect-news"],
+  "notice": [
+    {
+      "quote": "Could you give me your full name? … Would it be possible to come a bit later?",
+      "question": { "id": "b1d-n1", "type": "mcq", "skill": "grammar",
+        "prompt": "Amir could say \"Can I come later?\" Why does he say \"Would it be possible to come a bit later?\"",
+        "options": ["It's more polite — he's asking for a change.", "It's more direct.", "It's past tense."], "answer": 0, "items": ["polite-requests"] },
+      "explain": "Longer = more polite. Could you…? / Would it be possible to…? / I was wondering if… are useful when you ask a favour or a change.",
+      "explain_ar": "كلما طالت الصيغة زاد التهذيب."
+    },
+    {
+      "quote": "I've had toothache since Sunday.",
+      "question": { "id": "b1d-n2", "type": "mcq", "skill": "grammar",
+        "prompt": "\"Since Sunday\" — what does since show?", "options": ["The starting point", "The length of time", "The end"], "answer": 0, "items": ["present-perfect-news"],
+        "explain": { "1": "For a length of time we use for: for three days." } },
+      "explain": "since + starting point (since Sunday, since 2020) · for + length of time (for three days).",
+      "explain_ar": "since مع نقطة البداية، for مع المدة."
+    }
+  ],
+  "grammar": {
+    "item": "polite-requests",
+    "title": "Polite requests",
+    "context": "Could you give me your full name? — Would it be possible to come a bit later?",
+    "pattern": "Could you + verb …? · Would it be possible to + verb …? · Do you think you could + verb …?",
+    "examples": ["Could you spell that, please?", "Would it be possible to change my appointment?", "Do you think you could send me a text?", "Could I have something later in the day?"],
+    "explain": "The bigger the favour, the longer and softer the request.",
+    "explain_ar": "كلما كبر الطلب، كانت الصيغة أطول وألطف."
+  },
+  "practice": [
+    { "id": "b1d-p1", "type": "transform", "skill": "grammar", "prompt": "Make it more polite, starting with \"Could you…\"", "source": "Spell your name.", "answers": ["Could you spell your name?", "Could you spell your name, please?"], "items": ["polite-requests"] },
+    { "id": "b1d-p2", "type": "transform", "skill": "grammar", "prompt": "Start with \"Would it be possible to…\"", "source": "I want to change my appointment.", "answers": ["Would it be possible to change my appointment?", "Would it be possible to change my appointment, please?"], "items": ["would-it-be-possible", "polite-requests"] },
+    { "id": "b1d-p3", "type": "gap", "skill": "vocabulary", "prompt": "Complete.", "text": "I'm sorry, Friday is fully ___. How about Monday?", "answers": ["booked"], "items": ["fully-booked"] },
+    { "id": "b1d-p4", "type": "gap", "skill": "vocabulary", "prompt": "Complete.", "text": "Three o'clock? Hmm, does that ___ you?", "answers": ["suit"], "items": ["does-that-suit-you"],
+      "errors": [{ "match": "^(fit|match)$", "why": "For times and arrangements we say suit: Does that suit you?", "why_ar": "للمواعيد نقول suit." }] },
+    { "id": "b1d-p5", "type": "correct", "skill": "grammar", "prompt": "Correct the sentence.", "sentence": "I've had toothache since three days.", "answers": ["I've had toothache for three days.", "I have had toothache for three days."], "items": ["present-perfect-news"],
+      "why": "\"Three days\" is a length of time, so use for.", "why_ar": "مدة زمنية ← for." },
+    { "id": "b1d-p6", "type": "match", "skill": "vocabulary", "prompt": "Match.", "pairs": [["reschedule", "change the time of an appointment"], ["fully booked", "no free times left"], ["Let me check.", "I'll look for information now."], ["Does that suit you?", "Is that time good for you?"]],
+      "items": ["reschedule", "fully-booked", "let-me-check", "does-that-suit-you"] }
+  ],
+  "pronunciation": [
+    { "id": "b1d-pr1", "type": "stress", "title": "Word stress", "tip": "Longer words have one main stress.",
+      "words": [
+        { "word": "appointment", "syllables": ["ap", "point", "ment"], "stress": 1 },
+        { "word": "possible", "syllables": ["pos", "si", "ble"], "stress": 0 },
+        { "word": "reschedule", "syllables": ["re", "sche", "dule"], "stress": 1 },
+        { "word": "receptionist", "syllables": ["re", "cep", "tion", "ist"], "stress": 1 }
+      ] },
+    { "id": "b1d-pr2", "type": "intonation", "title": "Polite or rude?", "tip": "A request that falls flat can sound rude. A wider, rising tone sounds friendlier.",
+      "items": [{ "text": "Could you spell that, please?", "pattern": "rise" }, { "text": "Would it be possible to come later?", "pattern": "rise" }, { "text": "Thursday at half five is perfect.", "pattern": "fall" }] },
+    { "id": "b1d-pr3", "type": "shadow", "title": "Shadowing", "tip": "Polite requests: soft voice, rising tone.",
+      "lines": ["I'd like to make an appointment, please.", "Would it be possible to come a bit later?", "Could you send me a text to confirm?"] }
+  ],
+  "retrieval": [
+    { "id": "b1d-r1", "type": "recall", "skill": "vocabulary", "prompt": "The receptionist offers a time. How does she ask if it's good for you? (4 words)", "answers": ["Does that suit you?", "Does that suit you"], "items": ["does-that-suit-you"] },
+    { "id": "b1d-r2", "type": "gap", "skill": "vocabulary", "prompt": "Complete from memory.", "text": "I'd like to ___ an appointment, please.", "answers": ["make", "book"], "items": ["make-an-appointment"] },
+    { "id": "b1d-r3", "type": "produce", "skill": "grammar", "prompt": "Your appointment is on Monday, but you can't go. Write a polite request to change it.",
+      "target": ["would it be possible", "could (you|i|we)", "do you think you could", "i was wondering if"], "targetLabel": "a polite request",
+      "sample": "Would it be possible to move my appointment to Wednesday?", "minWords": 7, "items": ["polite-requests", "reschedule"] }
+  ],
+  "speaking": {
+    "controlled": { "instruction": "Listen and repeat.", "lines": ["I'd like to make an appointment, please.", "Does that suit you?", "Would it be possible to come a bit later?", "Could you send me a text to confirm?"] },
+    "guided": { "instruction": "Call to change an appointment.", "frame": ["Hello, my name is ___. I have an appointment on ___.", "I'm afraid I can't come because ___.", "Would it be possible to ___?", "Could you ___?"],
+      "checklist": ["Who you are", "Your appointment", "The reason", "A polite request"] },
+    "free": { "instruction": "Leave a voice message for a clinic: explain your problem and ask for an appointment at a time that suits you.",
+      "prepSeconds": 45, "maxSeconds": 60, "checklist": ["Name + problem", "When it started (since/for)", "A suitable time", "How to contact you"], "useful": ["I've had… since/for…", "Would it be possible…?", "Could you call me back on…?"] }
+  },
+  "interaction": {
+    "setting": "Phone call to a clinic", "studentRole": "Patient", "characterRole": "Receptionist", "character": "Jenny",
+    "goals": [
+      { "id": "request", "label": "Ask for an appointment", "patterns": ["appointment|see the dentist|see a dentist|book"] },
+      { "id": "problem", "label": "Explain the problem", "patterns": ["tooth|pain|hurts|ache|problem"] },
+      { "id": "polite", "label": "Ask for a different time politely", "patterns": ["would it be possible|could i|could you|do you have anything|is there anything"] },
+      { "id": "confirm", "label": "Confirm the time", "patterns": ["perfect|fine|great|suits me|that's good|ok|okay|thursday|five thirty|half five"] }
+    ],
+    "start": "t1",
+    "turns": [
+      { "id": "t1", "say": "Good morning, Riverside Dental Clinic. How can I help?",
+        "expect": [{ "patterns": ["appointment|see the dentist|see a dentist|book|tooth|pain"], "reply": "Of course. What seems to be the problem?", "next": "t2" }],
+        "fallback": { "reply": "Sorry, how can I help you?", "hint": "Try: I'd like to make an appointment, please." }, "model": "Hi. I'd like to make an appointment, please." },
+      { "id": "t2", "say": "",
+        "expect": [{ "patterns": ["tooth|pain|hurt|ache|problem|check|clean"], "reply": "I'm sorry to hear that. We have tomorrow at two fifteen. Does that suit you?", "next": "t3" }],
+        "fallback": { "reply": "Is it pain, a check-up, or something else?", "hint": "Try: I've had toothache since Sunday." }, "model": "I've had toothache since Sunday." },
+      { "id": "t3", "say": "",
+        "expect": [
+          { "patterns": ["later|evening|after five|after work|would it be possible|anything else|another time|can't|cannot|work"], "reply": "Let me check… I can offer Thursday at five thirty.", "next": "t4" },
+          { "patterns": ["yes|fine|ok|okay|perfect|great"], "reply": "Lovely, tomorrow at two fifteen then. Could I have your name?", "next": "t5" }
+        ],
+        "fallback": { "reply": "Is two fifteen tomorrow OK for you?", "hint": "You work until five. Try: I'm afraid I work until five. Would it be possible to come later?" }, "model": "I'm afraid I work until five. Would it be possible to come a bit later?" },
+      { "id": "t4", "say": "",
+        "expect": [{ "patterns": ["yes|fine|ok|okay|perfect|great|suits|thursday|good"], "reply": "Great. Could I have your full name?", "next": "t5" }],
+        "fallback": { "reply": "Does Thursday at five thirty suit you?", "hint": "Try: Thursday is perfect." }, "model": "Thursday at half five is perfect." },
+      { "id": "t5", "say": "",
+        "expect": [{ "patterns": ["\\w+ \\w+|my name|it's|i'm"], "reply": "Thank you. We'll send you a text to confirm. Anything else?", "next": "t6" }],
+        "fallback": { "reply": "Your full name, please?", "hint": "Try: It's Amir Saleh. S-A-L-E-H." }, "model": "It's Amir Saleh — S-A-L-E-H." },
+      { "id": "t6", "say": "",
+        "expect": [{ "patterns": ["no|that's all|thank|bye|great"], "reply": "You're welcome. See you soon!", "next": "end" }],
+        "fallback": { "reply": "Is there anything else?", "hint": "Try: No, that's all. Thanks very much." }, "model": "No, that's everything. Thanks very much." }
+    ],
+    "useful": ["I'd like to make an appointment.", "I've had… since…", "Would it be possible to…?", "Does that suit you? — That suits me."]
+  }
+}
