@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { BookOpen, Flame, Info, Monitor, Moon, RotateCcw, Sun, Trophy } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Ar, Card, SectionHeader } from "@/components/ui/primitives";
 import { scenes } from "@/data/scenes";
@@ -20,6 +21,7 @@ const themes: { value: ThemePref; label: string; Icon: typeof Sun }[] = [
 export function MeScreen() {
   const progress = useProgress();
   const theme = useTheme();
+  const [confirming, setConfirming] = useState(false);
   const saved = Object.keys(progress.saved).length;
 
   const stats = [
@@ -96,17 +98,32 @@ export function MeScreen() {
         </div>
       </Card>
 
-      <motion.div variants={rise}>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            if (window.confirm("Reset your progress on this device?")) resetProgress();
-          }}
-        >
-          <RotateCcw className="size-4" aria-hidden />
-          Reset progress on this device
-        </Button>
+      <motion.div variants={rise} aria-live="polite">
+        {confirming ? (
+          <div className="flex flex-col gap-3 rounded-card border border-terra/25 bg-terra-soft p-4">
+            <p className="text-sm text-ink">Reset streak, finished scenes and saved phrases on this device?</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="secondary" size="sm" onClick={() => setConfirming(false)}>
+                Keep progress
+              </Button>
+              <Button
+                variant="accent"
+                size="sm"
+                onClick={() => {
+                  resetProgress();
+                  setConfirming(false);
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button variant="ghost" size="sm" onClick={() => setConfirming(true)}>
+            <RotateCcw className="size-4" aria-hidden />
+            Reset progress on this device
+          </Button>
+        )}
       </motion.div>
     </motion.div>
   );
