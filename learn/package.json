@@ -1,9 +1,0 @@
-{
-  "name": "learn-english",
-  "private": true,
-  "type": "module",
-  "description": "Learn English — SLA-based learning app. Static ES modules, no build step.",
-  "scripts": {
-    "test": "node --test tests/*.test.js"
-  }
-}

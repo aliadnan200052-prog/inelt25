@@ -14,7 +14,7 @@
    Bump CACHE_VERSION whenever the cached shell changes.
    ═══════════════════════════════════════════════════════════════════════ */
 
-const CACHE_VERSION = 'inelt-v14';
+const CACHE_VERSION = 'inelt-v13';
 const SHELL = [
   '/welcome',
   '/login',
@@ -60,9 +60,6 @@ self.addEventListener('fetch', event => {
   if (url.hostname.endsWith('supabase.co')) return;
   // Leave other cross-origin requests (fonts, CDN scripts) to the browser.
   if (url.origin !== self.location.origin) return;
-  // The Learn English app (/learn) loads content that admins republish;
-  // leave it to the browser's normal HTTP caching.
-  if (url.pathname === '/learn' || url.pathname.startsWith('/learn/')) return;
 
   // ── HTML: network first, cache only as an offline fallback ──
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
