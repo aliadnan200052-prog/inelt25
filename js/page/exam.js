@@ -38,7 +38,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
 const secKey = s => (SECTION_KEYS.indexOf(s) >= 0 ? s : null);
 const SECTION_KEYS = ['Reading Comprehension', 'Grammar', 'Functions', 'Conversation'];
 const sNames = {
-  "Reading Comprehension":"القراءة والفهم",
+  "Reading Comprehension":"القطع الخارجية",
   "Grammar":"القواعد",
   "Functions":"الوظائف اللغوية",
   "Conversation":"الحوار"
@@ -268,7 +268,7 @@ function renderQ() {
     passageHTML = `
       <div class="reading-passage">
         <div class="passage-label">
-          <span class="passage-label-text"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> نص القراءة <span class="passage-progress en">${posInSection}/${readingQs.length}</span></span>
+          <span class="passage-label-text"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> القطعة الخارجية <span class="passage-progress en">${posInSection}/${readingQs.length}</span></span>
           <button type="button" class="passage-toggle">${passageOpen ? 'إخفاء النص ▲' : 'عرض النص ▼'}</button>
         </div>
         <div class="passage-body${passageOpen ? '' : ' collapsed'}">${esc(passage)}</div>

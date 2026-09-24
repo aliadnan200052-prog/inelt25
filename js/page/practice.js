@@ -6,7 +6,7 @@ const SECTIONS = [
   { key: 'conversation', api: 'Conversation',           ar: 'الحوار',           en: 'Conversation' },
   { key: 'functions',    api: 'Functions',              ar: 'الوظائف اللغوية',  en: 'Functions' },
   { key: 'grammar',      api: 'Grammar',                ar: 'القواعد',          en: 'Grammar' },
-  { key: 'reading',      api: 'Reading Comprehension',  ar: 'القراءة والفهم',   en: 'Reading' }
+  { key: 'reading',      api: 'Reading Comprehension',  ar: 'القطع الخارجية',   en: 'Passages' }
 ];
 const ICONS = {
   reading:      '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -18,7 +18,19 @@ const COUNTS = [5, 10, 20];
 const KEYS = ['A','B','C','D'];
 
 let pick = 'grammar', count = 10;
-let qs = [], passage = '', i = 0, right = 0, answered = false;
+let qs = [], passage = '', passageTitle = '', i = 0, right = 0, answered = false;
+
+/* Reading is not practised by a count of questions: the student picks a
+   named passage and answers the questions that belong to it. The list is
+   fetched once and kept, so switching sections back and forth does not
+   ask the server again. */
+let passages = null, passagesLoading = false, passagesError = '';
+
+/* Set when the database has no list_reading_passages — i.e. when
+   backend/reading-passages.sql has not been run yet. The section then
+   falls back to the way it worked before, so deploying this page ahead
+   of the SQL leaves reading practice working rather than empty. */
+let passagesUnsupported = false;
 
 const $ = id => document.getElementById(id);
 
@@ -32,8 +44,75 @@ function renderSetup() {
   $('counts').innerHTML = COUNTS.map(c =>
     `<button class="pr-count${c === count ? ' sel' : ''}" data-c="${c}">${c}</button>`).join('');
 }
-function choose(k) { pick = k; renderSetup(); }
+function choose(k) { pick = k; renderSetup(); renderMode(); }
 function setCount(c) { count = c; renderSetup(); }
+
+/* The count row and «ابدأ التدريب» belong to the three sections that are
+   practised by number of questions. القطع الخارجية replaces both with the
+   list of passages. */
+function renderMode() {
+  const byPassage = pick === 'reading' && !passagesUnsupported;
+  $('countLabel').classList.toggle('hidden', byPassage);
+  $('counts').classList.toggle('hidden', byPassage);
+  $('startBtn').classList.toggle('hidden', byPassage);
+  $('passages').classList.toggle('hidden', !byPassage);
+  $('prLead').textContent = byPassage
+    ? 'اختر القطعة التي تريد التدرّب عليها. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.'
+    : 'اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.';
+  if (byPassage) loadPassages();
+}
+
+async function loadPassages(force) {
+  if (passagesLoading) return;
+  if (passages && !force) return renderPassages();
+  passagesLoading = true; passagesError = '';
+  renderPassages();
+  try {
+    passages = await ExamAPI.listPassages();
+  } catch (e) {
+    console.error('listPassages failed:', e);
+    if (/schema cache|does not exist|PGRST202/i.test(String((e && e.message) || e))) {
+      passagesUnsupported = true;
+      passagesLoading = false;
+      renderMode();
+      return;
+    }
+    passagesError = humanError(e) || 'تعذّر تحميل قائمة القطع.';
+  } finally {
+    if (!passagesUnsupported) {
+      passagesLoading = false;
+      renderPassages();
+    }
+  }
+}
+
+function renderPassages() {
+  const box = $('passages');
+  if (passagesLoading) {
+    box.innerHTML = '<div class="pr-passage-skel"></div>'.repeat(4);
+    return;
+  }
+  if (passagesError) {
+    box.innerHTML =
+      `<div class="pr-passages-msg">${esc(passagesError)}
+         <button type="button" class="btn btn-ghost" id="passagesRetry">إعادة المحاولة</button>
+       </div>`;
+    return;
+  }
+  if (!passages || !passages.length) {
+    box.innerHTML = '<div class="pr-passages-msg">لا توجد قطع متاحة بعد.</div>';
+    return;
+  }
+  box.innerHTML = passages.map((p, n) =>
+    `<button type="button" class="pr-passage-card" data-key="${esc(p.key)}">
+       <span class="pr-passage-n en">${n + 1}</span>
+       <span class="pr-passage-main">
+         <span class="pr-passage-name">${esc(p.title || 'قطعة بلا اسم')}</span>
+         <span class="pr-passage-preview en">${esc(p.preview || '')}</span>
+       </span>
+       <span class="pr-passage-count"><b class="en">${Number(p.count) || 0}</b> سؤال</span>
+     </button>`).join('');
+}
 
 async function start() {
   const btn = $('startBtn');
@@ -50,9 +129,38 @@ async function start() {
   }
   qs = data.questions || [];
   passage = data.passage || '';
+  passageTitle = '';
   if (!qs.length) {
     alert('لا توجد أسئلة متاحة في هذا القسم بعد.');
     btn.disabled = false;
+    return;
+  }
+  i = 0; right = 0;
+  $('setup').classList.add('hidden');
+  $('runner').classList.remove('hidden');
+  renderQ();
+  window.scrollTo(0, 0);
+}
+
+/* Same runner, different way in: one named passage and every question
+   that belongs to it, in the order they were written. */
+async function startPassage(key, card) {
+  if (card) card.classList.add('loading');
+  let data;
+  try {
+    data = await ExamAPI.startPassagePractice(key);
+  } catch (e) {
+    console.error('startPassagePractice failed:', e);
+    alert('تعذّر فتح هذه القطعة. ' + (humanError(e) || 'حاول مرة أخرى.'));
+    if (card) card.classList.remove('loading');
+    return;
+  }
+  if (card) card.classList.remove('loading');
+  qs = data.questions || [];
+  passage = data.passage || '';
+  passageTitle = data.title || '';
+  if (!qs.length) {
+    alert('لا توجد أسئلة لهذه القطعة بعد.');
     return;
   }
   i = 0; right = 0;
@@ -89,7 +197,9 @@ function renderQ() {
      </div>`).join('');
 
   $('prCard').innerHTML =
-    (passage ? `<div class="pr-passage">${esc(passage)}</div>` : '') +
+    (passage
+      ? `<div class="pr-passage">${passageTitle ? `<span class="pr-passage-heading">${esc(passageTitle)}</span>` : ''}${esc(passage)}</div>`
+      : '') +
     `<div class="pr-q">${esc(q.question)}</div>
      <div class="pr-opts" id="prOpts">${opts}</div>
      <div id="prExplain"></div>`;
@@ -146,6 +256,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const ok = await ExamAPI.requireSession();
   if (!ok) return;
   renderSetup();
+  renderMode();
 });
 
 /* Events are bound here rather than with onclick= in the markup, so the
@@ -157,6 +268,9 @@ document.addEventListener('click', e => {
   if (sec) return choose(sec.dataset.k);
   const cnt = e.target.closest('.pr-count[data-c]');
   if (cnt) return setCount(Number(cnt.dataset.c));
+  const card = e.target.closest('.pr-passage-card[data-key]');
+  if (card) return startPassage(card.dataset.key, card);
+  if (e.target.closest('#passagesRetry')) return loadPassages(true);
   const opt = e.target.closest('#prOpts .pr-opt[data-n]');
   if (opt) return answer(Number(opt.dataset.n));
 });

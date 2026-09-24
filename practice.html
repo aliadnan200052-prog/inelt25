@@ -76,6 +76,72 @@
 }
 .pr-count.sel { background: var(--primary-strong); border-color: var(--primary-strong); color: var(--on-primary); }
 
+/* ── Passage picker (القطع الخارجية) ──
+   A <button> does not reliably inherit the page's direction, so each card
+   sets it: without that the number badge and the count land on the wrong
+   edge in RTL. */
+.pr-passages { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-8); }
+.pr-passage-card {
+  direction: rtl; display: flex; align-items: center; gap: var(--sp-4);
+  width: 100%; padding: var(--sp-4) var(--sp-5); text-align: start; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  background: var(--surface-raised); box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
+              box-shadow var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+.pr-passage-card:hover {
+  transform: translateY(-2px); border-color: var(--sec-reading);
+  background: var(--tint-purple); box-shadow: var(--shadow-sm);
+}
+.pr-passage-card:active { transform: translateY(0); }
+.pr-passage-card.loading { opacity: .55; pointer-events: none; }
+.pr-passage-n {
+  flex-shrink: 0; display: grid; place-items: center;
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: var(--tint-purple); color: var(--sec-reading);
+  font-size: var(--fs-xs); font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.pr-passage-main { flex: 1; min-width: 0; }
+.pr-passage-name {
+  display: block; font-size: var(--fs-sm); font-weight: 700; color: var(--text-primary);
+}
+.pr-passage-preview {
+  display: block; margin-top: 3px; direction: ltr; text-align: left;
+  font-size: var(--fs-2xs); color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pr-passage-count {
+  flex-shrink: 0; font-size: var(--fs-2xs); font-weight: 600; color: var(--text-secondary);
+}
+.pr-passage-count b { font-weight: 700; color: var(--text-primary); }
+.pr-passages-msg {
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-8) var(--sp-5); border-radius: var(--r-lg);
+  border: 1px dashed var(--border-strong); background: var(--surface-overlay);
+  font-size: var(--fs-sm); color: var(--text-secondary); text-align: center;
+}
+.pr-passage-skel {
+  height: 64px; border-radius: var(--r-lg);
+  background: linear-gradient(90deg, var(--surface-high) 25%, var(--surface-overlay) 37%, var(--surface-high) 63%);
+  background-size: 400% 100%; animation: pr-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes pr-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .pr-passage-skel { animation: none; }
+  .pr-passage-card { animation: none; }
+  .pr-passage-card:hover { transform: none; }
+}
+
+/* The name of the passage, above the English text it belongs to. */
+.pr-passage-heading {
+  display: block; direction: rtl; text-align: right;
+  margin-bottom: var(--sp-3); padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-ar); font-size: var(--fs-sm);
+  font-weight: 700; color: var(--sec-reading);
+}
+
 /* ── Runner ── */
 .pr-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-3); }
 .pr-progress-label { font-size: var(--fs-2xs); color: var(--text-secondary); }
@@ -200,12 +266,15 @@
 
   <!-- ── Setup ── -->
   <div id="setup">
-    <p class="pr-lead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.</p>
+    <p class="pr-lead" id="prLead">اختر قسماً وعدد الأسئلة. لا يوجد مؤقّت، وتشوف الإجابة الصحيحة بعد كل سؤال مباشرة.</p>
 
     <div class="pr-sections" id="sections"></div>
 
-    <div class="pr-count-label">عدد الأسئلة</div>
+    <div class="pr-count-label" id="countLabel">عدد الأسئلة</div>
     <div class="pr-counts" id="counts"></div>
+
+    <!-- Shown instead of the two above when القطع الخارجية is picked. -->
+    <div class="pr-passages hidden" id="passages"></div>
 
     <button class="btn btn-primary btn-lg btn-block" id="startBtn">ابدأ التدريب</button>
   </div>
