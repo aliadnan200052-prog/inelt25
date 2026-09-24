@@ -662,10 +662,16 @@ html.is-offline .floating-controls { top: calc(var(--sp-5) + var(--offline-h)); 
    Shared by the welcome page and the dashboard, so it lives here rather
    than in either page's own <style>. Written by /js/install.js.
    ════════════════════════════════════════════════════════════════════════ */
+/* The card wraps on its own width, not the viewport's. A media query was
+   wrong here: the welcome page's column is 315px wide at a 1440px screen,
+   so the wide layout stayed on and crushed the text into three lines and
+   the button into a pill. Flex basis does the same job with no query and
+   no container-query support to depend on. */
 .inst-card {
   direction: rtl;
   position: relative;
   display: flex; align-items: center; gap: var(--sp-4);
+  flex-wrap: wrap;
   padding: var(--sp-5);
   border-radius: var(--r-lg);
   border: 1px solid var(--primary-border);
@@ -673,10 +679,13 @@ html.is-offline .floating-controls { top: calc(var(--sp-5) + var(--offline-h)); 
   animation: rise-in var(--dur-3) var(--ease-entrance) both;
 }
 .inst-art { flex-shrink: 0; width: 52px; height: 42px; }
-.inst-text { flex: 1; min-width: 0; }
-.inst-t { font-size: var(--fs-sm); font-weight: 700; color: var(--text-primary); }
+.inst-text { flex: 1 1 190px; min-width: 0; }
+/* the × sits in this corner; keep the heading out from under it */
+.inst-t { padding-inline-end: 30px; font-size: var(--fs-sm); font-weight: 700; color: var(--text-primary); }
 .inst-s { margin-top: 3px; font-size: var(--fs-2xs); line-height: 1.7; color: var(--text-secondary); }
-.inst-go { flex-shrink: 0; padding-inline: var(--sp-5); }
+/* wide enough to sit beside the text when there is room, and a full row of
+   its own the moment there is not */
+.inst-go { flex: 1 1 auto; min-width: 120px; padding-inline: var(--sp-5); }
 .inst-x {
   /* inline-END, which is the left in RTL: the mirrored place for a close
      control, and it keeps the × off the corner the heading starts in.
@@ -690,11 +699,6 @@ html.is-offline .floating-controls { top: calc(var(--sp-5) + var(--offline-h)); 
 }
 .inst-x:hover { background: var(--surface-high); color: var(--text-primary); }
 .inst-x svg { width: 15px; height: 15px; }
-
-@media (max-width: 540px) {
-  .inst-card { flex-wrap: wrap; padding-top: var(--sp-6); }
-  .inst-go { width: 100%; }
-}
 
 /* ── the sheet ─────────────────────────────────────────────────────── */
 html.inst-open, html.inst-open body { overflow: hidden; }
