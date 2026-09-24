@@ -128,7 +128,7 @@
          </svg>
          <div class="inst-text">
            <div class="inst-t">ثبّت INELT على جهازك</div>
-           <div class="inst-s">يفتح كأي تطبيق، بلا شريط متصفح، ويشتغل حتى بدون إنترنت</div>
+           <div class="inst-s">يفتح كأي تطبيق، بأيقونة على شاشتك وبلا شريط متصفح</div>
          </div>
          <button type="button" class="btn btn-primary inst-go" id="instGo">${deferred ? 'تثبيت' : 'كيف؟'}</button>
          <button type="button" class="inst-x" id="instX" aria-label="إخفاء">
