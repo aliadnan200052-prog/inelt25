@@ -414,6 +414,14 @@ body[data-dash="study"]    .dash-block:not([data-view~="study"]) { display: none
 /* Only once a tab has actually been used, so the first paint settles once. */
 body.dash-moved .dash-block { animation: fade-in var(--dur-3) var(--ease) both; }
 
+/* The install card is written in by /js/install.js, and the slot stays
+   empty when the app is already installed or the card was dismissed — so
+   the gap above it has to go with the card, not sit there alone. */
+#installSlot:empty { display: none; }
+/* a class, not the id, so the ≥1000px rule that hands spacing over to the
+   grid gap still reaches it — exactly like .dash-tg above it */
+.dash-install { margin-top: var(--d-gap); }
+
 /* ══════════ shared section furniture ══════════ */
 .dash-sec { margin-top: var(--d-gap); }
 .dash-sec-first { margin-top: var(--sp-6); }
@@ -2092,7 +2100,7 @@ html { scroll-behavior: smooth; }
           </g>
         </svg>
         <div class="dash-tile-name">القطع الخارجية</div>
-        <div class="dash-tile-en">Reading</div>
+        <div class="dash-tile-en">Passages</div>
       </a>
 
       <a class="dash-tile dash-tile-c" href="/practice">
@@ -2201,6 +2209,10 @@ html { scroll-behavior: smooth; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
       </span>
     </a>
+
+    <!-- Filled by /js/install.js, and left empty when the app is already
+         installed or the card was dismissed. -->
+    <div data-view="home" class="dash-block dash-install" id="installSlot"></div>
     </div>
   </div>
 
@@ -2453,5 +2465,6 @@ html { scroll-behavior: smooth; }
 
 <script src="/js/page/exam.js"></script>
 <script src="/js/sw-register.js"></script>
+<script src="/js/install.js"></script>
 </body>
 </html>

@@ -656,3 +656,129 @@ html.is-offline .floating-controls { top: calc(var(--sp-5) + var(--offline-h)); 
   #offlineBar { animation: offline-in 220ms var(--ease-entrance) both; }
   @keyframes offline-in { from { transform: translateY(-100%) } to { transform: none } }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   INSTALL — the card that offers the app, and the sheet with the steps.
+   Shared by the welcome page and the dashboard, so it lives here rather
+   than in either page's own <style>. Written by /js/install.js.
+   ════════════════════════════════════════════════════════════════════════ */
+.inst-card {
+  direction: rtl;
+  position: relative;
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--primary-border);
+  background: var(--tint-green);
+  animation: rise-in var(--dur-3) var(--ease-entrance) both;
+}
+.inst-art { flex-shrink: 0; width: 52px; height: 42px; }
+.inst-text { flex: 1; min-width: 0; }
+.inst-t { font-size: var(--fs-sm); font-weight: 700; color: var(--text-primary); }
+.inst-s { margin-top: 3px; font-size: var(--fs-2xs); line-height: 1.7; color: var(--text-secondary); }
+.inst-go { flex-shrink: 0; padding-inline: var(--sp-5); }
+.inst-x {
+  /* inline-END, which is the left in RTL: the mirrored place for a close
+     control, and it keeps the × off the corner the heading starts in.
+     The sheet's own × sits at the same end. */
+  position: absolute; top: 6px; inset-inline-end: 6px;
+  width: 28px; height: 28px; flex-shrink: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+.inst-x:hover { background: var(--surface-high); color: var(--text-primary); }
+.inst-x svg { width: 15px; height: 15px; }
+
+@media (max-width: 540px) {
+  .inst-card { flex-wrap: wrap; padding-top: var(--sp-6); }
+  .inst-go { width: 100%; }
+}
+
+/* ── the sheet ─────────────────────────────────────────────────────── */
+html.inst-open, html.inst-open body { overflow: hidden; }
+.inst-wrap:empty { display: none; }
+.inst-scrim {
+  position: fixed; inset: 0; z-index: 120;
+  background: rgba(14, 24, 20, .5);
+  animation: fade-in var(--dur-2) var(--ease) both;
+}
+.inst-sheet {
+  direction: rtl;
+  position: fixed; z-index: 121;
+  inset-inline: 0; bottom: 0;
+  max-height: 88vh; overflow-y: auto;
+  padding: var(--sp-6) var(--sp-6) calc(var(--sp-7) + env(safe-area-inset-bottom, 0px));
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  background: var(--surface-base);
+  box-shadow: var(--shadow-lg);
+  animation: inst-up var(--dur-3) var(--ease-entrance) both;
+}
+@keyframes inst-up { from { transform: translateY(100%) } to { transform: none } }
+@media (min-width: 640px) {
+  /* Centred with physical left, not inset-inline-start: the translate that
+     pairs with it would have to flip sign per direction, and a sheet that
+     lands off-centre the day a page is LTR is not worth the cleverness.
+     The animation only fades, because rise-in ends at transform:none and
+     that would undo the centring at the last frame. */
+  .inst-sheet {
+    inset-inline: auto; left: 50%;
+    top: 50%; bottom: auto;
+    width: min(460px, calc(100vw - 2 * var(--sp-6)));
+    transform: translate(-50%, -50%);
+    border-radius: var(--r-xl);
+    animation: inst-fade var(--dur-3) var(--ease-entrance) both;
+  }
+  @keyframes inst-fade { from { opacity: 0 } to { opacity: 1 } }
+}
+.inst-head { display: flex; align-items: center; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.inst-head-t { font-size: var(--fs-lg); font-weight: 700; color: var(--text-primary); }
+.inst-head .inst-x { position: static; margin-inline-start: auto; }
+
+.inst-tabs {
+  display: flex; gap: var(--sp-2, 6px); margin-bottom: var(--sp-6);
+  padding: 4px; border-radius: var(--r-pill); background: var(--surface-high);
+}
+.inst-tab {
+  flex: 1; padding: 8px 6px; border: 0; border-radius: var(--r-pill);
+  background: transparent; cursor: pointer;
+  font-family: inherit; font-size: var(--fs-2xs); font-weight: 700;
+  color: var(--text-secondary);
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+.inst-tab.on { background: var(--surface-raised); color: var(--text-primary); box-shadow: var(--shadow-xs); }
+
+.inst-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-5); }
+.inst-step { display: flex; align-items: flex-start; gap: var(--sp-4); }
+.inst-n {
+  flex-shrink: 0; display: grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: var(--on-primary);
+  font-size: var(--fs-2xs); font-weight: 700;
+}
+.inst-step-b { flex: 1; min-width: 0; }
+.inst-step-t {
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+  font-size: var(--fs-sm); font-weight: 600; color: var(--text-primary);
+}
+.inst-step-s { display: block; margin-top: 3px; font-size: var(--fs-2xs); line-height: 1.7; color: var(--text-secondary); }
+.inst-ic {
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--surface-raised);
+  color: var(--primary-deep);
+}
+.inst-ic svg { width: 15px; height: 15px; }
+.inst-note {
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--surface-overlay);
+  font-size: var(--fs-2xs); line-height: 1.8; color: var(--text-secondary);
+}
+.inst-note + .btn { margin-top: var(--sp-5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .inst-card, .inst-sheet, .inst-scrim { animation: none; }
+}

@@ -184,6 +184,9 @@
 }
 
 .welcome-inner .telegram-link { margin-top: var(--sp-5); }
+/* Written in by /js/install.js; empty when there is nothing to offer. */
+.welcome-install:empty { display: none; }
+.welcome-install { width: 100%; margin-top: var(--sp-6); text-align: start; }
 
 /* ── Larger screens: the design is a phone screen, so it stays a
       centred column and simply gets more breathing room. ───────────── */
@@ -322,9 +325,14 @@
       <span>زورونا على التلغرام</span>
     </a>
 
+    <!-- Filled by /js/install.js, and left empty when the app is already
+         installed or the card was dismissed. -->
+    <div id="installSlot" class="welcome-install"></div>
+
   </div>
 </div>
 
 <script src="/js/sw-register.js"></script>
+<script src="/js/install.js"></script>
 </body>
 </html>
