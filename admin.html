@@ -302,6 +302,34 @@ td { color: var(--text-primary); line-height: 1.7; }
   white-space: nowrap;
 }
 
+/* ── Reading passages ──────────────────────────────────────────────── */
+.pass-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--border);
+}
+.pass-row:last-child { border-bottom: 0; }
+.pass-preview {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-en);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pass-title { width: 230px; flex-shrink: 0; }
+.pass-count { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pass-saved { color: var(--success); font-size: var(--fs-2xs); }
+@media (max-width: 720px) {
+  .pass-row { flex-wrap: wrap; }
+  .pass-preview { flex-basis: 100%; order: -1; }
+  .pass-title { width: 100%; }
+}
+
 /* ── Pagination ────────────────────────────────────────────────────── */
 .pager {
   display: flex;
@@ -345,6 +373,15 @@ td { color: var(--text-primary); line-height: 1.7; }
       <button id="importBtn">Upload &amp; Import</button>
     </div>
     <div id="importResult"></div>
+  </section>
+
+  <section>
+    <h2>Reading passages — القطع الخارجية</h2>
+    <p class="muted">The Arabic name a student sees when picking a passage in
+      «تدرّب». Saving writes the name onto every question that carries this
+      passage. Leave a name empty to remove it — the passage then shows as
+      «قطعة بلا اسم».</p>
+    <div id="passagesBox">loading…</div>
   </section>
 
   <section>

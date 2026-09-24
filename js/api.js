@@ -144,6 +144,28 @@ const ExamAPI = (() => {
       return data;
     },
 
+    // ── Reading passages («القطع الخارجية») ───────────────
+    // list_reading_passages and start_passage_practice are defined in
+    // backend/reading-passages.sql. Like start_practice neither is an
+    // exam attempt: they never read or write attempts_used.
+    //
+    // A passage is identified by the md5 of its text, so naming one or
+    // practising it needs no id the frontend has to store.
+    async listPassages() {
+      const { data, error } = await client.rpc("list_reading_passages");
+      if (error) throw new ApiError(error.message);
+      if (data?.error === "unauthorized") throw new ApiError("Not signed in", "unauthorized");
+      if (data?.error) throw new ApiError(data.error);
+      return Array.isArray(data) ? data : [];
+    },
+    async startPassagePractice(key) {
+      const { data, error } = await client.rpc("start_passage_practice", { p_key: key });
+      if (error) throw new ApiError(error.message);
+      if (data?.error === "unauthorized") throw new ApiError("Not signed in", "unauthorized");
+      if (data?.error) throw new ApiError(data.error);
+      return data;
+    },
+
     // ── Premium purchase ──────────────────────────────────
     async startCheckout() {
       const { url } = await call("create-checkout", { method: "POST" });
@@ -206,6 +228,16 @@ const ExamAPI = (() => {
     },
     async adminDelete(id) {
       const { data, error } = await client.rpc("admin_delete_question", { p_id: id });
+      if (error) throw new ApiError(error.message);
+      if (data?.error) throw new ApiError(data.error);
+      return data;
+    },
+    // Writes the Arabic name onto every question that carries this
+    // passage, so the name belongs to the passage and not to one row.
+    async adminSetPassageTitle(key, title) {
+      const { data, error } = await client.rpc("admin_set_passage_title", {
+        p_key: key, p_title: title,
+      });
       if (error) throw new ApiError(error.message);
       if (data?.error) throw new ApiError(data.error);
       return data;

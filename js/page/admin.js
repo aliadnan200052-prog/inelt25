@@ -8,6 +8,7 @@ async function init() {
     document.getElementById('whoami').textContent = '';
     document.getElementById('app').style.display = 'block';
     loadList();
+    loadPassages();
   } catch (e) {
     document.getElementById('whoami').textContent = 'Access denied — this account is not an admin.';
   }
@@ -33,6 +34,53 @@ async function doImport() {
     loadList();
   } catch (e) {
     box.textContent = 'Error: ' + e.message;
+  }
+}
+
+/* ── Reading passages ──────────────────────────────────────────────
+   A passage has no row of its own: it is the text shared by several
+   questions, keyed by the md5 of that text. Saving a name writes it onto
+   every question carrying the passage, which is what makes the name
+   belong to the passage rather than to one question. */
+async function loadPassages() {
+  const box = document.getElementById('passagesBox');
+  box.textContent = 'loading…';
+  let list;
+  try {
+    list = await ExamAPI.listPassages();
+  } catch (e) {
+    box.textContent = 'Error: ' + e.message;
+    return;
+  }
+  if (!list.length) {
+    box.innerHTML = '<p class="muted">No reading passages in the bank yet.</p>';
+    return;
+  }
+  box.innerHTML = list.map(p => `
+    <div class="pass-row" data-key="${escapeHtml(p.key)}">
+      <input class="pass-title" type="text" dir="rtl" lang="ar"
+             placeholder="اسم القطعة بالعربية" value="${escapeHtml(p.title || '')}">
+      <span class="pass-preview">${escapeHtml(p.preview || '')}</span>
+      <span class="muted pass-count">${Number(p.count) || 0} Q</span>
+      <button class="secondary" data-save="1">Save</button>
+      <span class="pass-saved"></span>
+    </div>`).join('');
+}
+
+async function savePassageTitle(row) {
+  const input = row.querySelector('.pass-title');
+  const note  = row.querySelector('.pass-saved');
+  const btn   = row.querySelector('[data-save]');
+  btn.disabled = true;
+  note.textContent = '';
+  try {
+    await ExamAPI.adminSetPassageTitle(row.dataset.key, input.value);
+    note.textContent = 'Saved';
+    setTimeout(() => { note.textContent = ''; }, 2000);
+  } catch (e) {
+    note.textContent = 'Error: ' + e.message;
+  } finally {
+    btn.disabled = false;
   }
 }
 
@@ -88,6 +136,14 @@ document.getElementById('exportJsonBtn').addEventListener('click', () => ExamAPI
 document.getElementById('exportCsvBtn').addEventListener('click', () => ExamAPI.adminExportUrl('csv'));
 document.getElementById('prevPageBtn').addEventListener('click', () => changePage(-1));
 document.getElementById('nextPageBtn').addEventListener('click', () => changePage(1));
+document.getElementById('passagesBox').addEventListener('click', e => {
+  const save = e.target.closest('[data-save]');
+  if (save) savePassageTitle(save.closest('.pass-row'));
+});
+document.getElementById('passagesBox').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('pass-title'))
+    savePassageTitle(e.target.closest('.pass-row'));
+});
 document.getElementById('tableBody').addEventListener('click', e => {
   const ed = e.target.closest('[data-edit]');
   if (ed) return editQuestion(ed.dataset.edit);
