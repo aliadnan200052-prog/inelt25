@@ -381,6 +381,10 @@ td { color: var(--text-primary); line-height: 1.7; }
       «تدرّب». Saving writes the name onto every question that carries this
       passage. Leave a name empty to remove it — the passage then shows as
       «قطعة بلا اسم».</p>
+    <p class="muted"><strong>Delete</strong> removes the passage and every
+      question on it, disabled ones included. There is no undo — to take a
+      passage out of circulation reversibly, disable its questions instead
+      (see <code>backend/passage-dedupe.sql</code>).</p>
     <div id="passagesBox">loading…</div>
   </section>
 

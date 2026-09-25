@@ -63,6 +63,7 @@ async function loadPassages() {
       <span class="pass-preview">${escapeHtml(p.preview || '')}</span>
       <span class="muted pass-count">${Number(p.count) || 0} Q</span>
       <button class="secondary" data-save="1">Save</button>
+      <button class="danger" data-drop="1">Delete</button>
       <span class="pass-saved"></span>
     </div>`).join('');
 }
@@ -81,6 +82,32 @@ async function savePassageTitle(row) {
     note.textContent = 'Error: ' + e.message;
   } finally {
     btn.disabled = false;
+  }
+}
+
+/* Deleting a passage takes every question on it, which is ten rows at a
+   stroke rather than the one the table's own Delete removes — so the
+   count goes in the question, and the answer says how many actually
+   went. There is no undo. */
+async function deletePassage(row) {
+  const name  = row.querySelector('.pass-title').value.trim();
+  const count = row.querySelector('.pass-count').textContent.trim();
+  const shown = name || row.querySelector('.pass-preview').textContent.trim().slice(0, 60) + '…';
+  if (!confirm(`Delete this passage and every question on it?\n\n${shown}\n\n` +
+               `${count} active — plus any disabled ones — will be deleted permanently. This cannot be undone.`)) return;
+  const note = row.querySelector('.pass-saved');
+  row.querySelectorAll('button').forEach(b => { b.disabled = true; });
+  note.textContent = 'deleting…';
+  try {
+    const r = await ExamAPI.adminDeletePassage(row.dataset.key);
+    row.remove();
+    await loadStats();
+    loadList();
+    loadPassages();
+    console.info('passage deleted:', r);
+  } catch (e) {
+    note.textContent = 'Error: ' + e.message;
+    row.querySelectorAll('button').forEach(b => { b.disabled = false; });
   }
 }
 
@@ -138,7 +165,9 @@ document.getElementById('prevPageBtn').addEventListener('click', () => changePag
 document.getElementById('nextPageBtn').addEventListener('click', () => changePage(1));
 document.getElementById('passagesBox').addEventListener('click', e => {
   const save = e.target.closest('[data-save]');
-  if (save) savePassageTitle(save.closest('.pass-row'));
+  if (save) return savePassageTitle(save.closest('.pass-row'));
+  const drop = e.target.closest('[data-drop]');
+  if (drop) return deletePassage(drop.closest('.pass-row'));
 });
 document.getElementById('passagesBox').addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.classList.contains('pass-title'))

@@ -242,6 +242,15 @@ const ExamAPI = (() => {
       if (data?.error) throw new ApiError(data.error);
       return data;
     },
+    // Removes every question carrying this passage, disabled ones
+    // included, and answers with how many rows actually went so the
+    // caller can check it against the number it warned about.
+    async adminDeletePassage(key) {
+      const { data, error } = await client.rpc("admin_delete_passage", { p_key: key });
+      if (error) throw new ApiError(error.message);
+      if (data?.error) throw new ApiError(data.error);
+      return data;
+    },
     async adminExportUrl(format = "json") {
       const { data, error } = await client.rpc("admin_export_questions");
       if (error) throw new ApiError(error.message);
