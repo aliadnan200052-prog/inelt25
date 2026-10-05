@@ -167,7 +167,11 @@
       if (!f) { out.push(step); return; }
       if (f.drill) {
         const lid = f.lesson.id;
-        if (!read.has(lid) && !LearnStore.isLessonDone(lid)) { read.add(lid); out.push({ read: lid }); }
+        if (!read.has(lid) && !LearnStore.isLessonDone(lid)) {
+          read.add(lid);
+          const n = (PARTS.get(lid) || [[]]).length;
+          for (let i = 0; i < n; i++) out.push({ read: lid, part: i, parts: n });
+        }
         out.push(step); return;
       }
       teachOne(step.id);
@@ -299,6 +303,47 @@
           </div>` : ''}`;
   }
 
+  /* A lesson is read in short cards, not in one wall of text. The
+     vocabulary side introduces five words as five cards; a rule deserves
+     the same pacing, and the booklet's own headings say where the breaks
+     belong — a section about the present simple's negative is one card,
+     its question form the next.
+
+     Weights, because blocks are not the same size: a table is most of a
+     card on its own, an example is a line. A break is taken at a block
+     that can open a card — a heading, a paragraph, a table, a formula —
+     so a card never starts on an example whose rule was left behind, and
+     never on a heading left dangling at the foot of the one before. */
+  const BLOCK_W = { p: 2, sub: 1, ex: 1, words: 2, table: 4, formula: 1, note: 1 };
+  const CARD_SOFT = 6, CARD_HARD = 10, SUB_MIN = 5;
+  const opensCard = b => b.t === 'sub' || b.t === 'p' || b.t === 'words' ||
+                         b.t === 'table' || b.t === 'formula';
+
+  /* Some blocks only make sense with the one before: a heading with its
+     rule, a formula or a word list with the sentence that introduced it.
+     A break there would leave "the verb takes this shape:" at the foot of
+     one card and the shape on the next. */
+  const leadsInto = (a, b) => a.t === 'sub' ||
+    (a.t === 'p' && (b.t === 'formula' || b.t === 'words' || b.t === 'table'));
+
+  function splitTeach(blocks) {
+    const parts = [];
+    let cur = [], w = 0;
+    (blocks || []).forEach(b => {
+      const held = cur.length && leadsInto(cur[cur.length - 1], b);
+      const here = cur.length && opensCard(b) && (b.t === 'sub' ? w >= SUB_MIN : w >= CARD_SOFT);
+      if (!held && (here || (cur.length && w >= CARD_HARD))) { parts.push(cur); cur = []; w = 0; }
+      cur.push(b); w += BLOCK_W[b.t] || 1;
+    });
+    if (cur.length) parts.push(cur);
+    return parts.length ? parts : [[]];
+  }
+
+  /* Split once at load, so the same lesson breaks in the same places
+     every sitting. */
+  const PARTS = new Map();
+  GRAMMAR.forEach(u => u.lessons.forEach(l => PARTS.set(l.id, splitTeach(l.teach))));
+
   /* The lesson itself, read before any of its questions. The booklet's
      blocks are rendered as they were written — rules as paragraphs,
      formulas as a pill, examples with their Arabic, tables as tables —
@@ -321,33 +366,43 @@
   }
 
   function askLesson(step) {
-    const { lesson, unit } = LESSON.get(step.read);
+    const { lesson } = LESSON.get(step.read);
+    const parts = PARTS.get(step.read) || [lesson.teach || []];
+    const i = Math.min(step.part || 0, parts.length - 1);
+    const last = i === parts.length - 1;
     current = null; answered = true;
     header();
     $('lnNext').disabled = false;
-    $('lnNext').textContent = 'ابدأ التمارين';
+    /* The button says what comes next, and after the last card of a
+       lesson what comes next is the exercises. */
+    $('lnNext').textContent = last ? 'ابدأ التمارين' : 'تابع';
     $('lnCard').innerHTML =
-      `<div class="ln-new">درس</div>
+      `<div class="ln-new">درس${parts.length > 1 ? ` · ${i + 1} من ${parts.length}` : ''}</div>
        <div class="ln-g-title">${esc(lesson.ar)}</div>
-       ${lesson.en ? `<div class="ln-g-en en">${esc(lesson.en)}</div>` : ''}
-       <div class="ln-g-body">${lesson.teach.map(blockHTML).join('')}</div>`;
+       ${lesson.en && i === 0 ? `<div class="ln-g-en en">${esc(lesson.en)}</div>` : ''}
+       <div class="ln-g-body">${parts[i].map(blockHTML).join('')}</div>`;
   }
 
   function askDrill(step, found) {
     const d = found.drill;
+    /* A question about the RULE — whether the if-clause takes a comma,
+       what the second conditional is for — is never on the exam paper; it
+       is here to teach. Those are written in Arabic, and their options
+       may be Arabic too, while anything the exam itself would ask stays
+       in English exactly as it would appear. */
     current = {
-      kind: 'drill', ask: 'اختر الإجابة الصحيحة',
-      prompt: d.q, promptLang: 'en',
-      options: d.opts, optionsLang: 'en',
-      answer: d.a, entry: { w: d.opts[d.a], ar: '', p: 'drill' }
+      kind: 'drill', ask: d.lang === 'ar' ? 'سؤال عن القاعدة' : 'اختر الإجابة الصحيحة',
+      prompt: d.q, promptLang: d.lang === 'ar' ? 'ar' : 'en',
+      options: d.opts, optionsLang: d.optsLang === 'ar' ? 'ar' : 'en',
+      answer: d.a, why: d.why || '', entry: { w: d.opts[d.a], ar: '', p: 'drill' }
     };
     answered = false;
     header();
     $('lnCard').innerHTML =
       `<div class="ln-ask">${esc(current.ask)}</div>
-       <div class="ln-prompt en">${esc(current.prompt)}</div>
+       <div class="ln-prompt ${esc(current.promptLang)}">${esc(current.prompt)}</div>
        <div class="ln-opts" id="lnOpts">${current.options.map((o, n) =>
-         `<button type="button" class="ln-opt en" data-n="${n}">${esc(o)}</button>`).join('')}</div>
+         `<button type="button" class="ln-opt ${esc(current.optionsLang)}" data-n="${n}">${esc(o)}</button>`).join('')}</div>
        <div id="lnTell"></div>`;
   }
 
@@ -412,9 +467,11 @@
   function tell(wasRight) {
     const e = current.entry;
     if (e.p === 'drill') {
+      const cls = current.optionsLang === 'ar' ? '' : 'en';
       $('lnTell').innerHTML =
         `<div class="ln-tell">${wasRight ? '<b>صحيح.</b> ' : '<b>الصحيح:</b> '}
-           <span class="en">${esc(current.options[current.answer])}</span></div>`;
+           <span class="${cls}">${esc(current.options[current.answer])}</span>
+           ${current.why ? `<span class="ln-tell-lit">${esc(current.why)}</span>` : ''}</div>`;
       return;
     }
     $('lnTell').innerHTML =
@@ -453,7 +510,11 @@
 
   function nextStep() {
     const leaving = plan[at];
-    if (leaving && leaving.read) LearnStore.lessonDone(leaving.read);
+    /* Read, not merely opened: a lesson counts once its last card has
+       been passed, so leaving halfway through brings the whole lesson
+       back rather than the questions alone. */
+    if (leaving && leaving.read && (leaving.part || 0) === (leaving.parts || 1) - 1)
+      LearnStore.lessonDone(leaving.read);
     done += stepSize(leaving);
     if (at < plan.length - 1) { at++; askOne(); window.scrollTo({ top: 0, behavior: 'instant' }); }
     else finish();
