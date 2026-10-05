@@ -14,29 +14,51 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
     ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 
-  const UNITS = (window.LEARN_VOCAB && window.LEARN_VOCAB.units) || [];
+  const VOCAB   = (window.LEARN_VOCAB   && window.LEARN_VOCAB.units)   || [];
+  const GRAMMAR = (window.LEARN_GRAMMAR && window.LEARN_GRAMMAR.units) || [];
+  const UNITS   = VOCAB.concat(GRAMMAR);
   const SITTING = 12;
 
   /* One flat index, so an id found in the review queue can be turned back
-     into the entry and the unit it came from. */
+     into the entry and the unit it came from. A grammar drill is an item
+     on the same ladder as a word: it is asked, graded, and comes back. */
   const INDEX = new Map();
-  UNITS.forEach(u => u.words.forEach(e => INDEX.set(u.id + ':' + e.w, { entry: e, unit: u })));
+  VOCAB.forEach(u => u.words.forEach(e => INDEX.set(u.id + ':' + e.w, { entry: e, unit: u })));
+  const LESSON = new Map();
+  GRAMMAR.forEach(u => u.lessons.forEach(l => {
+    LESSON.set(l.id, { lesson: l, unit: u });
+    l.drills.forEach((d, i) => INDEX.set(l.id + '#' + i, { drill: d, lesson: l, unit: u }));
+  }));
 
-  const KIND_AR = { words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير', functions: 'وظائف لغوية' };
-  const KIND_ORDER = ['words', 'phrases', 'idioms', 'functions'];
+  const isGrammar = u => u.kind === 'grammar';
+  const drillIds  = l => l.drills.map((d, i) => l.id + '#' + i);
+
+  const KIND_AR = { grammar: 'القواعد', words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير', functions: 'وظائف لغوية' };
+  const KIND_ORDER = ['grammar', 'words', 'phrases', 'idioms', 'functions'];
   const ICONS = {
     words: '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
     phrases: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     idioms: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2V17h6v-1.3c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M9 21h6"/></svg>',
-    functions: '<svg viewBox="0 0 24 24"><path d="M8 10h8"/><path d="M8 14h5"/><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg>'
+    functions: '<svg viewBox="0 0 24 24"><path d="M8 10h8"/><path d="M8 14h5"/><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg>',
+    grammar: '<svg viewBox="0 0 24 24"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.3a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></svg>'
   };
 
   const kindOf = u => u.kind || 'words';
-  const idsOf  = u => u.words.map(e => u.id + ':' + e.w);
+  const idsOf  = u => isGrammar(u)
+    ? u.lessons.reduce((all, l) => all.concat(drillIds(l)), [])
+    : u.words.map(e => u.id + ':' + e.w);
 
   /* How far through a unit the learner is: an entry counts once it has
      been met, and counts double once it is known. */
   function unitProgress(u) {
+    if (isGrammar(u)) {
+      const readDone = u.lessons.filter(l => LearnStore.isLessonDone(l.id)).length;
+      const ids = idsOf(u);
+      const known = ids.filter(id => LearnStore.item(id).level >= LearnStore.PRODUCE_FROM).length;
+      return { total: u.lessons.length, met: readDone, known,
+               pct: Math.round(readDone / u.lessons.length * 100), grammar: true,
+               drills: ids.length };
+    }
     const ids = idsOf(u);
     let met = 0, known = 0;
     ids.forEach(id => {
@@ -79,7 +101,9 @@
             <span class="ln-unit-ic">${ICONS[k]}</span>
             <span class="ln-unit-main">
               <span class="ln-unit-n">${esc(u.ar)}</span>
-              <span class="ln-unit-s">${p.known} من ${p.total} تعرفها</span>
+              <span class="ln-unit-s">${p.grammar
+                 ? `${p.met} من ${p.total} دروس · ${p.drills} تمريناً`
+                 : `${p.known} من ${p.total} تعرفها`}</span>
               <span class="ln-unit-bar"><span class="ln-unit-fill" style="width:${p.pct}%"></span></span>
             </span>
             <span class="ln-unit-go">${p.pct}%</span>
@@ -120,13 +144,33 @@
 
      The teaching card is also what puts the entry on the ladder, so it
      comes back tomorrow whether or not the first sitting went well. */
-  function teachFirst(steps) {
+  /* Introductions go immediately before the card that uses them, not in a
+     block at the front: meeting five words and then being asked about
+     them ten cards later is most of the way back to not having met them.
+
+     Runs over the GROUPED plan, so a matching card is preceded by a
+     teaching card for each of its five, and a grammar drill by its lesson
+     — once for the lesson, not once per question. */
+  function introduce(steps) {
     const out = [];
-    const taught = new Set();
+    const taught = new Set(), read = new Set();
+    const fresh = id => LearnStore.item(id).seen === 0;
+
+    const teachOne = id => {
+      if (taught.has(id) || !fresh(id)) return;
+      taught.add(id); out.push({ teach: id });
+    };
+
     steps.forEach(step => {
+      if (step.match) { step.match.forEach(m => teachOne(m.id)); out.push(step); return; }
       const f = INDEX.get(step.id);
-      const fresh = f && LearnStore.item(step.id).seen === 0;
-      if (fresh && !taught.has(step.id)) { taught.add(step.id); out.push({ teach: step.id }); }
+      if (!f) { out.push(step); return; }
+      if (f.drill) {
+        const lid = f.lesson.id;
+        if (!read.has(lid) && !LearnStore.isLessonDone(lid)) { read.add(lid); out.push({ read: lid }); }
+        out.push(step); return;
+      }
+      teachOne(step.id);
       out.push(step);
     });
     return out;
@@ -144,11 +188,12 @@
     };
     steps.forEach(step => {
       const f = INDEX.get(step.id);
-      const low = f && LearnStore.item(step.id).level < LearnStore.PRODUCE_FROM;
+      const pairable = f && f.entry && f.entry.p !== 'fn' &&
+                       LearnStore.item(step.id).level < LearnStore.PRODUCE_FROM;
       const sameUnit = run.length && INDEX.get(run[0].id).unit === (f && f.unit);
-      if (f && low && f.entry.p !== 'fn' && (!run.length || sameUnit)) { run.push(step); return; }
+      if (pairable && (!run.length || sameUnit)) { run.push(step); return; }
       flush();
-      if (f && low && f.entry.p !== 'fn') run.push(step); else out.push(step);
+      if (pairable) run.push(step); else out.push(step);
     });
     flush();
     return out;
@@ -160,15 +205,13 @@
   /* Cards and answers are not the same count once a card can hold five
      pairs, so the score needs its own tally. */
   let done = 0;
-  const stepSize = s => (s && s.teach ? 0 : s && s.match ? s.match.length : 1);
+  const stepSize = s => (s && (s.teach || s.read) ? 0 : s && s.match ? s.match.length : 1);
 
   function begin(unit) {
-    /* Teach, then group: the cards that test are folded into matching
-       cards, and every new entry has been met before any of them. */
-    const steps = planSitting(unit);
-    const tests = groupMatches(steps);
-    const intro = teachFirst(steps).filter(x => x.teach);
-    plan = intro.concat(tests);
+    /* Group first, then introduce: the matching cards are formed, and
+       each introduction is placed directly in front of the card it
+       prepares the learner for. */
+    plan = introduce(groupMatches(planSitting(unit)));
     if (!plan.length) return;
     at = 0; right = 0; done = 0;
     $('path').classList.add('hidden');
@@ -180,10 +223,12 @@
 
   function askOne() {
     const step = plan[at];
+    if (step.read)  return askLesson(step);
     if (step.teach) return askTeach(step);
     if (step.match) return askMatch(step);
     const found = INDEX.get(step.id);
     if (!found) { nextStep(); return; }
+    if (found.drill) return askDrill(step, found);
     const it = LearnStore.item(step.id);
     current = LearnExercises.build(found.entry, found.unit, it.level, (at + 1) * 7919 + step.id.length);
     if (!current) { nextStep(); return; }
@@ -244,10 +289,66 @@
             <div class="ln-teach-when-k">${e.p === 'fn' ? 'متى تقولها' : 'المعنى الحرفي'}</div>
             <div class="ln-teach-when-v ${e.p === 'fn' ? 'en' : ''}">${esc(when)}</div>
           </div>` : ''}
+       ${e.syn ? `<div class="ln-teach-when">
+            <div class="ln-teach-when-k">بالإنكليزية تعني</div>
+            <div class="ln-teach-when-v en">${esc(e.syn)}</div>
+          </div>` : ''}
        ${e.ex && e.p !== 'fn' ? `<div class="ln-teach-ex">
             <div class="ln-teach-ex-en en">${esc(e.ex)}</div>
             ${e.exar ? `<div class="ln-teach-ex-ar">${esc(e.exar)}</div>` : ''}
           </div>` : ''}`;
+  }
+
+  /* The lesson itself, read before any of its questions. The booklet's
+     blocks are rendered as they were written — rules as paragraphs,
+     formulas as a pill, examples with their Arabic, tables as tables —
+     because that material was reviewed once and should not be reworded
+     on its way here. */
+  function blockHTML(b) {
+    switch (b.t) {
+      case 'p':       return `<p class="ln-g-p">${esc(b.ar)}</p>`;
+      case 'sub':     return `<div class="ln-g-sub"><span>${esc(b.ar)}</span>${b.en ? `<span class="en">${esc(b.en)}</span>` : ''}</div>`;
+      case 'formula': return `<div class="ln-g-formula">${esc(b.text)}</div>`;
+      case 'note':    return `<div class="ln-g-note">${esc(b.ar)}</div>`;
+      case 'words':   return `<div class="ln-g-words">${(b.items || []).map(w => `<span class="en">${esc(w)}</span>`).join('')}</div>`;
+      case 'ex':      return `<div class="ln-g-ex"><span class="en">${esc(b.en)}</span><span class="ar">${esc(b.ar)}</span></div>`;
+      case 'table':   return `<div class="ln-g-tablewrap"><table class="ln-g-table">
+            <thead><tr>${(b.head || []).map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+            <tbody>${(b.rows || []).map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+          </table></div>`;
+      default:        return '';
+    }
+  }
+
+  function askLesson(step) {
+    const { lesson, unit } = LESSON.get(step.read);
+    current = null; answered = true;
+    header();
+    $('lnNext').disabled = false;
+    $('lnNext').textContent = 'ابدأ التمارين';
+    $('lnCard').innerHTML =
+      `<div class="ln-new">درس</div>
+       <div class="ln-g-title">${esc(lesson.ar)}</div>
+       ${lesson.en ? `<div class="ln-g-en en">${esc(lesson.en)}</div>` : ''}
+       <div class="ln-g-body">${lesson.teach.map(blockHTML).join('')}</div>`;
+  }
+
+  function askDrill(step, found) {
+    const d = found.drill;
+    current = {
+      kind: 'drill', ask: 'اختر الإجابة الصحيحة',
+      prompt: d.q, promptLang: 'en',
+      options: d.opts, optionsLang: 'en',
+      answer: d.a, entry: { w: d.opts[d.a], ar: '', p: 'drill' }
+    };
+    answered = false;
+    header();
+    $('lnCard').innerHTML =
+      `<div class="ln-ask">${esc(current.ask)}</div>
+       <div class="ln-prompt en">${esc(current.prompt)}</div>
+       <div class="ln-opts" id="lnOpts">${current.options.map((o, n) =>
+         `<button type="button" class="ln-opt en" data-n="${n}">${esc(o)}</button>`).join('')}</div>
+       <div id="lnTell"></div>`;
   }
 
   function askMatch(step) {
@@ -310,6 +411,12 @@
      "الصحيح: عائلة — عائلة" when the question was the meaning itself. */
   function tell(wasRight) {
     const e = current.entry;
+    if (e.p === 'drill') {
+      $('lnTell').innerHTML =
+        `<div class="ln-tell">${wasRight ? '<b>صحيح.</b> ' : '<b>الصحيح:</b> '}
+           <span class="en">${esc(current.options[current.answer])}</span></div>`;
+      return;
+    }
     $('lnTell').innerHTML =
       `<div class="ln-tell">
          ${wasRight ? '<b>صحيح.</b> ' : '<b>الصحيح:</b> '}
@@ -345,7 +452,9 @@
   }
 
   function nextStep() {
-    done += stepSize(plan[at]);
+    const leaving = plan[at];
+    if (leaving && leaving.read) LearnStore.lessonDone(leaving.read);
+    done += stepSize(leaving);
     if (at < plan.length - 1) { at++; askOne(); window.scrollTo({ top: 0, behavior: 'instant' }); }
     else finish();
   }

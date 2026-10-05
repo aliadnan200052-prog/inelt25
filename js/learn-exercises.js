@@ -122,6 +122,25 @@
       };
     },
 
+    /* "It means ______ ?" — the exam's own way of testing an idiom, with
+       the answer as one English word rather than an Arabic gloss. A
+       learner who only ever meets the Arabic cannot answer it. */
+    synonym(entry, unit, rnd) {
+      if (!entry.syn) return null;
+      const wrong = distractors(entry, unit, 'syn', rnd);
+      if (wrong.length < 3) return null;
+      const options = shuffle([entry.syn].concat(wrong), rnd);
+      return {
+        kind: 'synonym',
+        ask: 'اختر المرادف الإنكليزي',
+        prompt: entry.w + '  —  it means ?',
+        promptLang: 'en',
+        options, optionsLang: 'en',
+        answer: options.indexOf(entry.syn),
+        note: entry.ar
+      };
+    },
+
     /* For a function: the situation, and what you would say. */
     situation(entry, unit, rnd) {
       if (entry.p !== 'fn' || !entry.ex) return null;
@@ -172,8 +191,15 @@
      back rather than leaving the learner with a blank card. */
   function build(entry, unit, level, seed) {
     const rnd = rngFrom(seed);
+    /* A phrase or an idiom alternates between its Arabic meaning and its
+       English synonym once it is past the first meeting, because the exam
+       asks for both. */
     const order = entry.p === 'fn'
       ? ['situation', 'meaning']
+      : (entry.p === 'phr' || entry.p === 'idiom')
+        ? (level >= 3 ? ['synonym', 'gap', 'meaning']
+           : level >= 1 ? ['synonym', 'gap', 'meaning']
+           : ['meaning', 'synonym', 'gap'])
       : level >= 3 ? ['produce', 'gap', 'meaning']
       : level >= 1 ? ['gap', 'meaning']
       : ['meaning', 'gap'];

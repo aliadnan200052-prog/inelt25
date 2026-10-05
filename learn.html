@@ -154,6 +154,53 @@
 .ln-teach-ex-en { font-family: var(--font-en); direction: ltr; text-align: left; font-size: var(--fs-md); line-height: 1.8; color: var(--text-primary); }
 .ln-teach-ex-ar { margin-top: 6px; font-size: var(--fs-sm); line-height: 1.8; color: var(--text-secondary); }
 
+/* ── درس القواعد ──
+   The booklet's own blocks, rendered as they were written. Arabic rules
+   read right to left; English examples, formulas and word lists read left
+   to right, and each says so rather than inheriting and guessing. */
+.ln-g-title { font-size: var(--fs-xl); font-weight: 700; color: var(--text-primary); }
+.ln-g-en { margin-top: 4px; font-family: var(--font-en); direction: ltr; text-align: left; font-size: var(--fs-xs); color: var(--text-secondary); }
+.ln-g-body { margin-top: var(--sp-6); }
+.ln-g-p { margin: 0 0 var(--sp-5); font-size: var(--fs-sm); line-height: 2.05; color: var(--text-primary); }
+.ln-g-sub {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  margin: var(--sp-6) 0 var(--sp-4); padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm); font-weight: 700; color: var(--primary-deep);
+}
+.ln-g-sub .en { font-family: var(--font-en); direction: ltr; font-size: var(--fs-2xs); font-weight: 600; color: var(--text-secondary); }
+.ln-g-formula {
+  margin: var(--sp-4) 0; padding: 11px var(--sp-5);
+  border-radius: var(--r-md); background: var(--primary-deep); color: var(--on-primary);
+  font-size: var(--fs-xs); font-weight: 600; text-align: center;
+}
+.ln-g-note {
+  margin: var(--sp-5) 0; padding: var(--sp-4) var(--sp-5);
+  border-inline-start: 3px solid var(--sec-functions);
+  border-radius: var(--r-sm); background: var(--tint-amber);
+  font-size: var(--fs-xs); line-height: 1.95; color: var(--text-primary);
+}
+.ln-g-words { display: flex; flex-wrap: wrap; gap: 7px; direction: ltr; margin: var(--sp-4) 0; }
+.ln-g-words span {
+  padding: 5px 12px; border-radius: var(--r-pill);
+  background: var(--surface-high); font-family: var(--font-en);
+  font-size: var(--fs-2xs); font-weight: 600; color: var(--text-primary);
+}
+.ln-g-ex {
+  margin: var(--sp-3) 0; padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface-overlay);
+}
+.ln-g-ex .en { display: block; font-family: var(--font-en); direction: ltr; text-align: left; font-size: var(--fs-sm); line-height: 1.75; color: var(--text-primary); }
+.ln-g-ex .ar { display: block; margin-top: 4px; font-size: var(--fs-2xs); color: var(--text-secondary); }
+.ln-g-tablewrap { margin: var(--sp-5) 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ln-g-table { width: 100%; min-width: 440px; border-collapse: collapse; font-size: var(--fs-2xs); }
+.ln-g-table th, .ln-g-table td {
+  padding: 9px 11px; border: 1px solid var(--border); text-align: start;
+}
+.ln-g-table th { background: var(--tint-green); font-weight: 700; color: var(--primary-deep); }
+.ln-g-table td { color: var(--text-primary); }
+
 /* ── التوصيل ──
    Two columns, tapped into pairs. A paired chip stays on screen rather
    than vanishing: the learner should be able to look back over what they
@@ -279,6 +326,9 @@
 </div>
 
 <script src="/js/data/learn-vocab.js"></script>
+<script src="/js/data/learn-grammar-source.js"></script>
+<script src="/js/data/learn-grammar-extra.js"></script>
+<script src="/js/data/learn-grammar.js"></script>
 <script src="/js/learn-store.js"></script>
 <script src="/js/learn-exercises.js"></script>
 <script src="/js/net.js"></script>
