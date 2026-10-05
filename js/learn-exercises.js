@@ -140,6 +140,34 @@
     }
   };
 
+  /* ── التوصيل ──────────────────────────────────────────────────────
+     Five at once, tapped into pairs. It is the one shape that is faster
+     than reading four options and more exacting than any of them: a
+     wrong pairing is wrong twice over, because it also takes a meaning
+     away from the word it belonged to.
+
+     Only for entries not yet known — once a word is produced from
+     memory, picking it out of five is no longer a test of anything. */
+  const MATCH_MIN = 4, MATCH_MAX = 5;
+
+  function buildMatch(entries, unit, seed) {
+    const rnd = rngFrom(seed);
+    const use = entries.slice(0, MATCH_MAX);
+    if (use.length < MATCH_MIN) return null;
+    // two entries sharing a meaning would make one pairing unanswerable
+    if (new Set(use.map(e => e.ar)).size !== use.length) return null;
+    const pairs = use.map(e => ({ id: unit.id + ':' + e.w, w: e.w, ar: e.ar, entry: e }));
+    return {
+      kind: 'match',
+      ask: 'وصّل كل كلمة بمعناها',
+      unit: unit.id,
+      pairs,
+      left:  shuffle(pairs.map(p => p.id), rnd),   // the English column
+      right: shuffle(pairs.map(p => p.id), rnd),   // the Arabic column
+      byId: Object.fromEntries(pairs.map(p => [p.id, p]))
+    };
+  }
+
   /* The ladder picks the shape, and anything that cannot be built falls
      back rather than leaving the learner with a blank card. */
   function build(entry, unit, level, seed) {
@@ -160,5 +188,6 @@
     ? String(given || '').trim().toLowerCase() === String(q.answer).trim().toLowerCase()
     : given === q.answer;
 
-  global.LearnExercises = { build, check, rngFrom, blankOut, distractors, KINDS };
+  global.LearnExercises = { build, buildMatch, check, rngFrom, blankOut, distractors, KINDS,
+                            MATCH_MIN, MATCH_MAX };
 })(typeof window !== 'undefined' ? window : globalThis);

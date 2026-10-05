@@ -129,6 +129,35 @@
 .ln-opt.right { border-color: var(--success); background: var(--success-dim); }
 .ln-opt.wrong { border-color: var(--danger); background: var(--danger-dim, rgba(185,49,49,.08)); }
 
+/* ── التوصيل ──
+   Two columns, tapped into pairs. A paired chip stays on screen rather
+   than vanishing: the learner should be able to look back over what they
+   have matched so far, and a card that empties as you work gives nothing
+   to check against. */
+.ln-match { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.ln-match-col { display: flex; flex-direction: column; gap: var(--sp-3); }
+.ln-chip {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  min-height: 52px; padding: 10px var(--sp-4);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface-raised); box-shadow: var(--shadow-xs);
+  font-family: inherit; font-size: var(--fs-sm); font-weight: 600;
+  color: var(--text-primary); cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease),
+              opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+.ln-chip.en { font-family: var(--font-en); direction: ltr; }
+.ln-chip.ar { font-family: var(--font-ar); direction: rtl; }
+.ln-chip:hover:not(.tied) { border-color: var(--primary-border); background: var(--tint-green); }
+.ln-chip.sel { border-color: var(--primary); background: var(--tint-green); transform: scale(.98); }
+.ln-chip.tied {
+  border-color: var(--success); background: var(--success-dim);
+  color: var(--text-secondary); opacity: .62; cursor: default;
+}
+.ln-chip.miss { border-color: var(--danger); background: var(--danger-dim); }
+.ln-match-left { margin-top: var(--sp-4); font-size: var(--fs-2xs); color: var(--text-secondary); text-align: center; }
+@media (prefers-reduced-motion: reduce) { .ln-chip { transition: none; } .ln-chip.sel { transform: none; } }
+
 .ln-input {
   width: 100%; padding: 14px var(--sp-5);
   border: 1px solid var(--border-strong); border-radius: var(--r-md);

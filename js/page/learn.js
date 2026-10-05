@@ -60,7 +60,10 @@
     const plan = planSitting();
     const reviews = plan.filter(p => p.isReview).length;
     const fresh   = plan.length - reviews;
-    $('todayT').textContent = plan.length ? `${plan.length} سؤالاً` : 'خلصت كل شيء اليوم';
+    /* Items, not questions: five of them can arrive on one matching card,
+       and promising twelve questions then showing eight cards reads as a
+       mistake. */
+    $('todayT').textContent = plan.length ? `${plan.length} مفردة` : 'خلصت كل شيء اليوم';
     $('todayS').textContent = plan.length
       ? (reviews ? `${reviews} للمراجعة` : 'لا مراجعة اليوم') + (fresh ? ` · ${fresh} جديد` : '')
       : 'ارجع غداً، أو افتح أي وحدة وتمرّن عليها.';
@@ -105,13 +108,45 @@
     return out;
   }
 
+  /* A run of items from one unit that are all still being learned makes a
+     better matching card than four separate questions: it is quicker, and
+     a wrong pairing costs twice, because it also takes a meaning away
+     from the word it belonged to. Known items are left alone — picking a
+     word out of five proves nothing once it can be written from memory. */
+  function groupMatches(steps) {
+    const out = [];
+    let run = [];
+    const flush = () => {
+      if (run.length >= LearnExercises.MATCH_MIN) {
+        out.push({ match: run.slice(0, LearnExercises.MATCH_MAX) });
+        run.slice(LearnExercises.MATCH_MAX).forEach(x => out.push(x));
+      } else run.forEach(x => out.push(x));
+      run = [];
+    };
+    steps.forEach(step => {
+      const f = INDEX.get(step.id);
+      const low = f && LearnStore.item(step.id).level < LearnStore.PRODUCE_FROM;
+      const sameUnit = run.length && INDEX.get(run[0].id).unit === (f && f.unit);
+      if (f && low && f.entry.p !== 'fn' && (!run.length || sameUnit)) { run.push(step); return; }
+      flush();
+      if (f && low && f.entry.p !== 'fn') run.push(step); else out.push(step);
+    });
+    flush();
+    return out;
+  }
+
   /* ── a sitting ──────────────────────────────────────────────────── */
   let plan = [], at = 0, right = 0, answered = false, current = null;
+  let tied = 0, missed = null, sel = null;
+  /* Cards and answers are not the same count once a card can hold five
+     pairs, so the score needs its own tally. */
+  let done = 0;
+  const stepSize = s => (s && s.match ? s.match.length : 1);
 
   function begin(unit) {
-    plan = planSitting(unit);
+    plan = groupMatches(planSitting(unit));
     if (!plan.length) return;
-    at = 0; right = 0;
+    at = 0; right = 0; done = 0;
     $('path').classList.add('hidden');
     $('summary').classList.add('hidden');
     $('sitting').classList.remove('hidden');
@@ -121,6 +156,7 @@
 
   function askOne() {
     const step = plan[at];
+    if (step.match) return askMatch(step);
     const found = INDEX.get(step.id);
     if (!found) { nextStep(); return; }
     const it = LearnStore.item(step.id);
@@ -128,11 +164,7 @@
     if (!current) { nextStep(); return; }
     answered = false;
 
-    $('lnPos').textContent   = `سؤال ${at + 1} من ${plan.length}`;
-    $('lnScore').textContent = `${right} / ${at}`;
-    $('lnFill').style.width  = (at / plan.length * 100) + '%';
-    $('lnNext').disabled = true;
-    $('lnNext').textContent = (at === plan.length - 1) ? 'إنهاء' : 'التالي';
+    header();
 
     const body = current.typed
       ? `<input class="ln-input" id="lnInput" type="text" autocomplete="off"
@@ -150,6 +182,67 @@
        ${body}
        <div id="lnTell"></div>`;
     if (current.typed) { const i = $('lnInput'); if (i) i.focus(); }
+  }
+
+  function header() {
+    $('lnPos').textContent   = `بطاقة ${at + 1} من ${plan.length}`;
+    $('lnScore').textContent = `${right} / ${done}`;
+    $('lnFill').style.width  = (at / plan.length * 100) + '%';
+    $('lnNext').disabled = true;
+    $('lnNext').textContent = (at === plan.length - 1) ? 'إنهاء' : 'التالي';
+  }
+
+  function askMatch(step) {
+    const first = INDEX.get(step.match[0].id);
+    const entries = step.match.map(x => INDEX.get(x.id).entry);
+    current = LearnExercises.buildMatch(entries, first.unit, (at + 1) * 104729);
+    if (!current) { plan[at] = step.match[0]; return askOne(); }
+    answered = false; tied = 0; missed = {}; sel = null;
+    header();
+    const chip = (id, side) => {
+      const p = current.byId[id];
+      return `<button type="button" class="ln-chip ${side}" data-pair="${esc(id)}" data-side="${side}">` +
+             esc(side === 'en' ? p.w : p.ar) + '</button>';
+    };
+    $('lnCard').innerHTML =
+      `<div class="ln-ask">${esc(current.ask)}</div>
+       <div class="ln-match" id="lnMatch">
+         <div class="ln-match-col">${current.left.map(id => chip(id, 'en')).join('')}</div>
+         <div class="ln-match-col">${current.right.map(id => chip(id, 'ar')).join('')}</div>
+       </div>
+       <div class="ln-match-left" id="lnLeft">${current.pairs.length} أزواج</div>
+       <div id="lnTell"></div>`;
+  }
+
+  function tapChip(el) {
+    if (answered || el.classList.contains('tied')) return;
+    const id = el.dataset.pair, side = el.dataset.side;
+    if (!sel) { sel = { id, side, el }; el.classList.add('sel'); return; }
+    if (sel.side === side) { sel.el.classList.remove('sel'); sel = { id, side, el }; el.classList.add('sel'); return; }
+    sel.el.classList.remove('sel');
+    if (sel.id === id) {
+      [sel.el, el].forEach(x => { x.classList.add('tied'); x.classList.remove('miss'); });
+      /* Right first time or not is what gets graded: a pair found after a
+         wrong try is not a pair the learner knew. */
+      LearnStore.grade(id, !missed[id]);
+      if (!missed[id]) right++;
+      tied++;
+      $('lnLeft').textContent = tied === current.pairs.length
+        ? 'اكتملت' : `${current.pairs.length - tied} من ${current.pairs.length} باقية`;
+      /* Live, not at the end: a card holding five pairs that shows 0 / 0
+         while three of them are already tied reads as broken. */
+      $('lnScore').textContent = `${right} / ${done + tied}`;
+      if (tied === current.pairs.length) {
+        answered = true;
+        $('lnNext').disabled = false;
+      }
+    } else {
+      missed[sel.id] = true; missed[id] = true;
+      const a = sel.el, c = el;
+      [a, c].forEach(x => x.classList.add('miss'));
+      setTimeout(() => [a, c].forEach(x => x.classList.remove('miss')), 520);
+    }
+    sel = null;
   }
 
   /* The card always says what the right answer was and what it means —
@@ -189,11 +282,12 @@
       });
     }
     tell(wasRight);
-    $('lnScore').textContent = `${right} / ${at + 1}`;
+    $('lnScore').textContent = `${right} / ${done + 1}`;
     $('lnNext').disabled = false;
   }
 
   function nextStep() {
+    done += stepSize(plan[at]);
     if (at < plan.length - 1) { at++; askOne(); window.scrollTo({ top: 0, behavior: 'instant' }); }
     else finish();
   }
@@ -201,8 +295,11 @@
   function finish() {
     $('sitting').classList.add('hidden');
     $('summary').classList.remove('hidden');
-    const pct = Math.round(right / plan.length * 100);
-    $('sumN').textContent = `${right} / ${plan.length}`;
+    /* A matching card holds five pairs, so the total is the number of
+       things answered, not the number of cards. */
+    const total = plan.reduce((n, s) => n + (s.match ? s.match.length : 1), 0);
+    const pct = Math.round(right / total * 100);
+    $('sumN').textContent = `${right} / ${total}`;
     $('sumS').textContent =
       pct >= 80 ? 'ممتاز. ما أخطأت فيه سيعود عليك خلال يوم.'
       : pct >= 50 ? 'جيد. الكلمات التي أخطأت فيها ستتكرر أكثر حتى تثبت.'
@@ -226,6 +323,8 @@
     if (e.target.closest('#startToday')) return begin(null);
     const u = e.target.closest('.ln-unit[data-unit]');
     if (u) return begin(UNITS.find(x => x.id === u.dataset.unit));
+    const chip = e.target.closest('#lnMatch .ln-chip[data-pair]');
+    if (chip) return tapChip(chip);
     const opt = e.target.closest('#lnOpts .ln-opt[data-n]');
     if (opt) return answer(Number(opt.dataset.n));
     if (e.target.closest('#lnCheck')) return answer(($('lnInput') || {}).value || '');
