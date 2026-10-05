@@ -113,6 +113,25 @@
      a wrong pairing costs twice, because it also takes a meaning away
      from the word it belonged to. Known items are left alone — picking a
      word out of five proves nothing once it can be written from memory. */
+  /* A new entry is shown before it is asked. Weg introduces a handful,
+     then practises those same ones, and that order is the whole point:
+     being asked something never seen is a guessing game, and a guess
+     teaches nothing.
+
+     The teaching card is also what puts the entry on the ladder, so it
+     comes back tomorrow whether or not the first sitting went well. */
+  function teachFirst(steps) {
+    const out = [];
+    const taught = new Set();
+    steps.forEach(step => {
+      const f = INDEX.get(step.id);
+      const fresh = f && LearnStore.item(step.id).seen === 0;
+      if (fresh && !taught.has(step.id)) { taught.add(step.id); out.push({ teach: step.id }); }
+      out.push(step);
+    });
+    return out;
+  }
+
   function groupMatches(steps) {
     const out = [];
     let run = [];
@@ -141,10 +160,15 @@
   /* Cards and answers are not the same count once a card can hold five
      pairs, so the score needs its own tally. */
   let done = 0;
-  const stepSize = s => (s && s.match ? s.match.length : 1);
+  const stepSize = s => (s && s.teach ? 0 : s && s.match ? s.match.length : 1);
 
   function begin(unit) {
-    plan = groupMatches(planSitting(unit));
+    /* Teach, then group: the cards that test are folded into matching
+       cards, and every new entry has been met before any of them. */
+    const steps = planSitting(unit);
+    const tests = groupMatches(steps);
+    const intro = teachFirst(steps).filter(x => x.teach);
+    plan = intro.concat(tests);
     if (!plan.length) return;
     at = 0; right = 0; done = 0;
     $('path').classList.add('hidden');
@@ -156,6 +180,7 @@
 
   function askOne() {
     const step = plan[at];
+    if (step.teach) return askTeach(step);
     if (step.match) return askMatch(step);
     const found = INDEX.get(step.id);
     if (!found) { nextStep(); return; }
@@ -190,6 +215,39 @@
     $('lnFill').style.width  = (at / plan.length * 100) + '%';
     $('lnNext').disabled = true;
     $('lnNext').textContent = (at === plan.length - 1) ? 'إنهاء' : 'التالي';
+  }
+
+  const POS_AR = {
+    n: 'اسم', v: 'فعل', adj: 'صفة', adv: 'ظرف', prep: 'حرف جر', conj: 'أداة ربط',
+    pron: 'ضمير', det: 'محدِّد', num: 'عدد', phr: 'عبارة', idiom: 'تعبير اصطلاحي',
+    fn: 'جملة تُقال في موقف'
+  };
+
+  function askTeach(step) {
+    const { entry: e } = INDEX.get(step.teach);
+    current = null; answered = true;             // nothing to answer here
+    header();
+    $('lnNext').disabled = false;
+    $('lnNext').textContent = 'التالي';
+
+    /* Putting it on the ladder is what makes it come back — the card is
+       the introduction AND the first repetition being scheduled. */
+    LearnStore.introduce(step.teach);
+
+    const when = e.p === 'fn' ? e.ex : (e.lit || '');
+    $('lnCard').innerHTML =
+      `<div class="ln-new">جديد</div>
+       <div class="ln-teach-w en">${esc(e.w)}</div>
+       <div class="ln-teach-ar">${esc(e.ar)}</div>
+       <div class="ln-teach-kind">${esc(POS_AR[e.p] || '')}</div>
+       ${when ? `<div class="ln-teach-when">
+            <div class="ln-teach-when-k">${e.p === 'fn' ? 'متى تقولها' : 'المعنى الحرفي'}</div>
+            <div class="ln-teach-when-v ${e.p === 'fn' ? 'en' : ''}">${esc(when)}</div>
+          </div>` : ''}
+       ${e.ex && e.p !== 'fn' ? `<div class="ln-teach-ex">
+            <div class="ln-teach-ex-en en">${esc(e.ex)}</div>
+            ${e.exar ? `<div class="ln-teach-ex-ar">${esc(e.exar)}</div>` : ''}
+          </div>` : ''}`;
   }
 
   function askMatch(step) {
@@ -256,7 +314,7 @@
       `<div class="ln-tell">
          ${wasRight ? '<b>صحيح.</b> ' : '<b>الصحيح:</b> '}
          <span class="en">${esc(e.w)}</span> — ${esc(e.ar)}
-         ${e.lit ? `<span class="ln-tell-lit">${esc(e.lit)}</span>` : ''}
+         ${e.lit ? `<span class="ln-tell-lit">حرفياً: ${esc(e.lit)}</span>` : ''}
          ${e.ex && e.p !== 'fn' ? `<span class="ln-tell-lit en">${esc(e.ex)}</span>` : ''}
        </div>`;
   }
@@ -295,9 +353,11 @@
   function finish() {
     $('sitting').classList.add('hidden');
     $('summary').classList.remove('hidden');
-    /* A matching card holds five pairs, so the total is the number of
-       things answered, not the number of cards. */
-    const total = plan.reduce((n, s) => n + (s.match ? s.match.length : 1), 0);
+    /* A matching card holds five pairs and a teaching card holds no
+       answer at all, so the total is what stepSize says — counting cards
+       told a learner they had scored 8 out of 24 when there were twelve
+       things in the sitting. */
+    const total = plan.reduce((n, s) => n + stepSize(s), 0);
     const pct = Math.round(right / total * 100);
     $('sumN').textContent = `${right} / ${total}`;
     $('sumS').textContent =

@@ -129,6 +129,31 @@
 .ln-opt.right { border-color: var(--success); background: var(--success-dim); }
 .ln-opt.wrong { border-color: var(--danger); background: var(--danger-dim, rgba(185,49,49,.08)); }
 
+/* ── بطاقة التعليم ──
+   The first meeting with an entry: what it is, what it means, and one
+   sentence it lives in. No sound and no picture — the exam is read, and
+   an emoji beside a word teaches nothing about using it. */
+.ln-new {
+  display: inline-block; margin-bottom: var(--sp-5);
+  padding: 5px 14px; border-radius: var(--r-pill);
+  background: var(--tint-green); color: var(--primary-deep);
+  font-size: var(--fs-2xs); font-weight: 700;
+}
+.ln-teach-w {
+  font-size: var(--fs-2xl); font-weight: 700; line-height: 1.4;
+  color: var(--text-primary); word-break: break-word;
+}
+.ln-teach-w.en { font-family: var(--font-en); direction: ltr; text-align: left; }
+.ln-teach-ar { margin-top: var(--sp-3); font-size: var(--fs-lg); font-weight: 600; color: var(--primary-deep); }
+.ln-teach-kind { margin-top: 6px; font-size: var(--fs-2xs); color: var(--text-secondary); }
+.ln-teach-when { margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
+.ln-teach-when-k { font-size: var(--fs-2xs); font-weight: 700; color: var(--text-secondary); }
+.ln-teach-when-v { margin-top: 5px; font-size: var(--fs-sm); line-height: 1.9; color: var(--text-primary); }
+.ln-teach-when-v.en { font-family: var(--font-en); direction: ltr; text-align: left; }
+.ln-teach-ex { margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
+.ln-teach-ex-en { font-family: var(--font-en); direction: ltr; text-align: left; font-size: var(--fs-md); line-height: 1.8; color: var(--text-primary); }
+.ln-teach-ex-ar { margin-top: 6px; font-size: var(--fs-sm); line-height: 1.8; color: var(--text-secondary); }
+
 /* ── التوصيل ──
    Two columns, tapped into pairs. A paired chip stays on screen rather
    than vanishing: the learner should be able to look back over what they
