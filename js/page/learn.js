@@ -51,6 +51,23 @@
   };
 
   const kindOf = u => u.kind || 'words';
+  /* Grouped once: the data does not change while the page is open. */
+  const GROUPS = {};
+  UNITS.forEach(u => { const k = kindOf(u); (GROUPS[k] = GROUPS[k] || []).push(u); });
+
+  /* Arabic counts its things differently at two, at ten, and after.
+     "13 أقسام" is wrong where "13 قسماً" is right. */
+  const count = (n, one, two, few, many) =>
+    n === 1 ? one : n === 2 ? two
+    : (n % 100 >= 3 && n % 100 <= 10) ? `${n} ${few}` : `${n} ${many}`;
+
+  /* One panel at a time. */
+  const PANELS = ['path', 'units', 'lessons', 'sitting', 'summary'];
+  const showOnly = id => {
+    PANELS.forEach(x => $(x).classList.toggle('hidden', x !== id));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
   const idsOf  = u => isGrammar(u)
     ? u.lessons.reduce((all, l) => all.concat(drillIds(l)), [])
     : u.words.map(e => u.id + ':' + e.w);
@@ -98,35 +115,81 @@
       : 'ارجع غداً، أو افتح أي وحدة وتمرّن عليها.';
     $('startToday').disabled = items.length === 0;
 
-    const groups = {};
-    UNITS.forEach(u => { const k = kindOf(u); (groups[k] = groups[k] || []).push(u); });
-    $('groups').innerHTML = KIND_ORDER.filter(k => groups[k]).map(k =>
-      `<div class="ln-group-t">${esc(KIND_AR[k])}</div>
-       <div class="ln-units">${groups[k].map(u => {
-         const p = unitProgress(u);
-         const row = `<button type="button" class="ln-unit" data-unit="${esc(u.id)}" data-kind="${esc(k)}">
-            <span class="ln-unit-ic">${ICONS[k]}</span>
-            <span class="ln-unit-main">
-              <span class="ln-unit-n">${esc(u.ar)}</span>
-              <span class="ln-unit-s">${p.grammar
-                 ? `${p.met} من ${p.total} دروس · ${p.drills} تمريناً`
-                 : `${p.known} من ${p.total} تعرفها`}</span>
+    /* Five doors, not fifty-three rows. Everything the track holds under
+       one heading used to be on this page at once — thirteen parts of
+       grammar, thirty-three units of words, and the rest — and a page you
+       scroll past to find where you were is a page you stop opening. */
+    $('groups').innerHTML =
+      `<div class="ln-kinds">${KIND_ORDER.filter(k => GROUPS[k]).map(k => {
+        const p = kindProgress(k);
+        return `<button type="button" class="ln-kind" data-kind="${esc(k)}" data-open="${esc(k)}">
+            <span class="ln-kind-ic">${ICONS[k]}</span>
+            <span class="ln-kind-main">
+              <span class="ln-kind-n">${esc(KIND_AR[k])}</span>
+              <span class="ln-kind-s">${esc(p.say)}</span>
               <span class="ln-unit-bar"><span class="ln-unit-fill" style="width:${p.pct}%"></span></span>
             </span>
-            <span class="ln-unit-go">${p.pct}%</span>
+            <span class="ln-kind-go">${ICONS.go}</span>
           </button>`;
-         /* A rule read once is gone: the drills come back, the rule does
-            not, and a student who wants to look something up before the
-            exam has nowhere to look. So a grammar part keeps a door back
-            into its lessons. */
-         return p.grammar
-           ? `<div class="ln-unit-pair">${row}
-                <button type="button" class="ln-unit-read" data-read-unit="${esc(u.id)}">
-                  ${ICONS.read}<span>اقرأ الدروس</span>
-                </button>
-              </div>`
-           : row;
-       }).join('')}</div>`).join('');
+      }).join('')}</div>`;
+  }
+
+  /* Where a whole kind stands: the grammar by lessons read, everything
+     else by entries known — the same two numbers its units show. */
+  function kindProgress(k) {
+    const units = GROUPS[k] || [];
+    if (k === 'grammar') {
+      const lessons = units.reduce((n, u) => n + u.lessons.length, 0);
+      const read = units.reduce((n, u) => n + u.lessons.filter(l => LearnStore.isLessonDone(l.id)).length, 0);
+      return { pct: lessons ? Math.round(read / lessons * 100) : 0,
+               say: `${count(units.length, 'قسم واحد', 'قسمان', 'أقسام', 'قسماً')} · ${read} من ${lessons} درساً` };
+    }
+    let total = 0, known = 0, met = 0;
+    units.forEach(u => {
+      const p = unitProgress(u);
+      total += p.total; known += p.known; met += p.met;
+    });
+    /* The bar follows what has been met and the figure beside it what is
+       known — the same way round as a unit's own bar, and for the same
+       reason: a bar driven by "known" alone stays at nothing for a week. */
+    return { pct: total ? Math.round(met / total * 100) : 0,
+             say: `${count(units.length, 'وحدة واحدة', 'وحدتان', 'وحدات', 'وحدةً')} · ${known} من ${total} تعرفها` };
+  }
+
+  /* ── the units of one kind ──────────────────────────────────────── */
+  let atKind = null;
+
+  function openKind(k) {
+    const units = GROUPS[k];
+    if (!units) return;
+    atKind = k;
+    showOnly('units');
+    $('unitsT').textContent = KIND_AR[k];
+    $('unitsList').innerHTML = units.map(u => {
+      const p = unitProgress(u);
+      const row = `<button type="button" class="ln-unit" data-unit="${esc(u.id)}" data-kind="${esc(k)}">
+          <span class="ln-unit-ic">${ICONS[k]}</span>
+          <span class="ln-unit-main">
+            <span class="ln-unit-n">${esc(u.ar)}</span>
+            <span class="ln-unit-s">${p.grammar
+               ? `${p.met} من ${p.total} دروس · ${p.drills} تمريناً`
+               : `${p.known} من ${p.total} تعرفها`}</span>
+            <span class="ln-unit-bar"><span class="ln-unit-fill" style="width:${p.pct}%"></span></span>
+          </span>
+          <span class="ln-unit-go">${p.pct}%</span>
+        </button>`;
+      /* A rule read once is gone: the drills come back, the rule does
+         not, and a student who wants to look something up before the
+         exam has nowhere to look. So a grammar part keeps a door back
+         into its lessons. */
+      return p.grammar
+        ? `<div class="ln-unit-pair">${row}
+             <button type="button" class="ln-unit-read" data-read-unit="${esc(u.id)}">
+               ${ICONS.read}<span>اقرأ الدروس</span>
+             </button>
+           </div>`
+        : row;
+    }).join('');
   }
 
   /* ── choosing what to ask ───────────────────────────────────────── */
@@ -257,10 +320,7 @@
     const u = GRAMMAR.find(x => x.id === unitId);
     if (!u) return;
     reviewing = unitId;
-    $('path').classList.add('hidden');
-    $('sitting').classList.add('hidden');
-    $('summary').classList.add('hidden');
-    $('lessons').classList.remove('hidden');
+    showOnly('lessons');
     $('lessonsT').textContent = u.ar;
     $('lessonsList').innerHTML = u.lessons.map((l, i) => {
       const n = (PARTS.get(l.id) || [[]]).length;
@@ -274,20 +334,18 @@
           <span class="ln-lesson-go">${ICONS.go}</span>
         </button>`;
     }).join('');
-    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   function readLesson(lid) {
     const n = (PARTS.get(lid) || [[]]).length;
     plan = []; for (let i = 0; i < n; i++) plan.push({ read: lid, part: i, parts: n, review: true });
     at = 0; dir = 1;
-    $('lessons').classList.add('hidden');
-    $('sitting').classList.remove('hidden');
+    showOnly('sitting');
     askOne();
-    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   /* ── a sitting ──────────────────────────────────────────────────── */
+  let cameFrom = null;
   let plan = [], at = 0, answered = false, current = null;
   let tied = 0, missed = null, sel = null;
   /* Which way the last step went, so a card that cannot be shown is
@@ -319,12 +377,10 @@
     plan = buildPlan(unit);
     if (!plan.length) return;
     at = 0; dir = 1; reviewing = null;
-    $('path').classList.add('hidden');
-    $('lessons').classList.add('hidden');
-    $('summary').classList.add('hidden');
-    $('sitting').classList.remove('hidden');
+    /* So the summary leads back where the sitting was started from. */
+    cameFrom = unit ? kindOf(unit) : null;
+    showOnly('sitting');
     askOne();
-    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   function askOne() {
@@ -691,8 +747,7 @@
   const prevStep = () => move(-1);
 
   function finish() {
-    $('sitting').classList.add('hidden');
-    $('summary').classList.remove('hidden');
+    showOnly('summary');
     /* A matching card holds five pairs and a teaching card holds no
        answer at all, so the total is what stepSize says — counting cards
        told a learner they had scored 8 out of 24 when there were twelve
@@ -706,17 +761,12 @@
       : pct >= 50 ? 'جيد. الكلمات التي أخطأت فيها ستتكرر أكثر حتى تثبت.'
       : 'لا بأس — ما تخطئ فيه يعود سريعاً، وهذا هو المقصود.';
     paintPath();
-    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   function toPath() {
-    reviewing = null;
-    $('sitting').classList.add('hidden');
-    $('summary').classList.add('hidden');
-    $('lessons').classList.add('hidden');
-    $('path').classList.remove('hidden');
+    reviewing = null; atKind = null; cameFrom = null;
+    showOnly('path');
     paintPath();
-    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   /* Events are bound here rather than with onclick= in the markup, so the
@@ -724,11 +774,15 @@
      question, so those use one delegated listener on the document. */
   document.addEventListener('click', e => {
     if (e.target.closest('#startToday')) return begin(null);
+    const k = e.target.closest('.ln-kind[data-open]');
+    if (k) return openKind(k.dataset.open);
+    if (e.target.closest('#unitsBack')) return toPath();
     const r = e.target.closest('.ln-unit-read[data-read-unit]');
     if (r) return openLessons(r.dataset.readUnit);
     const l = e.target.closest('.ln-lesson[data-lesson]');
     if (l) return readLesson(l.dataset.lesson);
-    if (e.target.closest('#lessonsBack')) return toPath();
+    /* Back to the part the lessons belong to, not all the way home. */
+    if (e.target.closest('#lessonsBack')) { reviewing = null; return openKind('grammar'); }
     const u = e.target.closest('.ln-unit[data-unit]');
     if (u) return begin(UNITS.find(x => x.id === u.dataset.unit));
     const chip = e.target.closest('#lnMatch .ln-chip[data-pair]');
@@ -739,7 +793,7 @@
     if (e.target.closest('#lnBack')) return prevStep();
     if (e.target.closest('#lnNext')) return nextStep();
     if (e.target.closest('#againBtn')) return begin(null);
-    if (e.target.closest('#backToPath')) return toPath();
+    if (e.target.closest('#backToPath')) return cameFrom ? openKind(cameFrom) : toPath();
   });
   document.addEventListener('keydown', e => {
     const typing = e.target && e.target.id === 'lnInput';
