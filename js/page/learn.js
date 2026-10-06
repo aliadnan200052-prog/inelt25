@@ -18,6 +18,10 @@
   const GRAMMAR = (window.LEARN_GRAMMAR && window.LEARN_GRAMMAR.units) || [];
   const UNITS   = VOCAB.concat(GRAMMAR);
   const SITTING = 12;
+  /* And no more than this many cards in one go. A sitting that runs to
+     twenty-six cards is not an evening habit, and a track opened once is
+     a track that teaches nothing. */
+  const CARDS = 12;
 
   /* One flat index, so an id found in the review queue can be turned back
      into the entry and the unit it came from. A grammar drill is an item
@@ -40,7 +44,10 @@
     phrases: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     idioms: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2V17h6v-1.3c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M9 21h6"/></svg>',
     functions: '<svg viewBox="0 0 24 24"><path d="M8 10h8"/><path d="M8 14h5"/><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg>',
-    grammar: '<svg viewBox="0 0 24 24"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.3a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></svg>'
+    grammar: '<svg viewBox="0 0 24 24"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.3a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></svg>',
+    read: '<svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    /* Forward is leftward on this page. */
+    go: '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>'
   };
 
   const kindOf = u => u.kind || 'words';
@@ -79,17 +86,17 @@
     $('statLearning').textContent = st.learning;
     $('statDue').textContent      = st.due;
 
-    const plan = planSitting();
-    const reviews = plan.filter(p => p.isReview).length;
-    const fresh   = plan.length - reviews;
-    /* Items, not questions: five of them can arrive on one matching card,
-       and promising twelve questions then showing eight cards reads as a
-       mistake. */
-    $('todayT').textContent = plan.length ? `${plan.length} مفردة` : 'خلصت كل شيء اليوم';
-    $('todayS').textContent = plan.length
+    /* Counted off the plan the sitting will actually run, cut to length
+       and all — promising twelve and showing nine reads as a mistake.
+       Items, not cards: five of them can arrive on one matching card. */
+    const items = itemsIn(buildPlan(null));
+    const reviews = items.filter(p => p.isReview).length;
+    const fresh   = items.length - reviews;
+    $('todayT').textContent = items.length ? `${items.length} مفردة` : 'خلصت كل شيء اليوم';
+    $('todayS').textContent = items.length
       ? (reviews ? `${reviews} للمراجعة` : 'لا مراجعة اليوم') + (fresh ? ` · ${fresh} جديد` : '')
       : 'ارجع غداً، أو افتح أي وحدة وتمرّن عليها.';
-    $('startToday').disabled = plan.length === 0;
+    $('startToday').disabled = items.length === 0;
 
     const groups = {};
     UNITS.forEach(u => { const k = kindOf(u); (groups[k] = groups[k] || []).push(u); });
@@ -97,7 +104,7 @@
       `<div class="ln-group-t">${esc(KIND_AR[k])}</div>
        <div class="ln-units">${groups[k].map(u => {
          const p = unitProgress(u);
-         return `<button type="button" class="ln-unit" data-unit="${esc(u.id)}" data-kind="${esc(k)}">
+         const row = `<button type="button" class="ln-unit" data-unit="${esc(u.id)}" data-kind="${esc(k)}">
             <span class="ln-unit-ic">${ICONS[k]}</span>
             <span class="ln-unit-main">
               <span class="ln-unit-n">${esc(u.ar)}</span>
@@ -108,6 +115,17 @@
             </span>
             <span class="ln-unit-go">${p.pct}%</span>
           </button>`;
+         /* A rule read once is gone: the drills come back, the rule does
+            not, and a student who wants to look something up before the
+            exam has nowhere to look. So a grammar part keeps a door back
+            into its lessons. */
+         return p.grammar
+           ? `<div class="ln-unit-pair">${row}
+                <button type="button" class="ln-unit-read" data-read-unit="${esc(u.id)}">
+                  ${ICONS.read}<span>اقرأ الدروس</span>
+                </button>
+              </div>`
+           : row;
        }).join('')}</div>`).join('');
   }
 
@@ -203,22 +221,106 @@
     return out;
   }
 
+  /* Twelve items can arrive behind twenty-six cards once each of them is
+     introduced and each rule is read first, so the ceiling is counted in
+     cards. What is cut is not lost: it is still due tomorrow.
+
+     The cut falls after a question, never inside the run of cards that
+     prepares one — a lesson travels with the question it was put there
+     for, and five introductions with the matching card they feed. */
+  function trimToCards(steps) {
+    let keep = 0, n = 0;
+    for (let i = 0; i < steps.length; i++) {
+      n++;
+      if (steps[i].teach || steps[i].read) continue;
+      /* `|| !keep` so a lesson longer than the whole budget still gets
+         asked its one question rather than being read for nothing. */
+      if (n <= CARDS || !keep) keep = i + 1;
+      if (n >= CARDS) break;
+    }
+    return keep ? steps.slice(0, keep) : steps;
+  }
+
+  /* Group first, then introduce: the matching cards are formed, and each
+     introduction is placed directly in front of the card it prepares the
+     learner for. Then the whole thing is cut to length. */
+  const buildPlan = unit => trimToCards(introduce(groupMatches(planSitting(unit))));
+  const itemsIn = steps => steps.reduce((all, s) => all.concat(s.match || (s.id ? [s] : [])), []);
+
+  /* ── reading a lesson again ─────────────────────────────────────── */
+  /* Re-reading touches nothing: no grade, no ladder, and a lesson never
+     read is not marked read by being looked at. It is the booklet left
+     open at the right page, not a shortcut past the sitting. */
+  let reviewing = null;
+
+  function openLessons(unitId) {
+    const u = GRAMMAR.find(x => x.id === unitId);
+    if (!u) return;
+    reviewing = unitId;
+    $('path').classList.add('hidden');
+    $('sitting').classList.add('hidden');
+    $('summary').classList.add('hidden');
+    $('lessons').classList.remove('hidden');
+    $('lessonsT').textContent = u.ar;
+    $('lessonsList').innerHTML = u.lessons.map((l, i) => {
+      const n = (PARTS.get(l.id) || [[]]).length;
+      return `<button type="button" class="ln-lesson" data-lesson="${esc(l.id)}">
+          <span class="ln-lesson-i">${i + 1}</span>
+          <span class="ln-lesson-main">
+            <span class="ln-lesson-n">${esc(l.ar)}</span>
+            <span class="ln-lesson-s">${n} ${n === 1 ? 'بطاقة' : n === 2 ? 'بطاقتان' : 'بطاقات'}${
+              LearnStore.isLessonDone(l.id) ? ' · قرأته' : ''}</span>
+          </span>
+          <span class="ln-lesson-go">${ICONS.go}</span>
+        </button>`;
+    }).join('');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function readLesson(lid) {
+    const n = (PARTS.get(lid) || [[]]).length;
+    plan = []; for (let i = 0; i < n; i++) plan.push({ read: lid, part: i, parts: n, review: true });
+    at = 0; dir = 1;
+    $('lessons').classList.add('hidden');
+    $('sitting').classList.remove('hidden');
+    askOne();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
   /* ── a sitting ──────────────────────────────────────────────────── */
-  let plan = [], at = 0, right = 0, answered = false, current = null;
+  let plan = [], at = 0, answered = false, current = null;
   let tied = 0, missed = null, sel = null;
-  /* Cards and answers are not the same count once a card can hold five
-     pairs, so the score needs its own tally. */
-  let done = 0;
+  /* Which way the last step went, so a card that cannot be shown is
+     skipped in the direction of travel rather than always forwards. */
+  let dir = 1;
   const stepSize = s => (s && (s.teach || s.read) ? 0 : s && s.match ? s.match.length : 1);
 
+  /* Cards and answers are not the same count once a card can hold five
+     pairs, so the score needs its own tally — and it is read off the plan
+     rather than added up as you go, because a running total counts a card
+     twice the moment you can walk back over it.
+
+     What was given is kept on the step: the answer, and how much of it
+     was right. That is also what lets a card be shown again exactly as it
+     was left — the ladder was told once, when the answer was given. */
+  function tally() {
+    let right = 0, done = 0;
+    plan.forEach(st => { if (st.gave) { right += st.gave.right; done += st.gave.of; } });
+    return { right, done };
+  }
+  function paintScore() {
+    const t = tally();
+    /* Nothing is being graded while a lesson is simply being read, and a
+       score of 0 / 0 standing there says otherwise. */
+    $('lnScore').textContent = reviewing ? '' : `${t.right} / ${t.done}`;
+  }
+
   function begin(unit) {
-    /* Group first, then introduce: the matching cards are formed, and
-       each introduction is placed directly in front of the card it
-       prepares the learner for. */
-    plan = introduce(groupMatches(planSitting(unit)));
+    plan = buildPlan(unit);
     if (!plan.length) return;
-    at = 0; right = 0; done = 0;
+    at = 0; dir = 1; reviewing = null;
     $('path').classList.add('hidden');
+    $('lessons').classList.add('hidden');
     $('summary').classList.add('hidden');
     $('sitting').classList.remove('hidden');
     askOne();
@@ -231,11 +333,17 @@
     if (step.teach) return askTeach(step);
     if (step.match) return askMatch(step);
     const found = INDEX.get(step.id);
-    if (!found) { nextStep(); return; }
+    if (!found) { move(dir); return; }
     if (found.drill) return askDrill(step, found);
-    const it = LearnStore.item(step.id);
-    current = LearnExercises.build(found.entry, found.unit, it.level, (at + 1) * 7919 + step.id.length);
-    if (!current) { nextStep(); return; }
+    /* Built once and kept. Answering moves the item up the ladder, so
+       building it again on the way back could ask a different question —
+       the one that was answered must be the one that comes back. */
+    if (!step.built) {
+      const it = LearnStore.item(step.id);
+      step.built = LearnExercises.build(found.entry, found.unit, it.level, (at + 1) * 7919 + step.id.length);
+    }
+    current = step.built;
+    if (!current) { move(dir); return; }
     answered = false;
 
     header();
@@ -255,13 +363,41 @@
        <div class="ln-prompt ${esc(current.promptLang)}">${esc(current.prompt)}</div>
        ${body}
        <div id="lnTell"></div>`;
+    if (restore(step)) return;
     if (current.typed) { const i = $('lnInput'); if (i) i.focus(); }
+  }
+
+  /* A card walked back to is shown as it was left: the same marks, the
+     same explanation, and nothing to answer again. */
+  function restore(step) {
+    const g = step.gave;
+    if (!g) return false;
+    answered = true;
+    if (current.typed) {
+      const i = $('lnInput');
+      if (i) { i.value = g.given; i.classList.add(g.right ? 'right' : 'wrong'); i.disabled = true; }
+      const c = $('lnCheck'); if (c) c.disabled = true;
+    } else {
+      const list = $('lnOpts');
+      if (list) {
+        list.classList.add('done');
+        list.querySelectorAll('.ln-opt').forEach(el => {
+          const n = Number(el.dataset.n);
+          if (n === current.answer) el.classList.add('right');
+          else if (n === g.given) el.classList.add('wrong');
+        });
+      }
+    }
+    tell(!!g.right);
+    $('lnNext').disabled = false;
+    return true;
   }
 
   function header() {
     $('lnPos').textContent   = `بطاقة ${at + 1} من ${plan.length}`;
-    $('lnScore').textContent = `${right} / ${done}`;
+    paintScore();
     $('lnFill').style.width  = (at / plan.length * 100) + '%';
+    $('lnBack').disabled = at === 0;
     $('lnNext').disabled = true;
     $('lnNext').textContent = (at === plan.length - 1) ? 'إنهاء' : 'التالي';
   }
@@ -375,7 +511,7 @@
     $('lnNext').disabled = false;
     /* The button says what comes next, and after the last card of a
        lesson what comes next is the exercises. */
-    $('lnNext').textContent = last ? 'ابدأ التمارين' : 'تابع';
+    $('lnNext').textContent = last ? (step.review ? 'رجوع للدروس' : 'ابدأ التمارين') : 'تابع';
     $('lnCard').innerHTML =
       `<div class="ln-new">درس${parts.length > 1 ? ` · ${i + 1} من ${parts.length}` : ''}</div>
        <div class="ln-g-title">${esc(lesson.ar)}</div>
@@ -404,14 +540,23 @@
        <div class="ln-opts" id="lnOpts">${current.options.map((o, n) =>
          `<button type="button" class="ln-opt ${esc(current.optionsLang)}" data-n="${n}">${esc(o)}</button>`).join('')}</div>
        <div id="lnTell"></div>`;
+    restore(step);
   }
 
   function askMatch(step) {
     const first = INDEX.get(step.match[0].id);
-    const entries = step.match.map(x => INDEX.get(x.id).entry);
-    current = LearnExercises.buildMatch(entries, first.unit, (at + 1) * 104729);
+    if (!step.built) {
+      const entries = step.match.map(x => INDEX.get(x.id).entry);
+      step.built = LearnExercises.buildMatch(entries, first.unit, (at + 1) * 104729);
+    }
+    current = step.built;
     if (!current) { plan[at] = step.match[0]; return askOne(); }
-    answered = false; tied = 0; missed = {}; sel = null;
+    /* The pairs already tied are kept on the step, so walking back shows
+       the card part-done rather than empty — and the ones already graded
+       cannot be graded again, because a tied chip is not tappable. */
+    const g = step.gave || (step.gave = { right: 0, of: 0, missed: {}, tied: [] });
+    missed = g.missed; tied = g.tied.length; sel = null;
+    answered = tied === current.pairs.length;
     header();
     const chip = (id, side) => {
       const p = current.byId[id];
@@ -426,6 +571,18 @@
        </div>
        <div class="ln-match-left" id="lnLeft">${current.pairs.length} أزواج</div>
        <div id="lnTell"></div>`;
+    if (tied) {
+      $('lnMatch').querySelectorAll('.ln-chip').forEach(el => {
+        if (g.tied.indexOf(el.dataset.pair) >= 0) el.classList.add('tied');
+      });
+      paintLeft();
+    }
+    if (answered) $('lnNext').disabled = false;
+  }
+
+  function paintLeft() {
+    $('lnLeft').textContent = tied === current.pairs.length
+      ? 'اكتملت' : `${current.pairs.length - tied} من ${current.pairs.length} باقية`;
   }
 
   function tapChip(el) {
@@ -439,13 +596,13 @@
       /* Right first time or not is what gets graded: a pair found after a
          wrong try is not a pair the learner knew. */
       LearnStore.grade(id, !missed[id]);
-      if (!missed[id]) right++;
+      const g = plan[at].gave;
+      g.right += missed[id] ? 0 : 1; g.of++; g.tied.push(id);
       tied++;
-      $('lnLeft').textContent = tied === current.pairs.length
-        ? 'اكتملت' : `${current.pairs.length - tied} من ${current.pairs.length} باقية`;
+      paintLeft();
       /* Live, not at the end: a card holding five pairs that shows 0 / 0
          while three of them are already tied reads as broken. */
-      $('lnScore').textContent = `${right} / ${done + tied}`;
+      paintScore();
       if (tied === current.pairs.length) {
         answered = true;
         $('lnNext').disabled = false;
@@ -487,8 +644,8 @@
     if (answered) return;
     answered = true;
     const wasRight = LearnExercises.check(current, given);
-    if (wasRight) right++;
     LearnStore.grade(plan[at].id, wasRight);
+    plan[at].gave = { given, right: wasRight ? 1 : 0, of: 1 };
 
     if (current.typed) {
       const i = $('lnInput');
@@ -504,21 +661,34 @@
       });
     }
     tell(wasRight);
-    $('lnScore').textContent = `${right} / ${done + 1}`;
+    paintScore();
     $('lnNext').disabled = false;
   }
 
-  function nextStep() {
+  /* Forwards and backwards are the same move. Walking back changes
+     nothing — no grade is given, taken away, or given twice — it only
+     shows a card again. */
+  function move(d) {
     const leaving = plan[at];
     /* Read, not merely opened: a lesson counts once its last card has
        been passed, so leaving halfway through brings the whole lesson
        back rather than the questions alone. */
-    if (leaving && leaving.read && (leaving.part || 0) === (leaving.parts || 1) - 1)
+    if (d > 0 && leaving && leaving.read && !leaving.review &&
+        (leaving.part || 0) === (leaving.parts || 1) - 1)
       LearnStore.lessonDone(leaving.read);
-    done += stepSize(leaving);
-    if (at < plan.length - 1) { at++; askOne(); window.scrollTo({ top: 0, behavior: 'instant' }); }
-    else finish();
+    const n = at + d;
+    if (n < 0) return move(1);                     // only reachable off a card that cannot be shown
+    if (n >= plan.length) {
+      if (reviewing) openLessons(reviewing);       // back to the list, not to a score
+      else finish();
+      return;
+    }
+    at = n; dir = d;
+    askOne();
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
+  const nextStep = () => move(1);
+  const prevStep = () => move(-1);
 
   function finish() {
     $('sitting').classList.add('hidden');
@@ -528,8 +698,9 @@
        told a learner they had scored 8 out of 24 when there were twelve
        things in the sitting. */
     const total = plan.reduce((n, s) => n + stepSize(s), 0);
-    const pct = Math.round(right / total * 100);
-    $('sumN').textContent = `${right} / ${total}`;
+    const got = tally().right;
+    const pct = Math.round(got / total * 100);
+    $('sumN').textContent = `${got} / ${total}`;
     $('sumS').textContent =
       pct >= 80 ? 'ممتاز. ما أخطأت فيه سيعود عليك خلال يوم.'
       : pct >= 50 ? 'جيد. الكلمات التي أخطأت فيها ستتكرر أكثر حتى تثبت.'
@@ -539,8 +710,10 @@
   }
 
   function toPath() {
+    reviewing = null;
     $('sitting').classList.add('hidden');
     $('summary').classList.add('hidden');
+    $('lessons').classList.add('hidden');
     $('path').classList.remove('hidden');
     paintPath();
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -551,6 +724,11 @@
      question, so those use one delegated listener on the document. */
   document.addEventListener('click', e => {
     if (e.target.closest('#startToday')) return begin(null);
+    const r = e.target.closest('.ln-unit-read[data-read-unit]');
+    if (r) return openLessons(r.dataset.readUnit);
+    const l = e.target.closest('.ln-lesson[data-lesson]');
+    if (l) return readLesson(l.dataset.lesson);
+    if (e.target.closest('#lessonsBack')) return toPath();
     const u = e.target.closest('.ln-unit[data-unit]');
     if (u) return begin(UNITS.find(x => x.id === u.dataset.unit));
     const chip = e.target.closest('#lnMatch .ln-chip[data-pair]');
@@ -558,14 +736,22 @@
     const opt = e.target.closest('#lnOpts .ln-opt[data-n]');
     if (opt) return answer(Number(opt.dataset.n));
     if (e.target.closest('#lnCheck')) return answer(($('lnInput') || {}).value || '');
+    if (e.target.closest('#lnBack')) return prevStep();
     if (e.target.closest('#lnNext')) return nextStep();
     if (e.target.closest('#againBtn')) return begin(null);
     if (e.target.closest('#backToPath')) return toPath();
   });
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    if (e.target && e.target.id === 'lnInput' && !answered) { e.preventDefault(); answer(e.target.value); }
-    else if (!$('lnNext').disabled && !$('sitting').classList.contains('hidden')) nextStep();
+    const typing = e.target && e.target.id === 'lnInput';
+    if (e.key === 'Enter') {
+      if (typing && !answered) { e.preventDefault(); answer(e.target.value); }
+      else if (!$('lnNext').disabled && !$('sitting').classList.contains('hidden')) nextStep();
+      return;
+    }
+    if (typing || $('sitting').classList.contains('hidden')) return;
+    /* The page reads right to left, so the right arrow goes back. */
+    if (e.key === 'ArrowRight' && !$('lnBack').disabled) { e.preventDefault(); prevStep(); }
+    else if (e.key === 'ArrowLeft' && !$('lnNext').disabled) { e.preventDefault(); nextStep(); }
   });
 
   document.addEventListener('DOMContentLoaded', () => {
