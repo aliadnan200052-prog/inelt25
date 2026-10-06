@@ -106,8 +106,12 @@
       write(s);
     },
 
+    /* When it was first read is the fact worth keeping. Walking back over
+       the last card of a lesson and forward again passes this way twice,
+       and that is not a second reading. */
     lessonDone(lessonId, now) {
       const s = read();
+      if (s.lessons[lessonId]) return;
       s.lessons[lessonId] = { at: now || Date.now() };
       write(s);
     },

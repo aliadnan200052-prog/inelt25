@@ -301,6 +301,10 @@
 
 .ln-actions { display: flex; gap: var(--sp-3); }
 .ln-actions .btn { flex: 1; }
+/* The way on is the wide one; the way back takes only what it needs. */
+#lnBack { flex: 0 0 auto; display: inline-flex; align-items: center; gap: var(--sp-2); }
+#lnBack svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+#lnBack:disabled { opacity: .4; cursor: default; }
 
 /* ── the end of a sitting ── */
 .ln-done { text-align: center; padding: var(--sp-8) var(--sp-6); }
@@ -362,7 +366,11 @@
     </div>
     <div class="ln-track"><div class="ln-fill" id="lnFill" style="width:0%"></div></div>
     <div class="ln-card" id="lnCard"></div>
-    <div class="ln-actions">
+    <div class="ln-actions" id="lnActs">
+      <button class="btn btn-ghost btn-lg" id="lnBack" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>السابق</span>
+      </button>
       <button class="btn btn-primary btn-lg" id="lnNext" disabled>التالي</button>
     </div>
   </div>

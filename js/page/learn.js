@@ -280,7 +280,7 @@
   function readLesson(lid) {
     const n = (PARTS.get(lid) || [[]]).length;
     plan = []; for (let i = 0; i < n; i++) plan.push({ read: lid, part: i, parts: n, review: true });
-    at = 0; right = 0; done = 0;
+    at = 0; dir = 1;
     $('lessons').classList.add('hidden');
     $('sitting').classList.remove('hidden');
     askOne();
@@ -288,17 +288,37 @@
   }
 
   /* ── a sitting ──────────────────────────────────────────────────── */
-  let plan = [], at = 0, right = 0, answered = false, current = null;
+  let plan = [], at = 0, answered = false, current = null;
   let tied = 0, missed = null, sel = null;
-  /* Cards and answers are not the same count once a card can hold five
-     pairs, so the score needs its own tally. */
-  let done = 0;
+  /* Which way the last step went, so a card that cannot be shown is
+     skipped in the direction of travel rather than always forwards. */
+  let dir = 1;
   const stepSize = s => (s && (s.teach || s.read) ? 0 : s && s.match ? s.match.length : 1);
+
+  /* Cards and answers are not the same count once a card can hold five
+     pairs, so the score needs its own tally — and it is read off the plan
+     rather than added up as you go, because a running total counts a card
+     twice the moment you can walk back over it.
+
+     What was given is kept on the step: the answer, and how much of it
+     was right. That is also what lets a card be shown again exactly as it
+     was left — the ladder was told once, when the answer was given. */
+  function tally() {
+    let right = 0, done = 0;
+    plan.forEach(st => { if (st.gave) { right += st.gave.right; done += st.gave.of; } });
+    return { right, done };
+  }
+  function paintScore() {
+    const t = tally();
+    /* Nothing is being graded while a lesson is simply being read, and a
+       score of 0 / 0 standing there says otherwise. */
+    $('lnScore').textContent = reviewing ? '' : `${t.right} / ${t.done}`;
+  }
 
   function begin(unit) {
     plan = buildPlan(unit);
     if (!plan.length) return;
-    at = 0; right = 0; done = 0; reviewing = null;
+    at = 0; dir = 1; reviewing = null;
     $('path').classList.add('hidden');
     $('lessons').classList.add('hidden');
     $('summary').classList.add('hidden');
@@ -313,11 +333,17 @@
     if (step.teach) return askTeach(step);
     if (step.match) return askMatch(step);
     const found = INDEX.get(step.id);
-    if (!found) { nextStep(); return; }
+    if (!found) { move(dir); return; }
     if (found.drill) return askDrill(step, found);
-    const it = LearnStore.item(step.id);
-    current = LearnExercises.build(found.entry, found.unit, it.level, (at + 1) * 7919 + step.id.length);
-    if (!current) { nextStep(); return; }
+    /* Built once and kept. Answering moves the item up the ladder, so
+       building it again on the way back could ask a different question —
+       the one that was answered must be the one that comes back. */
+    if (!step.built) {
+      const it = LearnStore.item(step.id);
+      step.built = LearnExercises.build(found.entry, found.unit, it.level, (at + 1) * 7919 + step.id.length);
+    }
+    current = step.built;
+    if (!current) { move(dir); return; }
     answered = false;
 
     header();
@@ -337,15 +363,41 @@
        <div class="ln-prompt ${esc(current.promptLang)}">${esc(current.prompt)}</div>
        ${body}
        <div id="lnTell"></div>`;
+    if (restore(step)) return;
     if (current.typed) { const i = $('lnInput'); if (i) i.focus(); }
+  }
+
+  /* A card walked back to is shown as it was left: the same marks, the
+     same explanation, and nothing to answer again. */
+  function restore(step) {
+    const g = step.gave;
+    if (!g) return false;
+    answered = true;
+    if (current.typed) {
+      const i = $('lnInput');
+      if (i) { i.value = g.given; i.classList.add(g.right ? 'right' : 'wrong'); i.disabled = true; }
+      const c = $('lnCheck'); if (c) c.disabled = true;
+    } else {
+      const list = $('lnOpts');
+      if (list) {
+        list.classList.add('done');
+        list.querySelectorAll('.ln-opt').forEach(el => {
+          const n = Number(el.dataset.n);
+          if (n === current.answer) el.classList.add('right');
+          else if (n === g.given) el.classList.add('wrong');
+        });
+      }
+    }
+    tell(!!g.right);
+    $('lnNext').disabled = false;
+    return true;
   }
 
   function header() {
     $('lnPos').textContent   = `بطاقة ${at + 1} من ${plan.length}`;
-    /* Nothing is being graded while a lesson is simply being read, and a
-       score of 0 / 0 standing there says otherwise. */
-    $('lnScore').textContent = reviewing ? '' : `${right} / ${done}`;
+    paintScore();
     $('lnFill').style.width  = (at / plan.length * 100) + '%';
+    $('lnBack').disabled = at === 0;
     $('lnNext').disabled = true;
     $('lnNext').textContent = (at === plan.length - 1) ? 'إنهاء' : 'التالي';
   }
@@ -488,14 +540,23 @@
        <div class="ln-opts" id="lnOpts">${current.options.map((o, n) =>
          `<button type="button" class="ln-opt ${esc(current.optionsLang)}" data-n="${n}">${esc(o)}</button>`).join('')}</div>
        <div id="lnTell"></div>`;
+    restore(step);
   }
 
   function askMatch(step) {
     const first = INDEX.get(step.match[0].id);
-    const entries = step.match.map(x => INDEX.get(x.id).entry);
-    current = LearnExercises.buildMatch(entries, first.unit, (at + 1) * 104729);
+    if (!step.built) {
+      const entries = step.match.map(x => INDEX.get(x.id).entry);
+      step.built = LearnExercises.buildMatch(entries, first.unit, (at + 1) * 104729);
+    }
+    current = step.built;
     if (!current) { plan[at] = step.match[0]; return askOne(); }
-    answered = false; tied = 0; missed = {}; sel = null;
+    /* The pairs already tied are kept on the step, so walking back shows
+       the card part-done rather than empty — and the ones already graded
+       cannot be graded again, because a tied chip is not tappable. */
+    const g = step.gave || (step.gave = { right: 0, of: 0, missed: {}, tied: [] });
+    missed = g.missed; tied = g.tied.length; sel = null;
+    answered = tied === current.pairs.length;
     header();
     const chip = (id, side) => {
       const p = current.byId[id];
@@ -510,6 +571,18 @@
        </div>
        <div class="ln-match-left" id="lnLeft">${current.pairs.length} أزواج</div>
        <div id="lnTell"></div>`;
+    if (tied) {
+      $('lnMatch').querySelectorAll('.ln-chip').forEach(el => {
+        if (g.tied.indexOf(el.dataset.pair) >= 0) el.classList.add('tied');
+      });
+      paintLeft();
+    }
+    if (answered) $('lnNext').disabled = false;
+  }
+
+  function paintLeft() {
+    $('lnLeft').textContent = tied === current.pairs.length
+      ? 'اكتملت' : `${current.pairs.length - tied} من ${current.pairs.length} باقية`;
   }
 
   function tapChip(el) {
@@ -523,13 +596,13 @@
       /* Right first time or not is what gets graded: a pair found after a
          wrong try is not a pair the learner knew. */
       LearnStore.grade(id, !missed[id]);
-      if (!missed[id]) right++;
+      const g = plan[at].gave;
+      g.right += missed[id] ? 0 : 1; g.of++; g.tied.push(id);
       tied++;
-      $('lnLeft').textContent = tied === current.pairs.length
-        ? 'اكتملت' : `${current.pairs.length - tied} من ${current.pairs.length} باقية`;
+      paintLeft();
       /* Live, not at the end: a card holding five pairs that shows 0 / 0
          while three of them are already tied reads as broken. */
-      $('lnScore').textContent = `${right} / ${done + tied}`;
+      paintScore();
       if (tied === current.pairs.length) {
         answered = true;
         $('lnNext').disabled = false;
@@ -571,8 +644,8 @@
     if (answered) return;
     answered = true;
     const wasRight = LearnExercises.check(current, given);
-    if (wasRight) right++;
     LearnStore.grade(plan[at].id, wasRight);
+    plan[at].gave = { given, right: wasRight ? 1 : 0, of: 1 };
 
     if (current.typed) {
       const i = $('lnInput');
@@ -588,23 +661,34 @@
       });
     }
     tell(wasRight);
-    $('lnScore').textContent = `${right} / ${done + 1}`;
+    paintScore();
     $('lnNext').disabled = false;
   }
 
-  function nextStep() {
+  /* Forwards and backwards are the same move. Walking back changes
+     nothing — no grade is given, taken away, or given twice — it only
+     shows a card again. */
+  function move(d) {
     const leaving = plan[at];
     /* Read, not merely opened: a lesson counts once its last card has
        been passed, so leaving halfway through brings the whole lesson
        back rather than the questions alone. */
-    if (leaving && leaving.read && !leaving.review &&
+    if (d > 0 && leaving && leaving.read && !leaving.review &&
         (leaving.part || 0) === (leaving.parts || 1) - 1)
       LearnStore.lessonDone(leaving.read);
-    done += stepSize(leaving);
-    if (at < plan.length - 1) { at++; askOne(); window.scrollTo({ top: 0, behavior: 'instant' }); }
-    else if (reviewing) openLessons(reviewing);   // back to the list, not to a score
-    else finish();
+    const n = at + d;
+    if (n < 0) return move(1);                     // only reachable off a card that cannot be shown
+    if (n >= plan.length) {
+      if (reviewing) openLessons(reviewing);       // back to the list, not to a score
+      else finish();
+      return;
+    }
+    at = n; dir = d;
+    askOne();
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
+  const nextStep = () => move(1);
+  const prevStep = () => move(-1);
 
   function finish() {
     $('sitting').classList.add('hidden');
@@ -614,8 +698,9 @@
        told a learner they had scored 8 out of 24 when there were twelve
        things in the sitting. */
     const total = plan.reduce((n, s) => n + stepSize(s), 0);
-    const pct = Math.round(right / total * 100);
-    $('sumN').textContent = `${right} / ${total}`;
+    const got = tally().right;
+    const pct = Math.round(got / total * 100);
+    $('sumN').textContent = `${got} / ${total}`;
     $('sumS').textContent =
       pct >= 80 ? 'ممتاز. ما أخطأت فيه سيعود عليك خلال يوم.'
       : pct >= 50 ? 'جيد. الكلمات التي أخطأت فيها ستتكرر أكثر حتى تثبت.'
@@ -651,14 +736,22 @@
     const opt = e.target.closest('#lnOpts .ln-opt[data-n]');
     if (opt) return answer(Number(opt.dataset.n));
     if (e.target.closest('#lnCheck')) return answer(($('lnInput') || {}).value || '');
+    if (e.target.closest('#lnBack')) return prevStep();
     if (e.target.closest('#lnNext')) return nextStep();
     if (e.target.closest('#againBtn')) return begin(null);
     if (e.target.closest('#backToPath')) return toPath();
   });
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    if (e.target && e.target.id === 'lnInput' && !answered) { e.preventDefault(); answer(e.target.value); }
-    else if (!$('lnNext').disabled && !$('sitting').classList.contains('hidden')) nextStep();
+    const typing = e.target && e.target.id === 'lnInput';
+    if (e.key === 'Enter') {
+      if (typing && !answered) { e.preventDefault(); answer(e.target.value); }
+      else if (!$('lnNext').disabled && !$('sitting').classList.contains('hidden')) nextStep();
+      return;
+    }
+    if (typing || $('sitting').classList.contains('hidden')) return;
+    /* The page reads right to left, so the right arrow goes back. */
+    if (e.key === 'ArrowRight' && !$('lnBack').disabled) { e.preventDefault(); prevStep(); }
+    else if (e.key === 'ArrowLeft' && !$('lnNext').disabled) { e.preventDefault(); nextStep(); }
   });
 
   document.addEventListener('DOMContentLoaded', () => {
