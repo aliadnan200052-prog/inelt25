@@ -90,6 +90,32 @@
 .ln-unit-fill { height: 100%; border-radius: var(--r-pill); background: var(--primary); transition: width var(--dur-4) var(--ease); }
 .ln-unit-go { flex-shrink: 0; font-size: var(--fs-2xs); font-weight: 700; color: var(--text-secondary); }
 
+/* ── the five doors ── */
+.ln-kinds { display: flex; flex-direction: column; gap: var(--sp-3); }
+.ln-kind {
+  direction: rtl; display: flex; align-items: center; gap: var(--sp-4);
+  width: 100%; padding: var(--sp-5); text-align: start; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  background: var(--surface-raised); box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+.ln-kind:hover { transform: translateY(-2px); border-color: var(--primary-border); background: var(--tint-green); }
+.ln-kind-ic {
+  flex-shrink: 0; display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  background: var(--tint-green); color: var(--primary-deep);
+}
+.ln-kind[data-kind="phrases"]   .ln-kind-ic { background: var(--tint-blue);   color: var(--sec-grammar); }
+.ln-kind[data-kind="idioms"]    .ln-kind-ic { background: var(--tint-purple); color: var(--sec-reading); }
+.ln-kind[data-kind="functions"] .ln-kind-ic { background: var(--tint-amber);  color: var(--sec-functions); }
+.ln-kind-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ln-kind-main { flex: 1; min-width: 0; }
+.ln-kind-n { display: block; font-size: var(--fs-md); font-weight: 700; color: var(--text-primary); }
+.ln-kind-s { display: block; margin-top: 3px; font-size: var(--fs-2xs); color: var(--text-secondary); }
+.ln-kind-go { flex-shrink: 0; display: grid; place-items: center; color: var(--text-secondary); }
+.ln-kind-go svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ln-kind:hover .ln-kind-go { color: var(--primary-deep); }
+
 /* ── reading the lessons again ── */
 .ln-unit-pair { display: flex; flex-direction: column; }
 .ln-unit-pair .ln-unit { border-end-start-radius: 0; border-end-end-radius: 0; }
@@ -106,15 +132,15 @@
 .ln-unit-read:hover { background: var(--tint-green); color: var(--primary-deep); }
 .ln-unit-read svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 
-.ln-lessons-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-bottom: var(--sp-5); }
-.ln-lessons-t { font-size: var(--fs-md); font-weight: 700; color: var(--text-primary); }
-.ln-lessons-back {
+.ln-sub-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.ln-sub-t { font-size: var(--fs-md); font-weight: 700; color: var(--text-primary); }
+.ln-sub-back {
   flex-shrink: 0; padding: var(--sp-2) var(--sp-4); cursor: pointer;
   border: 1px solid var(--border); border-radius: var(--r-pill);
   background: var(--surface-raised); color: var(--text-secondary);
   font-size: var(--fs-2xs); font-weight: 700;
 }
-.ln-lessons-back:hover { border-color: var(--primary-border); color: var(--primary-deep); }
+.ln-sub-back:hover { border-color: var(--primary-border); color: var(--primary-deep); }
 .ln-lessons { display: flex; flex-direction: column; gap: var(--sp-3); }
 .ln-lesson {
   direction: rtl; display: flex; align-items: center; gap: var(--sp-4);
@@ -349,11 +375,20 @@
     <div id="groups"></div>
   </div>
 
+  <!-- ── the units of one kind ── -->
+  <div id="units" class="hidden">
+    <div class="ln-sub-top">
+      <span class="ln-sub-t" id="unitsT">—</span>
+      <button type="button" class="ln-sub-back" id="unitsBack">المسار</button>
+    </div>
+    <div class="ln-units" id="unitsList"></div>
+  </div>
+
   <!-- ── the lessons of one part, to read again ── -->
   <div id="lessons" class="hidden">
-    <div class="ln-lessons-top">
-      <span class="ln-lessons-t" id="lessonsT">—</span>
-      <button type="button" class="ln-lessons-back" id="lessonsBack">المسار</button>
+    <div class="ln-sub-top">
+      <span class="ln-sub-t" id="lessonsT">—</span>
+      <button type="button" class="ln-sub-back" id="lessonsBack">القواعد</button>
     </div>
     <div class="ln-lessons" id="lessonsList"></div>
   </div>
