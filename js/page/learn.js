@@ -20,8 +20,14 @@
   const SITTING = 12;
   /* And no more than this many cards in one go. A sitting that runs to
      twenty-six cards is not an evening habit, and a track opened once is
-     a track that teaches nothing. */
-  const CARDS = 12;
+     a track that teaches nothing.
+
+     But the card ceiling alone squeezed the questions out of grammar: a
+     part whose lessons run four cards each spent its whole budget on
+     reading and asked four things, where a unit of words asked eight.
+     Nobody sits down to read — so the questions have a floor, and the
+     cards give way to it up to a hard ceiling. */
+  const CARDS = 12, ASK_MIN = 8, CARDS_MAX = 18;
 
   /* One flat index, so an id found in the review queue can be turned back
      into the entry and the unit it came from. A grammar drill is an item
@@ -292,14 +298,20 @@
      prepares one — a lesson travels with the question it was put there
      for, and five introductions with the matching card they feed. */
   function trimToCards(steps) {
-    let keep = 0, n = 0;
+    let keep = 0, n = 0, asked = 0;
     for (let i = 0; i < steps.length; i++) {
       n++;
-      if (steps[i].teach || steps[i].read) continue;
-      /* `|| !keep` so a lesson longer than the whole budget still gets
-         asked its one question rather than being read for nothing. */
-      if (n <= CARDS || !keep) keep = i + 1;
-      if (n >= CARDS) break;
+      const step = steps[i];
+      if (step.teach || step.read) continue;
+      /* Take this question while the sitting is still inside its card
+         budget, or while it has not yet asked enough — whichever is
+         holding it open. `|| !keep` so a lesson longer than the whole
+         budget still gets asked its one question rather than being read
+         for nothing. */
+      if (n <= CARDS || (asked < ASK_MIN && n <= CARDS_MAX) || !keep) {
+        keep = i + 1; asked += stepSize(step);
+      } else break;
+      if (n >= CARDS && asked >= ASK_MIN) break;
     }
     return keep ? steps.slice(0, keep) : steps;
   }
