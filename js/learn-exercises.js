@@ -37,8 +37,7 @@
      little trust in the whole thing. */
   const ASK_MEANING = {
     phr:   'ما معنى هذه العبارة؟',
-    idiom: 'ما معنى هذا التعبير؟',
-    fn:    'متى تقول هذه الجملة؟'
+    idiom: 'ما معنى هذا التعبير؟'
   };
 
   function shuffle(arr, rnd) {
@@ -89,7 +88,7 @@
     /* The sentence it lives in, with it taken out. Meaning is not enough;
        it has to fit. */
     gap(entry, unit, rnd) {
-      if (entry.p === 'fn' || !entry.ex) return null;
+      if (!entry.ex) return null;
       const gapped = blankOut(entry.ex, entry.w);
       if (gapped === entry.ex) return null;        // nothing was removed
       const wrong = distractors(entry, unit, 'w', rnd);
@@ -109,7 +108,6 @@
     /* Arabic in front of them, they write the English. No options to lean
        on — this is the one that proves the word is theirs. */
     produce(entry, unit, rnd) {
-      if (entry.p === 'fn') return null;           // a whole sentence is not typed from memory
       return {
         kind: 'produce',
         ask: 'اكتب الكلمة بالإنكليزية',
@@ -137,23 +135,6 @@
         promptLang: 'en',
         options, optionsLang: 'en',
         answer: options.indexOf(entry.syn),
-        note: entry.ar
-      };
-    },
-
-    /* For a function: the situation, and what you would say. */
-    situation(entry, unit, rnd) {
-      if (entry.p !== 'fn' || !entry.ex) return null;
-      const wrong = distractors(entry, unit, 'w', rnd);
-      if (wrong.length < 3) return null;
-      const options = shuffle([entry.w].concat(wrong), rnd);
-      return {
-        kind: 'situation',
-        ask: 'ماذا تقول في هذا الموقف؟',
-        prompt: entry.ex,
-        promptLang: 'en',
-        options, optionsLang: 'en',
-        answer: options.indexOf(entry.w),
         note: entry.ar
       };
     }
@@ -194,9 +175,7 @@
     /* A phrase or an idiom alternates between its Arabic meaning and its
        English synonym once it is past the first meeting, because the exam
        asks for both. */
-    const order = entry.p === 'fn'
-      ? ['situation', 'meaning']
-      : (entry.p === 'phr' || entry.p === 'idiom')
+    const order = (entry.p === 'phr' || entry.p === 'idiom')
         ? (level >= 3 ? ['synonym', 'gap', 'meaning']
            : level >= 1 ? ['synonym', 'gap', 'meaning']
            : ['meaning', 'synonym', 'gap'])

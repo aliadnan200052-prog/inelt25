@@ -441,66 +441,6 @@ window.LEARN_VOCAB = { units: [
   { w:'all of a sudden',      p:'idiom', ar:'فجأة',                   lit:'كله من مفاجئ',          ex:'All of a sudden the lights went out.', exar:'فجأة انطفأت الأضواء.', syn:'suddenly' },
   { w:'first and foremost',   p:'idiom', ar:'أولاً وقبل كل شيء',       lit:'أول والأمامي',          ex:'First and foremost, keep the patient calm.', exar:'أولاً وقبل كل شيء، أبقِ المصاب هادئاً.', syn:'above all' }
 ]},
-/* ── الوظائف اللغوية ──────────────────────────────────────────────────
-   The exam's Functions and Conversation sections do not ask what a word
-   means; they ask what you SAY. So the entry is the whole sentence, and
-   `ex` is the situation it answers rather than an example of it. */
-{ id: 'f1', kind: 'functions', ar: 'الطلب والعرض والاعتذار', en: 'Requests, offers, apologies', words: [
-  { w:'Could you help me, please?',            p:'fn', ar:'طلب مساعدة بأدب',          ex:'You cannot carry your bag alone.' },
-  { w:'Would you mind opening the window?',    p:'fn', ar:'طلب مهذّب جداً',            ex:'The room is hot and the window is shut.' },
-  { w:'May I come in?',                        p:'fn', ar:'استئذان بالدخول',          ex:'You arrive late at the classroom door.' },
-  { w:'Can I borrow your pen?',                p:'fn', ar:'طلب استعارة',              ex:'Your pen has stopped working.' },
-  { w:'Shall I carry that for you?',           p:'fn', ar:'عرض المساعدة',             ex:'An old man is carrying a heavy box.' },
-  { w:'Let me give you a hand.',               p:'fn', ar:'عرض المساعدة بغير رسمية',  ex:'Your friend is moving furniture.' },
-  { w:'Would you like some tea?',              p:'fn', ar:'عرض ضيافة',                ex:'A guest has just arrived at your house.' },
-  { w:'Yes, please. That is very kind of you.',p:'fn', ar:'قبول العرض',               ex:'Someone offers to help you.' },
-  { w:'No, thank you. I can manage.',          p:'fn', ar:'رفض العرض بأدب',           ex:'Someone offers help you do not need.' },
-  { w:'I am sorry, I did not mean it.',        p:'fn', ar:'اعتذار',                   ex:'You have upset a friend by mistake.' },
-  { w:'Never mind. It does not matter.',       p:'fn', ar:'قبول الاعتذار',            ex:'A friend apologises for being late.' },
-  { w:'Excuse me, where is the station?',      p:'fn', ar:'استيقاف شخص والسؤال',      ex:'You are lost in a city you do not know.' },
-  { w:'I am afraid I cannot come.',            p:'fn', ar:'اعتذار عن دعوة',           ex:'You are invited but you are busy.' },
-  { w:'Thank you very much for your help.',    p:'fn', ar:'شكر',                      ex:'Someone has just helped you.' },
-  { w:'You are welcome.',                      p:'fn', ar:'الردّ على الشكر',           ex:'Someone thanks you.' },
-  { w:'Please speak more slowly.',             p:'fn', ar:'طلب التمهّل بالكلام',       ex:'You cannot follow what is being said.' },
-  { w:'Could you repeat that, please?',        p:'fn', ar:'طلب الإعادة',              ex:'You did not hear the question.' },
-  { w:'Just a moment, please.',                p:'fn', ar:'طلب الانتظار',             ex:'Someone asks for you on the phone.' },
-  { w:'Help! Call an ambulance!',              p:'fn', ar:'طلب نجدة',                 ex:'Someone has collapsed in the street.' },
-  { w:'Do not worry, you will be fine.',       p:'fn', ar:'طمأنة',                    ex:'An injured person is frightened.' },
-  { w:'Congratulations on your success!',      p:'fn', ar:'تهنئة',                    ex:'Your friend has passed the exam.' },
-  { w:'I wish you the best of luck.',          p:'fn', ar:'تمنّي التوفيق',             ex:'A friend sits the exam tomorrow.' },
-  { w:'Please accept my condolences.',         p:'fn', ar:'تعزية',                    ex:'A colleague has lost a relative.' },
-  { w:'Make yourself at home.',                p:'fn', ar:'ترحيب بالضيف',             ex:'A guest has just sat down.' },
-  { w:'See you tomorrow.',                     p:'fn', ar:'وداع',                     ex:'You are leaving school for the day.' }
-]},
-
-{ id: 'f2', kind: 'functions', ar: 'الرأي والنصيحة والموافقة', en: 'Opinion, advice, agreement', words: [
-  { w:'In my opinion, first aid should be taught at school.', p:'fn', ar:'إبداء رأي',        ex:'You are asked what you think.' },
-  { w:'I think you are right.',                 p:'fn', ar:'موافقة',                  ex:'Someone has made a good point.' },
-  { w:'I agree with you completely.',           p:'fn', ar:'موافقة تامة',             ex:'You share your friend’s view.' },
-  { w:'I am afraid I do not agree.',            p:'fn', ar:'اعتراض مهذّب',             ex:'You think your friend is mistaken.' },
-  { w:'That is a good idea.',                   p:'fn', ar:'استحسان',                 ex:'A friend suggests studying together.' },
-  { w:'You had better see a doctor.',           p:'fn', ar:'نصيحة قوية',              ex:'Your friend has been ill for a week.' },
-  { w:'You should study harder.',               p:'fn', ar:'نصيحة',                   ex:'A classmate failed the test.' },
-  { w:'Why do not we meet after school?',       p:'fn', ar:'اقتراح',                  ex:'You want to plan a study session.' },
-  { w:'How about going to the library?',        p:'fn', ar:'اقتراح',                  ex:'You and a friend are deciding where to study.' },
-  { w:'Let us start now.',                      p:'fn', ar:'حثّ على البدء',            ex:'Everyone is ready but nobody has begun.' },
-  { w:'I am not sure about that.',              p:'fn', ar:'تحفّظ',                    ex:'You doubt what you have just heard.' },
-  { w:'It depends on the weather.',             p:'fn', ar:'إجابة مشروطة',            ex:'Someone asks whether you will travel.' },
-  { w:'What do you think of this book?',        p:'fn', ar:'طلب رأي',                 ex:'You want your friend’s opinion.' },
-  { w:'That is why I called you.',              p:'fn', ar:'تعليل',                   ex:'You are explaining the reason for a phone call.' },
-  { w:'I am looking forward to the holiday.',   p:'fn', ar:'تعبير عن الترقّب',         ex:'The holiday starts next week.' },
-  { w:'I would rather stay at home.',           p:'fn', ar:'تفضيل',                   ex:'A friend suggests going out in bad weather.' },
-  { w:'It is up to you.',                       p:'fn', ar:'ترك القرار للآخر',        ex:'Someone asks you to choose for them.' },
-  { w:'I do not mind at all.',                  p:'fn', ar:'عدم ممانعة',              ex:'Someone asks whether they may open the window.' },
-  { w:'Of course not.',                         p:'fn', ar:'نفي قاطع مهذّب',           ex:'Someone asks if you mind waiting.' },
-  { w:'That is terrible news.',                 p:'fn', ar:'تعاطف مع خبر سيّئ',        ex:'A friend tells you about an accident.' },
-  { w:'Well done! You deserve it.',             p:'fn', ar:'إطراء',                   ex:'A classmate came first in the exam.' },
-  { w:'Do not give up.',                        p:'fn', ar:'تشجيع',                   ex:'A friend wants to stop studying English.' },
-  { w:'Take your time.',                        p:'fn', ar:'طلب عدم الاستعجال',       ex:'Someone is rushing an answer.' },
-  { w:'I beg your pardon?',                     p:'fn', ar:'استفسار مهذّب عمّا قيل',    ex:'You did not catch what was said.' },
-  { w:'What is the matter with you?',           p:'fn', ar:'سؤال عن الحال',           ex:'A friend looks worried.' }
-]},
-
 { id: 'v13', ar: 'المشاعر', en: 'Feelings', words: [
   { w:'happy', p:'adj', ar:'سعيد', ex:'She was happy with the result.', exar:'كانت سعيدة بالنتيجة.' },
   { w:'sad', p:'adj', ar:'حزين', ex:'He looked sad after the match.', exar:'بدا حزيناً بعد المباراة.' },
