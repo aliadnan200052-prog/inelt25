@@ -43,13 +43,12 @@
   const isGrammar = u => u.kind === 'grammar';
   const drillIds  = l => l.drills.map((d, i) => l.id + '#' + i);
 
-  const KIND_AR = { grammar: 'القواعد', words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير', functions: 'وظائف لغوية' };
-  const KIND_ORDER = ['grammar', 'words', 'phrases', 'idioms', 'functions'];
+  const KIND_AR = { grammar: 'القواعد', words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير' };
+  const KIND_ORDER = ['grammar', 'words', 'phrases', 'idioms'];
   const ICONS = {
     words: '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
     phrases: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     idioms: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2V17h6v-1.3c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M9 21h6"/></svg>',
-    functions: '<svg viewBox="0 0 24 24"><path d="M8 10h8"/><path d="M8 14h5"/><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg>',
     grammar: '<svg viewBox="0 0 24 24"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.3a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></svg>',
     read: '<svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
     /* Forward is leftward on this page. */
@@ -279,7 +278,7 @@
     };
     steps.forEach(step => {
       const f = INDEX.get(step.id);
-      const pairable = f && f.entry && f.entry.p !== 'fn' &&
+      const pairable = f && f.entry &&
                        LearnStore.item(step.id).level < LearnStore.PRODUCE_FROM;
       const sameUnit = run.length && INDEX.get(run[0].id).unit === (f && f.unit);
       if (pairable && (!run.length || sameUnit)) { run.push(step); return; }
@@ -472,8 +471,7 @@
 
   const POS_AR = {
     n: 'اسم', v: 'فعل', adj: 'صفة', adv: 'ظرف', prep: 'حرف جر', conj: 'أداة ربط',
-    pron: 'ضمير', det: 'محدِّد', num: 'عدد', phr: 'عبارة', idiom: 'تعبير اصطلاحي',
-    fn: 'جملة تُقال في موقف'
+    pron: 'ضمير', det: 'محدِّد', num: 'عدد', phr: 'عبارة', idiom: 'تعبير اصطلاحي'
   };
 
   function askTeach(step) {
@@ -487,21 +485,21 @@
        the introduction AND the first repetition being scheduled. */
     LearnStore.introduce(step.teach);
 
-    const when = e.p === 'fn' ? e.ex : (e.lit || '');
+    const when = e.lit || '';
     $('lnCard').innerHTML =
       `<div class="ln-new">جديد</div>
        <div class="ln-teach-w en">${esc(e.w)}</div>
        <div class="ln-teach-ar">${esc(e.ar)}</div>
        <div class="ln-teach-kind">${esc(POS_AR[e.p] || '')}</div>
        ${when ? `<div class="ln-teach-when">
-            <div class="ln-teach-when-k">${e.p === 'fn' ? 'متى تقولها' : 'المعنى الحرفي'}</div>
-            <div class="ln-teach-when-v ${e.p === 'fn' ? 'en' : ''}">${esc(when)}</div>
+            <div class="ln-teach-when-k">المعنى الحرفي</div>
+            <div class="ln-teach-when-v">${esc(when)}</div>
           </div>` : ''}
        ${e.syn ? `<div class="ln-teach-when">
             <div class="ln-teach-when-k">بالإنكليزية تعني</div>
             <div class="ln-teach-when-v en">${esc(e.syn)}</div>
           </div>` : ''}
-       ${e.ex && e.p !== 'fn' ? `<div class="ln-teach-ex">
+       ${e.ex ? `<div class="ln-teach-ex">
             <div class="ln-teach-ex-en en">${esc(e.ex)}</div>
             ${e.exar ? `<div class="ln-teach-ex-ar">${esc(e.exar)}</div>` : ''}
           </div>` : ''}`;
@@ -704,7 +702,7 @@
          ${wasRight ? '<b>صحيح.</b> ' : '<b>الصحيح:</b> '}
          <span class="en">${esc(e.w)}</span> — ${esc(e.ar)}
          ${e.lit ? `<span class="ln-tell-lit">حرفياً: ${esc(e.lit)}</span>` : ''}
-         ${e.ex && e.p !== 'fn' ? `<span class="ln-tell-lit en">${esc(e.ex)}</span>` : ''}
+         ${e.ex ? `<span class="ln-tell-lit en">${esc(e.ex)}</span>` : ''}
        </div>`;
   }
 
