@@ -1,0 +1,174 @@
+/* =====================================================================
+   INELT · صفحات المستندات — الخصوصية والشروط
+   ---------------------------------------------------------------------
+   سطح قراءة لا أكثر: عمود واحد، عناوين مرقّمة، ومسافات تريح العين.
+   الألوان والخطوط والمسافات كلّها من /css/inelt-theme.css، فلا لون
+   جديد هنا ولا خطّ جديد.
+   ===================================================================== */
+
+.doc-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--sp-7) var(--sp-5) var(--sp-9);
+}
+
+/* ── الترويسة ── */
+.doc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-7);
+}
+.doc-home {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  text-decoration: none;
+}
+.doc-home img {
+  width: 38px;
+  height: 38px;
+  border-radius: 22%;
+  display: block;
+}
+.doc-home-n {
+  font-family: var(--font-en);
+  font-weight: 700;
+  letter-spacing: .1em;
+  font-size: var(--fs-sm);
+  color: var(--primary-deep);
+}
+.doc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  text-decoration: none;
+}
+.doc-back:hover { border-color: var(--primary-border); color: var(--primary-deep); }
+.doc-back svg {
+  width: 15px; height: 15px; fill: none;
+  stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── العنوان ── */
+.doc-title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.doc-dates {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+}
+.doc-intro {
+  margin-top: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
+  border: 1px solid var(--border);
+  border-inline-start: 3px solid var(--primary);
+  border-radius: var(--r-lg);
+  background: var(--surface-raised);
+  font-size: var(--fs-sm);
+  line-height: 1.95;
+  color: var(--text-primary);
+}
+
+/* ── الأقسام ── */
+.doc-sec { margin-top: var(--sp-8); }
+.doc-h {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.doc-h i {
+  flex-shrink: 0;
+  font-family: var(--font-en);
+  font-style: normal;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--primary);
+}
+.doc-sec p {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: 1.98;
+  color: var(--text-secondary);
+}
+.doc-sec p strong { color: var(--text-primary); font-weight: 600; }
+.doc-sec ul { margin: var(--sp-4) 0 0; padding: 0; list-style: none; }
+.doc-sec li {
+  position: relative;
+  padding-inline-start: var(--sp-5);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: 1.95;
+  color: var(--text-secondary);
+}
+.doc-sec li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: .82em;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--primary-border);
+}
+.doc-sec li b { color: var(--text-primary); font-weight: 600; }
+
+.doc-note {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-md);
+  background: var(--tint-green);
+  font-size: var(--fs-xs);
+  line-height: 1.9;
+  color: var(--text-primary);
+}
+
+.doc-key {
+  font-family: var(--font-en);
+  direction: ltr;
+  unicode-bidi: isolate;
+  padding: 2px 7px;
+  border-radius: var(--r-xs);
+  background: var(--surface-high);
+  font-size: .92em;
+}
+
+.doc-sec a { color: var(--primary-deep); font-weight: 600; }
+
+/* ── الذيل ── */
+.doc-foot {
+  margin-top: var(--sp-9);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+}
+.doc-foot a { color: var(--text-secondary); text-decoration: none; font-weight: 600; }
+.doc-foot a:hover { color: var(--primary-deep); }
+.doc-foot-links { display: flex; gap: var(--sp-5); }
+
+@media (max-width: 520px) {
+  .doc-shell { padding: var(--sp-6) var(--sp-4) var(--sp-8); }
+  .doc-title { font-size: var(--fs-xl); }
+}
