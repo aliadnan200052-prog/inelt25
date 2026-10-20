@@ -184,6 +184,17 @@
 }
 
 .welcome-inner .telegram-link { margin-top: var(--sp-5); }
+.welcome-legal {
+  margin-top: var(--sp-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+}
+.welcome-legal a { color: inherit; text-decoration: none; font-weight: 600; }
+.welcome-legal a:hover { color: var(--primary-deep); text-decoration: underline; }
 /* Written in by /js/install.js; empty when there is nothing to offer. */
 .welcome-install:empty { display: none; }
 .welcome-install { width: 100%; margin-top: var(--sp-6); text-align: start; }
@@ -328,6 +339,12 @@
     <!-- Filled by /js/install.js, and left empty when the app is already
          installed or the card was dismissed. -->
     <div id="installSlot" class="welcome-install"></div>
+
+    <div class="welcome-legal">
+      <a href="/privacy">سياسة الخصوصية</a>
+      <span aria-hidden="true">·</span>
+      <a href="/terms">شروط الاستخدام</a>
+    </div>
 
   </div>
 </div>
