@@ -14,7 +14,7 @@
    Bump CACHE_VERSION whenever the cached shell changes.
    ═══════════════════════════════════════════════════════════════════════ */
 
-const CACHE_VERSION = 'inelt-v31';
+const CACHE_VERSION = 'inelt-v32';
 const SHELL = [
   '/welcome',
   '/login',
