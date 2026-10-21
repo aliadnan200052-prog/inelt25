@@ -37,7 +37,8 @@
      little trust in the whole thing. */
   const ASK_MEANING = {
     phr:   'ما معنى هذه العبارة؟',
-    idiom: 'ما معنى هذا التعبير؟'
+    idiom: 'ما معنى هذا التعبير؟',
+    fn:    'ما معنى هذه الوظيفة؟'
   };
 
   function shuffle(arr, rnd) {
@@ -62,9 +63,19 @@
     return out;
   }
 
+  const rxSafe = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  /* The whole entry first: "to apologise" taken out of its sentence as one
+     piece. Falling straight to the first word would blank the sentence's
+     first "to" instead, and the gap would ask about the wrong thing — which
+     is what every entry of more than one word did before.
+
+     Only when the sentence carries an inflected form ("he apologised") does
+     it fall back to matching the head word and whatever is stuck to it. */
   const blankOut = (sentence, word) => {
+    const whole = new RegExp('(?<![\\w-])' + rxSafe(word) + '(?![\\w-])', 'i');
+    if (whole.test(sentence)) return sentence.replace(whole, '______');
     const head = word.split(' ')[0].replace(/y$/, '');
-    const re = new RegExp('\\b' + head.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\w*', 'i');
+    const re = new RegExp('\\b' + rxSafe(head) + '\\w*', 'i');
     return sentence.replace(re, '______');
   };
 
@@ -175,7 +186,7 @@
     /* A phrase or an idiom alternates between its Arabic meaning and its
        English synonym once it is past the first meeting, because the exam
        asks for both. */
-    const order = (entry.p === 'phr' || entry.p === 'idiom')
+    const order = (entry.p === 'phr' || entry.p === 'idiom' || entry.p === 'fn')
         ? (level >= 3 ? ['synonym', 'gap', 'meaning']
            : level >= 1 ? ['synonym', 'gap', 'meaning']
            : ['meaning', 'synonym', 'gap'])
