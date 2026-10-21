@@ -43,12 +43,13 @@
   const isGrammar = u => u.kind === 'grammar';
   const drillIds  = l => l.drills.map((d, i) => l.id + '#' + i);
 
-  const KIND_AR = { grammar: 'القواعد', words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير' };
-  const KIND_ORDER = ['grammar', 'words', 'phrases', 'idioms'];
+  const KIND_AR = { grammar: 'القواعد', words: 'كلمات', phrases: 'عبارات', idioms: 'تعابير', functions: 'وظائف لغوية' };
+  const KIND_ORDER = ['grammar', 'words', 'phrases', 'idioms', 'functions'];
   const ICONS = {
     words: '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
     phrases: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     idioms: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.2V17h6v-1.3c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M9 21h6"/></svg>',
+    functions: '<svg viewBox="0 0 24 24"><path d="M8 10h8"/><path d="M8 14h5"/><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg>',
     grammar: '<svg viewBox="0 0 24 24"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.3a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></svg>',
     read: '<svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
     /* Forward is leftward on this page. */
@@ -471,7 +472,8 @@
 
   const POS_AR = {
     n: 'اسم', v: 'فعل', adj: 'صفة', adv: 'ظرف', prep: 'حرف جر', conj: 'أداة ربط',
-    pron: 'ضمير', det: 'محدِّد', num: 'عدد', phr: 'عبارة', idiom: 'تعبير اصطلاحي'
+    pron: 'ضمير', det: 'محدِّد', num: 'عدد', phr: 'عبارة', idiom: 'تعبير اصطلاحي',
+    fn: 'وظيفة لغوية'
   };
 
   function askTeach(step) {

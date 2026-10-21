@@ -1082,6 +1082,68 @@ window.LEARN_VOCAB = { units: [
   { w:'account for', p:'phr', ar:'يفسّر · يشكّل',          syn:'explain',      ex:'How do you account for the delay?', exar:'كيف تفسّر التأخير؟' },
   { w:'come across', p:'phr', ar:'يعثر على مصادفة',      syn:'find',         ex:'I came across an old photo.', exar:'عثرت مصادفة على صورة قديمة.' },
   { w:'put aside',   p:'phr', ar:'يدّخر · ينحّي',          syn:'save',         ex:'He puts aside some money each month.', exar:'يدّخر بعض المال كل شهر.' }
+]},
+
+/* ── الوظائف اللغوية ──────────────────────────────────────────────────
+   الوظيفة نفسها هي المدخل — «الاعتذار»، «طلب الإذن» — لا الجملة التي
+   تُقال فيها. فتُدرَّس كما تُدرَّس الكلمة: معناها، ثم مثالٌ تعيش فيه.
+
+   وكل مثال يحوي العبارة بنصّها كما هي، لأن بطاقة «أكمل الفراغ» تُبنى
+   بحذفها من مثالها — فلو لم تكن فيه حرفاً بحرف لم تُبنَ البطاقة. */
+{ id: 'f1', kind: 'functions', ar: 'وظائف التعامل والمجاملة', en: 'Social functions', words: [
+  { w:'to greet',           p:'fn', ar:'التحية',              ex:'It is polite to greet your teacher in the morning.', exar:'من الأدب أن تحيّي معلّمك في الصباح.' },
+  { w:'to welcome',         p:'fn', ar:'الترحيب',             ex:'The manager came out to welcome the guests.', exar:'خرج المدير ليرحّب بالضيوف.' },
+  { w:'to introduce',       p:'fn', ar:'التعريف بشخص',        ex:'Allow me to introduce my colleague.', exar:'اسمح لي أن أعرّفك بزميلي.' },
+  { w:'to say goodbye',     p:'fn', ar:'التوديع',             ex:'She waved to say goodbye at the station.', exar:'لوّحت مودّعةً في المحطة.' },
+  { w:'to thank',           p:'fn', ar:'الشكر',               ex:'He wrote a letter to thank them for their help.', exar:'كتب رسالة ليشكرهم على مساعدتهم.' },
+  { w:'to apologise',       p:'fn', ar:'الاعتذار',            ex:'He phoned her to apologise for the delay.', exar:'اتّصل بها ليعتذر عن التأخير.' },
+  { w:'to request',         p:'fn', ar:'الطلب',               ex:'She raised her hand to request a short break.', exar:'رفعت يدها لتطلب استراحة قصيرة.' },
+  { w:'to ask permission',  p:'fn', ar:'طلب الإذن',           ex:'You must see the manager to ask permission for leave.', exar:'عليك مراجعة المدير لتطلب إذناً بإجازة.' },
+  { w:'to offer',           p:'fn', ar:'عرض المساعدة',        ex:'He stopped to offer help to the old man.', exar:'توقّف ليعرض المساعدة على الرجل المسنّ.' },
+  { w:'to invite',          p:'fn', ar:'الدعوة',              ex:'They called us to invite us to the wedding.', exar:'اتّصلوا بنا ليدعونا إلى العرس.' },
+  { w:'to accept',          p:'fn', ar:'القبول',              ex:'It was kind of her to accept the invitation.', exar:'كان لطفاً منها أن تقبل الدعوة.' },
+  { w:'to refuse',          p:'fn', ar:'الرفض',               ex:'He had a good reason to refuse the offer.', exar:'كان لديه سبب وجيه ليرفض العرض.' },
+  { w:'to agree',           p:'fn', ar:'الموافقة',            ex:'The two sides met to agree on a final date.', exar:'اجتمع الطرفان ليتّفقا على موعد نهائي.' },
+  { w:'to disagree',        p:'fn', ar:'المخالفة في الرأي',   ex:'It is fine to disagree politely in a discussion.', exar:'لا بأس أن تخالف بأدب في النقاش.' },
+  { w:'to suggest',         p:'fn', ar:'الاقتراح',            ex:'He wrote to suggest a better solution.', exar:'كتب ليقترح حلاً أفضل.' },
+  { w:'to advise',          p:'fn', ar:'النصح',               ex:'The doctor called to advise him to rest.', exar:'اتّصل الطبيب لينصحه بالراحة.' },
+  { w:'to warn',            p:'fn', ar:'التحذير',             ex:'A sign was put up to warn drivers of the bend.', exar:'وُضعت لافتة لتحذّر السائقين من المنعطف.' },
+  { w:'to promise',         p:'fn', ar:'الوعد',               ex:'He shook my hand to promise he would return.', exar:'صافحني واعداً بأنه سيعود.' },
+  { w:'to congratulate',    p:'fn', ar:'التهنئة',             ex:'We phoned them to congratulate them on the new baby.', exar:'اتّصلنا بهم لنهنّئهم بالمولود الجديد.' },
+  { w:'to wish',            p:'fn', ar:'التمنّي',             ex:'She stayed to wish him good luck before the exam.', exar:'بقيت لتتمنّى له التوفيق قبل الامتحان.' },
+  { w:'to complain',        p:'fn', ar:'الشكوى',              ex:'He went to the office to complain about the noise.', exar:'ذهب إلى المكتب ليشكو من الضجيج.' },
+  { w:'to inform',          p:'fn', ar:'الإخبار',             ex:'The school sent a message to inform parents of the trip.', exar:'أرسلت المدرسة رسالة لتُخبر الأهالي بالرحلة.' },
+  { w:'to explain',         p:'fn', ar:'الشرح',               ex:'The teacher stopped to explain the rule again.', exar:'توقّف المعلّم ليشرح القاعدة مرة أخرى.' },
+  { w:'to describe',        p:'fn', ar:'الوصف',               ex:'We use adjectives to describe a place clearly.', exar:'نستعمل الصفات لنصف مكاناً وصفاً واضحاً.' },
+  { w:'to ask for help',    p:'fn', ar:'طلب المساعدة',        ex:'Do not be shy to ask for help when you need it.', exar:'لا تخجل أن تطلب المساعدة حين تحتاجها.' }
+]},
+
+{ id: 'f2', kind: 'functions', ar: 'وظائف الحوار والرأي', en: 'Conversation functions', words: [
+  { w:'to give directions',     p:'fn', ar:'إعطاء الإرشادات',          ex:'He stopped the car to give directions to the tourists.', exar:'أوقف السيارة ليرشد السيّاح.' },
+  { w:'to make an appointment', p:'fn', ar:'تحديد موعد',               ex:'Please call the clinic to make an appointment.', exar:'اتّصل بالعيادة من فضلك لتحديد موعد.' },
+  { w:'to order food',          p:'fn', ar:'طلب الطعام',               ex:'They sat down and raised a hand to order food.', exar:'جلسوا ورفعوا أيديهم ليطلبوا الطعام.' },
+  { w:'to book a room',         p:'fn', ar:'حجز غرفة',                 ex:'I phoned the hotel to book a room for two nights.', exar:'اتّصلت بالفندق لأحجز غرفة لليلتين.' },
+  { w:'to ask about the price', p:'fn', ar:'السؤال عن السعر',          ex:'She went to the counter to ask about the price.', exar:'ذهبت إلى الكاونتر لتسأل عن السعر.' },
+  { w:'to express an opinion',  p:'fn', ar:'إبداء الرأي',              ex:'Students are free to express an opinion in class.', exar:'للطلاب أن يبدوا رأيهم في الصف.' },
+  { w:'to ask for an opinion',  p:'fn', ar:'طلب الرأي',                ex:'Say "What do you think?" to ask for an opinion.', exar:'قل «ما رأيك؟» لتطلب الرأي.' },
+  { w:'to express surprise',    p:'fn', ar:'التعبير عن الدهشة',        ex:'We say "Really?" to express surprise.', exar:'نقول «حقاً؟» للتعبير عن الدهشة.' },
+  { w:'to express sympathy',    p:'fn', ar:'المواساة',                 ex:'He sent a short message to express sympathy.', exar:'أرسل رسالة قصيرة يواسيه فيها.' },
+  { w:'to offer condolences',   p:'fn', ar:'التعزية',                  ex:'The family visited them to offer condolences.', exar:'زارتهم العائلة للتعزية.' },
+  { w:'to encourage',           p:'fn', ar:'التشجيع',                  ex:'The coach spoke to encourage the players at half time.', exar:'تكلّم المدرّب ليشجّع اللاعبين في الاستراحة.' },
+  { w:'to interrupt politely',  p:'fn', ar:'المقاطعة بأدب',            ex:'Say "Excuse me" to interrupt politely.', exar:'قل «عذراً» لتقاطع بأدب.' },
+  { w:'to ask for repetition',  p:'fn', ar:'طلب الإعادة',              ex:'Say "Pardon?" to ask for repetition.', exar:'قل «عفواً؟» لتطلب الإعادة.' },
+  { w:'to clarify',             p:'fn', ar:'التوضيح',                  ex:'He drew a diagram to clarify his idea.', exar:'رسم مخطّطاً ليوضّح فكرته.' },
+  { w:'to correct',             p:'fn', ar:'التصحيح',                  ex:'The teacher used a red pen to correct the mistakes.', exar:'استعمل المعلّم قلماً أحمر ليصحّح الأخطاء.' },
+  { w:'to remind',              p:'fn', ar:'التذكير',                  ex:'She left a note to remind him of the meeting.', exar:'تركت ورقة لتذكّره بالاجتماع.' },
+  { w:'to persuade',            p:'fn', ar:'الإقناع',                  ex:'They talked for an hour to persuade him to stay.', exar:'تكلّموا ساعة ليقنعوه بالبقاء.' },
+  { w:'to express regret',      p:'fn', ar:'التعبير عن الأسف',         ex:'He wrote to express regret for his absence.', exar:'كتب ليعبّر عن أسفه لغيابه.' },
+  { w:'to express preference',  p:'fn', ar:'التعبير عن التفضيل',       ex:'We use "I would rather" to express preference.', exar:'نستعمل «I would rather» للتعبير عن التفضيل.' },
+  { w:'to express certainty',   p:'fn', ar:'التعبير عن اليقين',        ex:'We use "definitely" to express certainty.', exar:'نستعمل «definitely» للتعبير عن اليقين.' },
+  { w:'to express doubt',       p:'fn', ar:'التعبير عن الشك',          ex:'We use "I am not sure" to express doubt.', exar:'نستعمل «I am not sure» للتعبير عن الشك.' },
+  { w:'to express ability',     p:'fn', ar:'التعبير عن القدرة',        ex:'We use "can" to express ability.', exar:'نستعمل «can» للتعبير عن القدرة.' },
+  { w:'to give an example',     p:'fn', ar:'ضرب مثال',                 ex:'The book stops to give an example after each rule.', exar:'يتوقّف الكتاب ليضرب مثالاً بعد كل قاعدة.' },
+  { w:'to give instructions',   p:'fn', ar:'إعطاء التعليمات',          ex:'The pilot spoke to give instructions before take-off.', exar:'تكلّم الطيّار ليعطي التعليمات قبل الإقلاع.' },
+  { w:'to make a decision',     p:'fn', ar:'اتّخاذ قرار',              ex:'The board met to make a decision about the offer.', exar:'اجتمع المجلس ليتّخذ قراراً بشأن العرض.' }
 ]}
 
 ]};
