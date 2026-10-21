@@ -99,7 +99,12 @@
     /* The sentence it lives in, with it taken out. Meaning is not enough;
        it has to fit. */
     gap(entry, unit, rnd) {
-      if (!entry.ex) return null;
+      /* A function's example is not a sentence it sits inside — it is the
+         thing you actually say: «الطلب» is shown as "Could you please open
+         the window?". There is nothing in it to take out, and the head-word
+         fallback would blank some unrelated "to" and then ask which
+         function fills it. So: no gap for a function. */
+      if (entry.p === 'fn' || !entry.ex) return null;
       const gapped = blankOut(entry.ex, entry.w);
       if (gapped === entry.ex) return null;        // nothing was removed
       const wrong = distractors(entry, unit, 'w', rnd);
