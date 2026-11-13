@@ -111,9 +111,54 @@ h1 {
   font-size: var(--fs-2xs);
   color: var(--text-secondary);
 }
-/* First card is the total — mark it as the primary figure. */
+/* First card in a row is the headline figure — mark it as primary. */
 .stat:first-child { border-color: var(--primary-border); background: var(--primary-soft); }
 .stat:first-child .n { color: var(--primary-strong); }
+/* Optional second line: a share, a rate, anything that qualifies .n. */
+.stat .s {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+  opacity: .85;
+}
+
+/* A label over each row of stat cards, so «users» and «questions» read
+   as two groups of figures rather than one long row. */
+.stats-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.stats-head span {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 600;
+  opacity: .72;
+}
+/* A note in place of a row of cards — spans the whole grid. */
+.grid-note { grid-column: 1 / -1; margin: 0; }
+
+/* One plain sentence under the user cards answering the only question
+   worth asking of them: did everyone who signed up actually sit an exam? */
+#userGrid { margin-bottom: var(--sp-4); }
+.stats-verdict {
+  margin: 0 0 var(--sp-7);
+  font-size: var(--fs-xs);
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+.stats-verdict b { font-weight: 700; }
+.stats-verdict b.yes { color: var(--primary-strong); }
+.stats-verdict b.no  { color: var(--text-primary); }
+.stats-verdict span  { margin-inline-start: 6px; }
 
 /* ── Sections ──────────────────────────────────────────────────────── */
 section {
@@ -363,6 +408,11 @@ td { color: var(--text-primary); line-height: 1.7; }
 </header>
 
 <div id="app" style="display:none">
+  <div class="stats-head">Users <span>المستخدمون</span></div>
+  <div class="grid" id="userGrid"></div>
+  <p class="stats-verdict" id="userVerdict"></p>
+
+  <div class="stats-head">Question bank <span>بنك الأسئلة</span></div>
   <div class="grid" id="statsGrid"></div>
 
   <section>

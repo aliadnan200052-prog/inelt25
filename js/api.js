@@ -213,6 +213,21 @@ const ExamAPI = (() => {
       if (data?.error) throw new ApiError(data.error);
       return data;
     },
+    // How many accounts exist, and how many of them actually sat a full
+    // exam. The database keeps no results table, so "sat an exam" is
+    // profiles.attempts_used > 0 — the counter start_exam() bumps, which
+    // practice and «المسار» never touch. Reads admin_user_stats(), which
+    // backend/admin-user-stats.sql creates; answers null when that
+    // function is not in the database yet so the dashboard still loads.
+    async adminUserStats() {
+      const { data, error } = await client.rpc("admin_user_stats");
+      if (error) {
+        if (/could not find the function|schema cache|does not exist/i.test(error.message || "")) return null;
+        throw new ApiError(error.message);
+      }
+      if (data?.error) throw new ApiError(data.error);
+      return data;
+    },
     async adminUpdate(id, fields) {
       const { data, error } = await client.rpc("admin_update_question", {
         p_id: id,
