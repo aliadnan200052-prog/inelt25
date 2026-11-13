@@ -7,6 +7,7 @@ async function init() {
     await loadStats();
     document.getElementById('whoami').textContent = '';
     document.getElementById('app').style.display = 'block';
+    loadUserStats();
     loadList();
     loadPassages();
   } catch (e) {
@@ -19,6 +20,43 @@ async function loadStats() {
   const g = document.getElementById('statsGrid');
   g.innerHTML = `<div class="stat"><div class="n">${total}</div><div class="l">Total questions</div></div>` +
     Object.entries(by_section).map(([s, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${s}</div></div>`).join('');
+}
+
+/* ── Users ─────────────────────────────────────────────────────────
+   The two figures that matter day to day: how many accounts exist, and
+   how many of those people actually sat a full exam. There is no
+   results table in the database, so the second figure is
+   profiles.attempts_used > 0 — an attempt is spent when start_exam()
+   runs, and «تدرّب» and «المسار» never spend one.
+
+   Kept out of init()'s try block on purpose: this row is extra, so if
+   its SQL function is missing or fails it leaves a note here instead of
+   turning the whole dashboard into "access denied". */
+async function loadUserStats() {
+  const g = document.getElementById('userGrid');
+  let s;
+  try {
+    s = await ExamAPI.adminUserStats();
+  } catch (e) {
+    g.innerHTML = `<p class="muted grid-note">User figures unavailable: ${escapeHtml(e.message)}</p>`;
+    return;
+  }
+  if (!s) {
+    g.innerHTML = '<p class="muted grid-note">Run <code>backend/admin-user-stats.sql</code> ' +
+      'once in the Supabase SQL editor to show user figures here.</p>';
+    return;
+  }
+  const share = s.users ? Math.round((s.took_exam / s.users) * 100) : 0;
+  const card = (n, label, sub) =>
+    `<div class="stat"><div class="n">${n}</div><div class="l">${label}</div>` +
+    (sub ? `<div class="s">${sub}</div>` : '') + '</div>';
+  g.innerHTML =
+    card(s.users, 'Users · المستخدمون',
+         `+${s.new_7d} this week · +${s.new_24h} today`) +
+    card(s.took_exam, 'Sat the exam · أدّوا الامتحان',
+         `${share}% of users · ${s.attempts} attempts spent`) +
+    card(s.premium, 'Premium · مشتركون') +
+    card(s.active_7d, 'Signed in this week · نشطون');
 }
 
 async function doImport() {
