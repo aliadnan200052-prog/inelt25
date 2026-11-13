@@ -146,6 +146,20 @@ h1 {
 /* A note in place of a row of cards — spans the whole grid. */
 .grid-note { grid-column: 1 / -1; margin: 0; }
 
+/* One plain sentence under the user cards answering the only question
+   worth asking of them: did everyone who signed up actually sit an exam? */
+#userGrid { margin-bottom: var(--sp-4); }
+.stats-verdict {
+  margin: 0 0 var(--sp-7);
+  font-size: var(--fs-xs);
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+.stats-verdict b { font-weight: 700; }
+.stats-verdict b.yes { color: var(--primary-strong); }
+.stats-verdict b.no  { color: var(--text-primary); }
+.stats-verdict span  { margin-inline-start: 6px; }
+
 /* ── Sections ──────────────────────────────────────────────────────── */
 section {
   padding: var(--sp-6);
@@ -396,6 +410,7 @@ td { color: var(--text-primary); line-height: 1.7; }
 <div id="app" style="display:none">
   <div class="stats-head">Users <span>المستخدمون</span></div>
   <div class="grid" id="userGrid"></div>
+  <p class="stats-verdict" id="userVerdict"></p>
 
   <div class="stats-head">Question bank <span>بنك الأسئلة</span></div>
   <div class="grid" id="statsGrid"></div>

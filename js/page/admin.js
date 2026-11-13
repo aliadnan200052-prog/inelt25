@@ -47,16 +47,30 @@ async function loadUserStats() {
     return;
   }
   const share = s.users ? Math.round((s.took_exam / s.users) * 100) : 0;
+  const never = Math.max(0, s.users - s.took_exam);
   const card = (n, label, sub) =>
     `<div class="stat"><div class="n">${n}</div><div class="l">${label}</div>` +
     (sub ? `<div class="s">${sub}</div>` : '') + '</div>';
   g.innerHTML =
-    card(s.users, 'Users · المستخدمون',
+    card(s.users, 'Signed up · سجّلوا',
          `+${s.new_7d} this week · +${s.new_24h} today`) +
     card(s.took_exam, 'Sat the exam · أدّوا الامتحان',
-         `${share}% of users · ${s.attempts} attempts spent`) +
+         `${share}% of them · ${s.attempts} attempts spent`) +
+    card(never, 'Never sat it · لم يؤدّوه') +
     card(s.premium, 'Premium · مشتركون') +
     card(s.active_7d, 'Signed in this week · نشطون');
+  document.getElementById('userVerdict').innerHTML = verdict(s.users, s.took_exam, never);
+}
+
+/* The two figures side by side, said in words — because "do they match?"
+   is the question these cards exist to answer. */
+function verdict(users, took, never) {
+  if (!users) return 'No accounts yet. <span dir="rtl">لا مستخدمين بعد.</span>';
+  if (never === 0) return '<b class="yes">They match</b> — all ' + users +
+    ' users have sat an exam. <span dir="rtl">العددان متطابقان.</span>';
+  return '<b class="no">They do not match</b> — ' + took + ' of ' + users +
+    ' users have sat an exam; ' + never + ' signed up and never started one. ' +
+    '<span dir="rtl">' + never + ' سجّلوا دخولهم ولم يدخلوا الامتحان.</span>';
 }
 
 async function doImport() {
