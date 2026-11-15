@@ -14,13 +14,16 @@
    Bump CACHE_VERSION whenever the cached shell changes.
    ═══════════════════════════════════════════════════════════════════════ */
 
-const CACHE_VERSION = 'inelt-v34';
+const CACHE_VERSION = 'inelt-v35';
 const SHELL = [
   '/welcome',
   '/login',
   '/',
   '/css/inelt-theme.css',
   '/manifest.json',
+  '/admin-manifest.json',
+  '/icons/admin-192.png',
+  '/icons/admin-512.png',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/favicon-32.png',

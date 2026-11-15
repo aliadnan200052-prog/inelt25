@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>INELT Admin</title>
-<link rel="icon" type="image/png" sizes="64x64" href="/icons/favicon-64.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/icons/admin-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/admin-32.png">
+<link rel="apple-touch-icon" href="/icons/admin-180.png">
+<!-- Its own manifest, not the app's: same site, own id and own start_url,
+     so the dashboard installs beside the student app and opens on /admin. -->
+<link rel="manifest" href="/admin-manifest.json">
+<meta name="theme-color" content="#1D4A3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="INELT Admin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,6 +40,7 @@ body {
 /* ── Page header ───────────────────────────────────────────────────── */
 .admin-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-4);
   padding-bottom: var(--sp-6);
@@ -76,6 +84,15 @@ h1 {
   animation: whoami-pulse 1.6s var(--ease) infinite;
 }
 @keyframes whoami-pulse { 0%,100% { opacity: 1 } 50% { opacity: .55 } }
+
+/* ── Install to the home screen ────────────────────────────────────── */
+/* Hidden until the browser says it can install — see js/page/admin-install.js. */
+.admin-install { margin-inline-start: auto; text-align: end; }
+.install-hint { margin-top: 7px; max-width: 34ch; line-height: 1.65; }
+@media (max-width: 560px) {
+  .admin-install { margin-inline-start: 0; text-align: start; width: 100%; }
+  .install-hint { max-width: none; }
+}
 
 /* ── Stat cards ────────────────────────────────────────────────────── */
 .grid {
@@ -405,6 +422,10 @@ td { color: var(--text-primary); line-height: 1.7; }
     <h1>INELT — Admin Dashboard</h1>
     <p class="muted" id="whoami">checking access…</p>
   </div>
+  <div class="admin-install">
+    <button type="button" class="secondary" id="installBtn" hidden>Install app</button>
+    <p class="muted install-hint" id="installHint" hidden></p>
+  </div>
 </header>
 
 <div id="app" style="display:none">
@@ -474,5 +495,7 @@ td { color: var(--text-primary); line-height: 1.7; }
 <script src="/js/api.js"></script>
 <script src="/js/net.js"></script>
 <script src="/js/page/admin.js"></script>
+<script src="/js/page/admin-install.js"></script>
+<script src="/js/sw-register.js"></script>
 </body>
 </html>
