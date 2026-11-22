@@ -257,7 +257,7 @@ export function newExam(): Exam {
       pageSize: 'A4',
       orientation: 'portrait',
       margins: { top: 12, bottom: 12, right: 14, left: 14 },
-      arFont: 'Amiri',
+      arFont: 'Times New Roman',
       latinFont: 'Times New Roman',
       fontSize: 13,
       headingSize: 14,

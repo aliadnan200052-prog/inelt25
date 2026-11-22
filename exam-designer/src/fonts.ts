@@ -53,5 +53,5 @@ const fam = (f: string) => FALLBACK[f] ?? `"${f}"`;
 
 export function fontStack(ar: string, latin: string) {
   // Latin font first: browsers fall back to the Arabic font for Arabic glyphs.
-  return latin === 'same' ? `${fam(ar)}, serif` : `${fam(latin)}, ${fam(ar)}, serif`;
+  return latin === 'same' || latin === ar ? `${fam(ar)}, serif` : `${fam(latin)}, ${fam(ar)}, serif`;
 }
