@@ -30,7 +30,7 @@ export const TYPE_META: Record<QuestionType, TypeMeta> = {
     hint: 'فروع يُجاب عنها كتابةً',
     titleAr: 'أجب عن الأسئلة التالية:',
     titleEn: 'Answer the following questions:',
-    answerLines: 2,
+    answerLines: 0,
     numbering: 'letters',
   },
   fill: {
@@ -75,7 +75,7 @@ export const TYPE_META: Record<QuestionType, TypeMeta> = {
     hint: 'نصوص للترجمة مع أسطر للإجابة',
     titleAr: 'ترجم ما يأتي:',
     titleEn: 'Translate the following:',
-    answerLines: 2,
+    answerLines: 0,
     numbering: 'letters',
   },
   passage: {
@@ -84,7 +84,7 @@ export const TYPE_META: Record<QuestionType, TypeMeta> = {
     hint: 'قطعة قراءة تتبعها أسئلة',
     titleAr: 'اقرأ القطعة الآتية ثم أجب عن الأسئلة التي تليها:',
     titleEn: 'Read the passage, then answer the questions:',
-    answerLines: 1,
+    answerLines: 0,
     numbering: 'letters',
   },
   grammar: {
@@ -93,7 +93,7 @@ export const TYPE_META: Record<QuestionType, TypeMeta> = {
     hint: 'فروع نحوية أو لغوية',
     titleAr: 'أجب عمّا هو مطلوب بين القوسين:',
     titleEn: 'Do as required between brackets:',
-    answerLines: 1,
+    answerLines: 0,
     numbering: 'letters',
   },
   open: {
@@ -102,7 +102,7 @@ export const TYPE_META: Record<QuestionType, TypeMeta> = {
     hint: 'سؤال واحد مع مساحة للإجابة',
     titleAr: '',
     titleEn: '',
-    answerLines: 5,
+    answerLines: 0,
     numbering: 'none',
   },
   mcq: {
@@ -258,7 +258,7 @@ export function newExam(): Exam {
       orientation: 'portrait',
       margins: { top: 12, bottom: 12, right: 14, left: 14 },
       arFont: 'Amiri',
-      latinFont: 'same',
+      latinFont: 'Times New Roman',
       fontSize: 13,
       headingSize: 14,
       lineHeight: 1.55,

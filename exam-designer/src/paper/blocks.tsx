@@ -113,16 +113,6 @@ export function RichText({ text, answer }: { text: string; answer?: string }) {
   );
 }
 
-function Lines({ n }: { n: number }) {
-  if (!n) return null;
-  return (
-    <div className="ans-lines">
-      {Array.from({ length: n }, (_, i) => (
-        <div key={i} className="ans-line" />
-      ))}
-    </div>
-  );
-}
 
 /* ─── Header ─── */
 
@@ -360,7 +350,7 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
         key: k('open'),
         node: (
           <div className="it-open" dir={dir}>
-            {teacher && q.modelAnswer.trim() ? answerLine(q.modelAnswer) : <Lines n={q.answerLines} />}
+            {teacher && q.modelAnswer.trim() ? answerLine(q.modelAnswer) : null}
           </div>
         ),
       });
@@ -478,11 +468,7 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
               {itemLabel(q, i, dir, ctx)}
               <div className="it-body">
                 <RichText text={it.text} answer={teacher && blanksInline ? it.answer : undefined} />
-                {teacher && it.answer.trim() ? (
-                  blanksInline && HAS_BLANK.test(it.text) ? null : answerLine(it.answer)
-                ) : (
-                  <Lines n={q.answerLines} />
-                )}
+                {teacher && it.answer.trim() && !(blanksInline && HAS_BLANK.test(it.text)) ? answerLine(it.answer) : null}
               </div>
             </div>
           ),
