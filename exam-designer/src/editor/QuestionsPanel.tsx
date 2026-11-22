@@ -452,7 +452,6 @@ function QuestionCard({ q, n, count, exam, collapsed, toggle, set, onMove, onDup
 }
 
 function Advanced({ q, patch, set }: { q: Question; patch: (p: Partial<Question>) => void; set: (fn: (q: Question) => Question) => void }) {
-  const lines = q.type !== 'mcq' && q.type !== 'match' && q.type !== 'truefalse';
   return (
     <div className="advanced">
       <Field label="اتجاه السؤال">
@@ -478,16 +477,6 @@ function Advanced({ q, patch, set }: { q: Question; patch: (p: Partial<Question>
               { value: 'numbers', label: '1 2 3' },
               { value: 'none', label: 'بدون' },
             ]}
-          />
-        </Field>
-      )}
-      {lines && (
-        <Field label={q.type === 'open' ? 'أسطر الإجابة' : 'أسطر الإجابة لكل فرع'}>
-          <Segmented
-            small
-            value={q.answerLines}
-            onChange={(v) => patch({ answerLines: v })}
-            options={[0, 1, 2, 3, 4, 6, 8].map((n) => ({ value: n, label: n === 0 ? 'بدون' : String(n) }))}
           />
         </Field>
       )}

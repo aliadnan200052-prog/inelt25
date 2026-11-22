@@ -1,6 +1,6 @@
 import { AlertTriangle, CheckCircle2, Copy, FileText, Languages, ListOrdered, Palette, Type } from 'lucide-react';
 import type { DesignSettings, Exam } from '../types';
-import { AR_FONTS, LATIN_FONTS } from '../fonts';
+import { AR_FONTS, fontStack, LATIN_FONTS } from '../fonts';
 import type { LayoutInfo } from '../paper/Paper';
 import { Field, Section, Segmented, Select, Toggle } from '../ui/ui';
 import type { Update } from '../pages/Editor';
@@ -140,7 +140,7 @@ export default function DesignPanel({ exam, update, layout }: { exam: Exam; upda
             />
           </Field>
         </div>
-        <p className="font-sample" style={{ fontFamily: `"${d.latinFont === 'same' ? d.arFont : d.latinFont}", "${d.arFont}"` }}>
+        <p className="font-sample" style={{ fontFamily: fontStack(d.arFont, d.latinFont) }}>
           نموذج للخط: اختر الإجابة الصحيحة — Choose the correct answer
         </p>
       </Section>

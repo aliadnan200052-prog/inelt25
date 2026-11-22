@@ -455,13 +455,6 @@
   font-family: 'DejaVu Sans', 'Segoe UI Symbol', var(--p-font);
   font-size: 0.95em;
 }
-.ans-lines {
-  padding-top: 1mm;
-}
-.ans-line {
-  height: calc(var(--p-fs) * var(--p-lh) * 1.25);
-  border-bottom: 0.7pt dotted #555;
-}
 .it-open {
   padding-inline-start: 3mm;
 }
