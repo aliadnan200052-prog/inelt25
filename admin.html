@@ -194,7 +194,7 @@ section h2 {
 section > .muted { display: block; margin-bottom: var(--sp-5); max-width: 68ch; }
 
 /* ── Controls ──────────────────────────────────────────────────────── */
-button {
+button, .btn-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -214,8 +214,9 @@ button {
               color var(--dur-2) var(--ease),
               transform var(--dur-1) var(--ease);
 }
-button:hover { background: var(--primary-deep); transform: translateY(-1px); }
-button:active { transform: translateY(0) scale(.98); }
+button:hover, .btn-link:hover { background: var(--primary-deep); transform: translateY(-1px); }
+button:active, .btn-link:active { transform: translateY(0) scale(.98); }
+.btn-link { text-decoration: none; }
 
 button.secondary {
   background: var(--surface-raised);
@@ -435,6 +436,13 @@ td { color: var(--text-primary); line-height: 1.7; }
 
   <div class="stats-head">Question bank <span>بنك الأسئلة</span></div>
   <div class="grid" id="statsGrid"></div>
+
+  <section>
+    <h2>Exam paper designer — مصمّم أوراق الامتحانات</h2>
+    <p class="muted">For testing. Not linked from the student app. Exams are
+      saved in this browser only.</p>
+    <a class="btn-link" href="/exam" target="_blank" rel="noopener">Open designer ↗</a>
+  </section>
 
   <section>
     <h2>Bulk import questions</h2>
