@@ -451,14 +451,6 @@ body.dash-moved .dash-block { animation: fade-in var(--dur-3) var(--ease) both; 
 .dash-jump-t { font-size: var(--fs-sm); font-weight: 700; color: var(--d-t1); }
 .dash-jump-s { margin-top: 3px; font-size: var(--fs-2xs); color: var(--d-t2); }
 .dash-jump-go { margin-inline-start: auto; width: 16px; height: 16px; color: var(--d-t3); flex-shrink: 0; }
-/* TEMPORARY (trial): the exam-paper designer (/exam) on the home view.
-   Remove this rule and the .dash-tool card below when the trial ends. */
-.dash-tool { margin-top: var(--d-gap); }
-.dash-tool-tag {
-  margin-inline-start: 6px; padding: 1px 8px; border-radius: 999px;
-  background: var(--g-100); color: var(--g-700);
-  font-size: var(--fs-2xs); font-weight: 600; vertical-align: 1px;
-}
 .dash-sec-head { display: flex; align-items: baseline; margin-bottom: var(--sp-4); }
 .dash-sec-title {
   font-size: var(--fs-md);
@@ -2225,18 +2217,6 @@ html { scroll-behavior: smooth; }
       </div>
       </div>
     </section>
-
-    <!-- TEMPORARY (trial): link to the exam-paper designer. Remove with the .dash-tool rule. -->
-    <a data-view="home" class="dash-block dash-jump dash-tool" href="/exam">
-      <span class="dash-jump-ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-      </span>
-      <div>
-        <div class="dash-jump-t">مصمّم أوراق الامتحانات <small class="dash-tool-tag">تجريبي</small></div>
-        <div class="dash-jump-s">للمدرّسين: أنشئ ورقة امتحان وصدّرها PDF</div>
-      </div>
-      <svg class="dash-jump-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-    </a>
 
     <a data-view="home" class="dash-block dash-tg" href="https://t.me/inelt25" target="_blank" rel="noopener noreferrer">
       <svg class="dash-tg-art" viewBox="0 0 110 76" fill="none" aria-hidden="true">
