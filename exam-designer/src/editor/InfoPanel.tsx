@@ -40,9 +40,6 @@ export default function InfoPanel({ exam, update }: { exam: Exam; update: Update
           <Field label="اسم المدرسة">
             <TextInput value={info.school} onChange={(v) => set('school', v)} placeholder="مثال: ثانوية المتميزين" />
           </Field>
-          <Field label="الجهة / المديرية" hint="سطر علوي اختياري">
-            <TextInput value={info.authority} onChange={(v) => set('authority', v)} placeholder="مثال: وزارة التربية" />
-          </Field>
           <Field label="اسم المادة">
             <TextInput value={info.subject} onChange={(v) => set('subject', v)} placeholder="مثال: اللغة العربية" />
           </Field>
@@ -64,9 +61,6 @@ export default function InfoPanel({ exam, update }: { exam: Exam; update: Update
               <TextInput value={info.examTypeOther} onChange={(v) => set('examTypeOther', v)} placeholder="مثال: امتحان الفصل الأول" />
             </Field>
           )}
-          <Field label="العام الدراسي">
-            <TextInput value={info.year} onChange={(v) => set('year', v)} placeholder="2025 - 2026" />
-          </Field>
           <Field label="التاريخ">
             <div className="input-with-btn">
               <TextInput value={info.date} onChange={(v) => set('date', v)} placeholder="اكتب التاريخ" />
@@ -86,36 +80,8 @@ export default function InfoPanel({ exam, update }: { exam: Exam; update: Update
           <Field label="الدرجة الكلية">
             <NumberInput value={info.totalMarks} onChange={(v) => set('totalMarks', v)} placeholder="مثال: 100" />
           </Field>
-          <Field label="تعليمات عامة" hint="تظهر تحت الترويسة، مثل: أجب عن خمسة أسئلة فقط" full>
-            <TextArea value={info.generalInstructions} onChange={(v) => set('generalInstructions', v)} minRows={2} />
-          </Field>
         </div>
-      </Section>
-
-      <Section title="ترويسة الورقة" subtitle="الشكل والشعار والعناصر الظاهرة" icon={<LayoutTemplate size={18} />}>
         <div className="stack">
-          <Field label="نمط الترويسة">
-            <div className="layout-picker">
-              {(
-                [
-                  ['classic', 'كلاسيكي', 'ثلاثة أعمدة'],
-                  ['centered', 'متوسط', 'عناصر في المنتصف'],
-                  ['boxed', 'جدول', 'معلومات داخل إطار'],
-                ] as const
-              ).map(([v, label, sub]) => (
-                <button key={v} type="button" className={'layout-opt' + (h.layout === v ? ' active' : '')} onClick={() => setH('layout', v)}>
-                  <span className={'mini mini-' + v}>
-                    <i />
-                    <i />
-                    <i />
-                  </span>
-                  <b>{label}</b>
-                  <small>{sub}</small>
-                </button>
-              ))}
-            </div>
-          </Field>
-
           <Field label="شعار المدرسة (اختياري)">
             <div className="logo-pick">
               {h.logo ? (
@@ -142,6 +108,44 @@ export default function InfoPanel({ exam, update }: { exam: Exam; update: Update
               )}
             </div>
           </Field>
+        </div>
+      </Section>
+
+      <Section title="إعدادات إضافية" subtitle="الجهة، العام الدراسي، التعليمات، وشكل الترويسة" icon={<LayoutTemplate size={18} />} defaultOpen={false}>
+        <div className="stack">
+          <div className="grid">
+          <Field label="الجهة / المديرية" hint="سطر علوي اختياري">
+            <TextInput value={info.authority} onChange={(v) => set('authority', v)} placeholder="مثال: وزارة التربية" />
+          </Field>
+          <Field label="العام الدراسي">
+            <TextInput value={info.year} onChange={(v) => set('year', v)} placeholder="2025 - 2026" />
+          </Field>
+          <Field label="تعليمات عامة" hint="تظهر تحت الترويسة، مثل: أجب عن خمسة أسئلة فقط" full>
+            <TextArea value={info.generalInstructions} onChange={(v) => set('generalInstructions', v)} minRows={2} />
+          </Field>
+          </div>
+          <Field label="نمط الترويسة">
+            <div className="layout-picker">
+              {(
+                [
+                  ['classic', 'كلاسيكي', 'ثلاثة أعمدة'],
+                  ['centered', 'متوسط', 'عناصر في المنتصف'],
+                  ['boxed', 'جدول', 'معلومات داخل إطار'],
+                ] as const
+              ).map(([v, label, sub]) => (
+                <button key={v} type="button" className={'layout-opt' + (h.layout === v ? ' active' : '')} onClick={() => setH('layout', v)}>
+                  <span className={'mini mini-' + v}>
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <b>{label}</b>
+                  <small>{sub}</small>
+                </button>
+              ))}
+            </div>
+          </Field>
+
 
           <div className="grid">
             <Field label="موضع الشعار">

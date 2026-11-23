@@ -271,10 +271,11 @@ export function newExam(): Exam {
       cutLine: true,
       qDividers: false,
       showMarksStudent: true,
-      pageNumbers: true,
+      pageNumbers: false,
       qNumberStyle: 'words',
       optionLabels: 'auto',
       digits: 'western',
+      fitOnePage: true,
     },
   };
 }

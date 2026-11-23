@@ -8,7 +8,6 @@ import {
   Copy,
   ImagePlus,
   Info,
-  KeyRound,
   ListPlus,
   MessageSquareText,
   Plus,
@@ -415,11 +414,7 @@ function QuestionCard({ q, n, count, exam, collapsed, toggle, set, onMove, onDup
             <McqItems q={q} dir={exam.design.optionLabels} qdir={dir} setItem={setItem} addItemAfter={addItemAfter} removeItem={removeItem} newId={newId} set={set} />
           ) : q.type === 'match' ? (
             <MatchPairs q={q} set={set} qdir={dir} />
-          ) : q.type === 'open' ? (
-            <Field label="الإجابة النموذجية (اختياري)" hint="تظهر في نسخة المدرس ونموذج الإجابة">
-              <TextArea value={q.modelAnswer} onChange={(v) => patch({ modelAnswer: v })} minRows={2} />
-            </Field>
-          ) : (
+          ) : q.type === 'open' ? null : (
             <div className="items">
               <div className="items-label">
                 {q.type === 'truefalse' ? 'العبارات' : 'الفروع'}
@@ -543,7 +538,6 @@ interface ItemRowProps {
 }
 
 function ItemRow({ q, it, label, autoFocus, setItem, onEnter, onRemove, onPasteLines, canRemove }: ItemRowProps) {
-  const [showAns, setShowAns] = useState(!!it.answer);
   const tf = q.type === 'truefalse';
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -578,34 +572,10 @@ function ItemRow({ q, it, label, autoFocus, setItem, onEnter, onRemove, onPasteL
               if (onPasteLines(e.clipboardData.getData('text'))) e.preventDefault();
             }}
           />
-          {tf && (
-            <Segmented
-              small
-              value={it.tf === null ? 'n' : it.tf ? 't' : 'f'}
-              onChange={(v) => setItem(it.id, { tf: v === 'n' ? null : v === 't' })}
-              options={[
-                { value: 't', label: '✓', title: 'صحيحة' },
-                { value: 'f', label: '✗', title: 'خاطئة' },
-              ]}
-            />
-          )}
-          {!tf && (
-            <IconButton title="الإجابة النموذجية" onClick={() => setShowAns(!showAns)}>
-              <KeyRound size={15} />
-            </IconButton>
-          )}
           <IconButton title="حذف" onClick={onRemove} disabled={!canRemove}>
             <X size={15} />
           </IconButton>
         </div>
-        {!tf && (showAns || it.answer) && (
-          <TextInput
-            className="input answer-input"
-            value={it.answer}
-            onChange={(v) => setItem(it.id, { answer: v })}
-            placeholder={fillHint ? 'إجابة الفراغ (لعدة فراغات افصل بـ |)' : 'الإجابة النموذجية — تظهر في نسخة المدرس فقط'}
-          />
-        )}
       </div>
     </div>
   );
@@ -638,7 +608,6 @@ function McqItems({
     <div className="items">
       <div className="items-label">
         الأسئلة والخيارات
-        <small>حدّد الإجابة الصحيحة بالضغط على حرفها — تظهر في نموذج الإجابة فقط</small>
       </div>
       {q.items.map((it, i) => (
         <McqItem
@@ -694,16 +663,8 @@ function McqItem({
       </div>
       <div className="mcq-opts">
         {it.options.map((o, oi) => (
-          <div key={oi} className={'mcq-opt' + (it.correct === oi ? ' correct' : '')}>
-            <button
-              type="button"
-              className="opt-mark"
-              title={it.correct === oi ? 'الإجابة الصحيحة' : 'تحديد كإجابة صحيحة'}
-              aria-pressed={it.correct === oi}
-              onClick={() => setItem(it.id, { correct: it.correct === oi ? null : oi })}
-            >
-              {optLabel(oi)}
-            </button>
+          <div key={oi} className="mcq-opt">
+            <span className="opt-mark">{optLabel(oi)}</span>
             <input
               data-nav
               className="input"
@@ -820,6 +781,9 @@ function ClosingSection({ exam, update }: { exam: Exam; update: Update }) {
             <Field label="العبارة">
               <TextInput value={c.text} onChange={(v) => setC('text', v)} placeholder="اكتب عبارة مخصصة" />
             </Field>
+            <details className="mini-details">
+              <summary>خيارات إضافية</summary>
+              <div className="stack details-body">
             <div className="grid">
               <Field label="المكان">
                 <Segmented
@@ -859,6 +823,8 @@ function ClosingSection({ exam, update }: { exam: Exam; update: Update }) {
               checked={c.signature}
               onChange={(v) => setC('signature', v)}
             />
+              </div>
+            </details>
           </>
         )}
       </div>

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { Dir, Exam, Item, Question, Variant } from '../types';
+import type { Dir, Exam, Item, Question } from '../types';
 import {
   examTypeLabel,
   fmtNum,
@@ -43,14 +43,9 @@ export const LABELS = {
     page: 'الصفحة',
     of: 'من',
     cont: 'يتبع',
-    key: 'نموذج الإجابة',
-    teacherCopy: 'نسخة المدرس',
     colA: 'العمود (أ)',
     colB: 'العمود (ب)',
-    answer: 'الإجابة',
     instructions: 'تعليمات',
-    trueW: 'صح',
-    falseW: 'خطأ',
   },
   en: {
     subject: 'Subject',
@@ -66,14 +61,9 @@ export const LABELS = {
     page: 'Page',
     of: 'of',
     cont: 'Continued',
-    key: 'Answer Key',
-    teacherCopy: "Teacher's copy",
     colA: 'Column (A)',
     colB: 'Column (B)',
-    answer: 'Answer',
     instructions: 'Instructions',
-    trueW: 'True',
-    falseW: 'False',
   },
 };
 export type Labels = (typeof LABELS)['ar'];
@@ -87,23 +77,19 @@ export function makeDigits(exam: Exam) {
 /* ─── Text with blanks ─── */
 
 const BLANK_RE = /(\.{3,}|…+|_{3,})/g;
-const HAS_BLANK = /(\.{3,}|…+|_{3,})/;
 
-export function RichText({ text, answer }: { text: string; answer?: string }) {
+export function RichText({ text }: { text: string }) {
   if (!text) return null;
   const parts = text.split(BLANK_RE);
-  const answers = answer ? answer.split(/[|،,]\s*/) : [];
-  let b = 0;
   return (
     <bdi className="rt">
       {parts.map((p, i) => {
         if (i % 2 === 1) {
           const len = p.length;
-          const fill = answers[b++];
           const w = Math.min(Math.max(len * 0.45, 4), 20);
           return (
-            <span key={i} className={'blank' + (fill ? ' filled' : '')} style={{ minWidth: `${w}em` }}>
-              {fill || ' '}
+            <span key={i} className="blank" style={{ minWidth: `${w}em` }}>
+              {' '}
             </span>
           );
         }
@@ -116,14 +102,13 @@ export function RichText({ text, answer }: { text: string; answer?: string }) {
 
 /* ─── Header ─── */
 
-function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: Labels; dir: Dir }) {
+function Header({ exam, L, dir }: { exam: Exam; L: Labels; dir: Dir }) {
   const { info, header: h } = exam;
   const lang = dir === 'rtl' ? 'ar' : 'en';
   const digits = makeDigits(exam);
   const show = (k: keyof typeof h.show, v: string | number | null) =>
     h.show[k] && v !== null && v !== undefined && String(v).trim() !== '';
   const type = examTypeLabel(exam, lang);
-  const titleLine = variant === 'key' ? L.key : type;
 
   const metaPairs: [string, string][] = [];
   if (show('subject', info.subject)) metaPairs.push([L.subject, info.subject]);
@@ -143,13 +128,12 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
   ) : null;
   const school = show('school', info.school) ? <div className="hdr-school">{info.school}</div> : null;
   const title =
-    (variant === 'key' || h.show.examType) && titleLine ? <div className="hdr-title">{titleLine}</div> : null;
+    h.show.examType && type ? <div className="hdr-title">{type}</div> : null;
   const year = show('year', info.year) ? (
     <div className="hdr-year">
       {L.year}: {info.year}
     </div>
   ) : null;
-  const badge = variant === 'teacher' ? <div className="hdr-badge">{L.teacherCopy}</div> : null;
 
   const kv = ([k, v]: [string, string]) => (
     <div className="kv" key={k}>
@@ -168,7 +152,6 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
         {h.logoPosition === 'center' && logo}
         {title}
         {year}
-        {badge}
       </div>
     );
     body = (
@@ -191,7 +174,6 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
         {school}
         {title}
         {year}
-        {badge}
         {metaPairs.length > 0 && (
           <div className="meta-row">
             {metaPairs.map(([k, v]) => (
@@ -213,7 +195,6 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
             {school}
             {title}
             {year}
-            {badge}
           </div>
         </div>
         {metaPairs.length > 0 && (
@@ -226,7 +207,7 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
   }
 
   const student =
-    variant !== 'key' && (h.studentName || h.studentSection || h.scoreBox) ? (
+    h.studentName || h.studentSection || h.scoreBox ? (
       <div className="student-row">
         {h.studentName && (
           <div className="sf grow">
@@ -265,7 +246,6 @@ function Header({ exam, variant, L, dir }: { exam: Exam; variant: Variant; L: La
 
 interface Ctx {
   exam: Exam;
-  variant: Variant;
   digits: (s: string, d: Dir) => string;
 }
 
@@ -286,12 +266,11 @@ function optionCols(q: Question, item: Item): number {
 }
 
 function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
-  const { exam, variant } = ctx;
+  const { exam } = ctx;
   const d = exam.design;
   const dir = questionDir(q, d.lang);
   const Lq = LABELS[dir === 'rtl' ? 'ar' : 'en'];
-  const teacher = variant === 'teacher';
-  const showMarks = (variant !== 'student' || d.showMarksStudent) && q.marks != null && q.marks > 0;
+  const showMarks = d.showMarksStudent && q.marks != null && q.marks > 0;
   const segs: Segment[] = [];
   const k = (s: string) => `${q.id}:${s}`;
 
@@ -337,25 +316,9 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
     });
   }
 
-  const answerLine = (a: string) =>
-    teacher && a.trim() ? (
-      <div className="t-answer">
-        {Lq.answer}: {a}
-      </div>
-    ) : null;
-
   switch (q.type) {
-    case 'open': {
-      segs.push({
-        key: k('open'),
-        node: (
-          <div className="it-open" dir={dir}>
-            {teacher && q.modelAnswer.trim() ? answerLine(q.modelAnswer) : null}
-          </div>
-        ),
-      });
+    case 'open':
       break;
-    }
     case 'mcq': {
       q.items.forEach((it, i) => {
         const cols = optionCols(q, it);
@@ -368,13 +331,12 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
                 <RichText text={it.text} />
                 <div className="opts" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
                   {it.options.map((o, oi) => (
-                    <div key={oi} className={'opt' + (teacher && it.correct === oi ? ' correct' : '')}>
+                    <div key={oi} className="opt">
                       <span className="opt-lbl">
                         {ctx.digits(optionLetter(oi, dir, d.optionLabels), dir)}
                         {dir === 'rtl' ? '-' : ')'}
                       </span>{' '}
                       <bdi>{o}</bdi>
-                      {teacher && it.correct === oi && <span className="tick"> ✓</span>}
                     </div>
                   ))}
                 </div>
@@ -397,7 +359,7 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
               </div>
               <span className="tf-box">
                 ({' '}
-                {teacher && it.tf != null ? (it.tf ? '✓' : '✗') : ' '}
+                {' '}
                 {' '})
               </span>
             </div>
@@ -425,7 +387,6 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
       for (let r = 0; r < rows; r++) {
         const L = lefts[r];
         const R = rights[r];
-        const ansIdx = L ? rights.findIndex((x) => x.id === L.id) : -1;
         segs.push({
           key: k('m' + r),
           node: (
@@ -437,7 +398,7 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
                     <bdi className="m-text">{L.left}</bdi>
                     <span className="tf-box">
                       ({' '}
-                      {teacher && ansIdx >= 0 ? letter(ansIdx, dir) : ' '}
+                      {' '}
                       {' '})
                     </span>
                   </>
@@ -459,7 +420,6 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
     }
     default: {
       // answer / fill / complete / translate / passage / grammar
-      const blanksInline = q.type === 'fill' || q.type === 'complete';
       q.items.forEach((it, i) => {
         segs.push({
           key: k(it.id),
@@ -467,8 +427,7 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
             <div className="it" dir={dir}>
               {itemLabel(q, i, dir, ctx)}
               <div className="it-body">
-                <RichText text={it.text} answer={teacher && blanksInline ? it.answer : undefined} />
-                {teacher && it.answer.trim() && !(blanksInline && HAS_BLANK.test(it.text)) ? answerLine(it.answer) : null}
+                <RichText text={it.text} />
               </div>
             </div>
           ),
@@ -479,104 +438,21 @@ function questionSegments(q: Question, n: number, ctx: Ctx): Segment[] {
   return segs;
 }
 
-/* ─── Answer key ─── */
-
-function keySegments(q: Question, n: number, ctx: Ctx): Segment[] {
-  const d = ctx.exam.design;
-  const dir = questionDir(q, d.lang);
-  const Lq = LABELS[dir === 'rtl' ? 'ar' : 'en'];
-  const k = (s: string) => `${q.id}:key:${s}`;
-  const head: Segment = {
-    key: k('head'),
-    keepWithNext: true,
-    gapBefore: n > 1,
-    node: (
-      <div className="q-head" dir={dir}>
-        <div className="q-title">
-          <span className="q-num">{ctx.digits(questionLabel(n, dir, d.qNumberStyle), dir)}</span>
-        </div>
-        {q.marks ? <div className="q-marks">({ctx.digits(marksText(q.marks, dir), dir)})</div> : null}
-      </div>
-    ),
-  };
-  const lbl = (i: number) =>
-    q.numbering === 'letters' ? letter(i, dir) : ctx.digits(String(i + 1), dir);
-  const missing = '—';
-  let body: ReactNode;
-  if (q.type === 'mcq' || q.type === 'truefalse') {
-    body = (
-      <div className="key-grid" dir={dir}>
-        {q.items.map((it, i) => (
-          <div key={it.id} className="key-cell">
-            <span className="it-lbl">{lbl(i)}-</span>{' '}
-            <b>
-              {q.type === 'mcq'
-                ? it.correct != null
-                  ? optionLetter(it.correct, dir, d.optionLabels) +
-                    (it.options[it.correct] && it.options[it.correct].length <= 18 ? ` (${it.options[it.correct]})` : '')
-                  : missing
-                : it.tf == null
-                  ? missing
-                  : it.tf
-                    ? `✓ ${Lq.trueW}`
-                    : `✗ ${Lq.falseW}`}
-            </b>
-          </div>
-        ))}
-      </div>
-    );
-  } else if (q.type === 'match') {
-    const lefts = q.pairs.filter((p) => p.left.trim());
-    const rightsRaw = q.pairs.filter((p) => p.right.trim());
-    const rights = seededOrder(rightsRaw.length, q.seed).map((i) => rightsRaw[i]);
-    body = (
-      <div className="key-grid" dir={dir}>
-        {lefts.map((p, i) => {
-          const ri = rights.findIndex((r) => r.id === p.id);
-          return (
-            <div key={p.id} className="key-cell">
-              {ctx.digits(String(i + 1), dir)} {dir === 'rtl' ? '←' : '→'} <b>{ri >= 0 ? letter(ri, dir) : missing}</b>
-            </div>
-          );
-        })}
-      </div>
-    );
-  } else if (q.type === 'open') {
-    body = (
-      <div className="key-list" dir={dir}>
-        {q.modelAnswer.trim() || missing}
-      </div>
-    );
-  } else {
-    body = (
-      <div className="key-list" dir={dir}>
-        {q.items.map((it, i) => (
-          <div key={it.id} className="it">
-            <span className="it-lbl">{lbl(i)}-</span>
-            <div className="it-body">{it.answer.trim() || missing}</div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  return [head, { key: k('body'), node: body }];
-}
-
 /* ─── Build the whole paper ─── */
 
-export function buildGroups(exam: Exam, variant: Variant): Group[] {
+export function buildGroups(exam: Exam): Group[] {
   const d = exam.design;
   const frameDir: Dir = d.lang === 'en' ? 'ltr' : 'rtl';
   const L = LABELS[frameDir === 'rtl' ? 'ar' : 'en'];
-  const ctx: Ctx = { exam, variant, digits: makeDigits(exam) };
+  const ctx: Ctx = { exam, digits: makeDigits(exam) };
   const groups: Group[] = [];
 
   groups.push({
     key: 'header',
-    segs: [{ key: 'header', node: <Header exam={exam} variant={variant} L={L} dir={frameDir} /> }],
+    segs: [{ key: 'header', node: <Header exam={exam} L={L} dir={frameDir} /> }],
   });
 
-  if (variant !== 'key' && exam.info.generalInstructions.trim()) {
+  if (exam.info.generalInstructions.trim()) {
     groups.push({
       key: 'gi',
       segs: [
@@ -596,12 +472,12 @@ export function buildGroups(exam: Exam, variant: Variant): Group[] {
   exam.questions.forEach((q, i) => {
     groups.push({
       key: q.id,
-      segs: variant === 'key' ? keySegments(q, i + 1, ctx) : questionSegments(q, i + 1, ctx),
+      segs: questionSegments(q, i + 1, ctx),
     });
   });
 
   const c = exam.closing;
-  if (variant !== 'key' && c.enabled && (c.text.trim() || c.signature)) {
+  if (c.enabled && (c.text.trim() || c.signature)) {
     const cdir = frameDir;
     groups.push({
       key: 'closing',

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import type { DesignSettings, Exam, Variant } from '../types';
+import type { DesignSettings, Exam } from '../types';
 import { buildGroups, LABELS, makeDigits, type Group, type Segment } from './blocks';
 import { fontStack } from '../fonts';
 import './paper.css';
@@ -61,13 +61,19 @@ export interface LayoutInfo {
   twoUpFits: boolean;
   fillRatio: number; // how much of one two-up region the content uses
   tooTall: boolean;
+  fontSize: number; // the size actually printed (after fitting to one page)
+  shrunk: boolean;
+  overflow: boolean; // more than one page even at the smallest readable size
 }
 
 /* ─── Measurement ─── */
 
 type Heights = Record<string, number>;
+const TAG = '__tag';
+const MIN_FONT_PT = 9;
+const FIT_STEP = 0.04;
 
-function Measurer({ segs, widthMm, onMeasure }: { segs: Segment[]; widthMm: number; onMeasure: (h: Heights) => void }) {
+function Measurer({ segs, widthMm, tag, onMeasure }: { segs: Segment[]; widthMm: number; tag: string; onMeasure: (h: Heights) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const [tick, setTick] = useState(0);
   const last = useRef('');
@@ -79,10 +85,10 @@ function Measurer({ segs, widthMm, onMeasure }: { segs: Segment[]; widthMm: numb
     el.querySelectorAll<HTMLElement>(':scope > .seg').forEach((s) => {
       h[s.dataset.k!] = s.getBoundingClientRect().height;
     });
-    const sig = JSON.stringify(h);
+    const sig = tag + JSON.stringify(h);
     if (sig !== last.current) {
       last.current = sig;
-      onMeasure(h);
+      onMeasure({ ...h, [TAG]: tag as unknown as number });
     }
   });
 
@@ -163,25 +169,51 @@ function paginate(groups: Group[], h: Heights, avail: number): { pages: string[]
 
 interface Props {
   exam: Exam;
-  variant: Variant;
   scale?: number;
   forPrint?: boolean;
   onLayout?: (info: LayoutInfo) => void;
 }
 
-export function PaperDoc({ exam, variant, scale = 1, forPrint, onLayout }: Props) {
+/** Lines can tighten by this much (as extra fit steps) once the font is at its minimum. */
+const LH_EXTRA = 0.12;
+const MIN_LINE_HEIGHT = 1.2;
+
+/** The exam shrunk by k: font sizes first, then (below minFit) tighter line spacing. */
+function scaled(exam: Exam, k: number, minFit: number): Exam {
+  if (k === 1) return exam;
+  const fk = Math.max(k, minFit);
+  const r = (n: number) => Math.round(n * fk * 10) / 10;
+  const lh = k < minFit ? Math.max(MIN_LINE_HEIGHT, exam.design.lineHeight - (minFit - k) * 3) : exam.design.lineHeight;
+  return {
+    ...exam,
+    design: { ...exam.design, fontSize: r(exam.design.fontSize), headingSize: r(exam.design.headingSize), lineHeight: lh },
+    closing: { ...exam.closing, size: r(exam.closing.size) },
+  };
+}
+
+export function PaperDoc({ exam: source, scale = 1, forPrint, onLayout }: Props) {
+  const [fit, setFit] = useState(1);
+  // a new exam starts again from the chosen size, then shrinks if needed
+  useLayoutEffect(() => setFit(1), [source]);
+  const tag = String(fit);
+  const minFit = Math.min(1, MIN_FONT_PT / source.design.fontSize);
+  const lowest = minFit - LH_EXTRA;
+  const exam = useMemo(() => scaled(source, fit, minFit), [source, fit, minFit]);
+
   const d = exam.design;
   const g = geometry(d);
-  const groups = useMemo(() => buildGroups(exam, variant), [exam, variant]);
+  const groups = useMemo(() => buildGroups(exam), [exam]);
   const segs = useMemo(() => groups.flatMap((x) => x.segs), [groups]);
   const byKey = useMemo(() => new Map(segs.map((s) => [s.key, s])), [segs]);
 
   const [hSingle, setHSingle] = useState<Heights>({});
   const [hRegion, setHRegion] = useState<Heights>({});
+  const twoUpAtFull = useRef(false);
 
-  const allowTwoUp = variant === 'student' && d.copies !== 'single';
+  const allowTwoUp = d.copies !== 'single';
   const separateRegionWidth = Math.abs(g.regionW - g.contentW) > 0.01;
   const footerPx = d.pageNumbers ? FOOTER_MM * PX_PER_MM : 0;
+  const measured = String(hSingle[TAG]) === tag;
 
   const layout = useMemo(() => {
     const avail = g.contentH * PX_PER_MM - footerPx - 1;
@@ -189,25 +221,41 @@ export function PaperDoc({ exam, variant, scale = 1, forPrint, onLayout }: Props
     const regionHeights = separateRegionWidth ? hRegion : hSingle;
     const totalRegion = segs.reduce((a, s) => a + (regionHeights[s.key] ?? 0), 0);
     const regionAvail = g.regionH * PX_PER_MM - 1;
-    const twoUpFits = totalRegion > 0 && totalRegion <= regionAvail;
-    const mode: 'single' | 'double' = allowTwoUp && twoUpFits ? 'double' : 'single';
+    if (fit === 1 && measured && (!separateRegionWidth || String(hRegion[TAG]) === tag)) {
+      twoUpAtFull.current = totalRegion > 0 && totalRegion <= regionAvail;
+    }
+    const twoUpFits = twoUpAtFull.current;
+    // two copies only at the chosen font size, never with a shrunk font
+    const mode: 'single' | 'double' = allowTwoUp && twoUpFits && fit === 1 ? 'double' : 'single';
     return {
       single,
       mode,
       info: {
         mode,
         pages: mode === 'double' ? 1 : single.pages.length,
-        twoUpRequested: variant === 'student' && d.copies === 'double',
+        twoUpRequested: d.copies === 'double',
         twoUpFits,
-        fillRatio: totalRegion / regionAvail,
+        fillRatio: fit === 1 ? totalRegion / regionAvail : 1,
         tooTall: single.tooTall,
+        fontSize: d.fontSize,
+        shrunk: fit < 1,
+        overflow: single.pages.length > 1,
       } as LayoutInfo,
     };
-  }, [groups, segs, hSingle, hRegion, g.contentH, g.regionH, footerPx, separateRegionWidth, allowTwoUp, variant, d.copies]);
+  }, [groups, segs, hSingle, hRegion, g.contentH, g.regionH, footerPx, separateRegionWidth, allowTwoUp, d.copies, d.fontSize, fit, tag, measured]);
 
-  const infoSig = JSON.stringify(layout.info);
+  // fit to one page: step the font down until the paper is a single page
+  useLayoutEffect(() => {
+    if (!source.design.fitOnePage || !measured || layout.mode === 'double') return;
+    if (layout.single.pages.length > 1 && fit - FIT_STEP >= lowest - 1e-9) setFit(+(fit - FIT_STEP).toFixed(3));
+  }, [layout, measured, fit, lowest, source.design.fitOnePage]);
+
+  const settled =
+    measured &&
+    !(source.design.fitOnePage && layout.mode !== 'double' && layout.single.pages.length > 1 && fit - FIT_STEP >= lowest - 1e-9);
+  const infoSig = settled ? JSON.stringify(layout.info) : '';
   useEffect(() => {
-    onLayout?.(layout.info);
+    if (settled) onLayout?.(layout.info);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [infoSig]);
 
@@ -281,8 +329,8 @@ export function PaperDoc({ exam, variant, scale = 1, forPrint, onLayout }: Props
 
   return (
     <div className={'paper-root' + (forPrint ? ' for-print' : '')} style={paperVars(d)}>
-      <Measurer segs={segs} widthMm={g.contentW} onMeasure={setHSingle} />
-      {allowTwoUp && separateRegionWidth && <Measurer segs={segs} widthMm={g.regionW} onMeasure={setHRegion} />}
+      <Measurer segs={segs} widthMm={g.contentW} tag={tag} onMeasure={setHSingle} />
+      {allowTwoUp && separateRegionWidth && <Measurer segs={segs} widthMm={g.regionW} tag={tag} onMeasure={setHRegion} />}
       {forPrint ? (
         <div className="paper-pages">{pages}</div>
       ) : (

@@ -138,6 +138,7 @@ export interface DesignSettings {
   qNumberStyle: 'words' | 'short' | 'number';
   optionLabels: 'auto' | 'latin' | 'arabic';
   digits: 'western' | 'eastern';
+  fitOnePage: boolean; // shrink the font so the exam prints on one page
 }
 
 export interface Exam {
