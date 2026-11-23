@@ -1,30 +1,28 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Eye, FileDown, Loader2, X } from 'lucide-react';
-import type { Exam, Variant } from '../types';
+import type { Exam } from '../types';
 import { examTitle } from '../model';
 import { loadExam, saveExam } from '../store';
 import { go } from '../App';
 import { geometry, PaperDoc, type LayoutInfo } from '../paper/Paper';
 import InfoPanel from '../editor/InfoPanel';
 import QuestionsPanel from '../editor/QuestionsPanel';
-import DesignPanel from '../editor/DesignPanel';
-import ExportPanel from '../editor/ExportPanel';
+import SettingsPanel from '../editor/SettingsPanel';
 import Preview from '../editor/Preview';
 
 export type Update = (fn: (e: Exam) => Exam) => void;
 
-const STEPS = ['معلومات الامتحان', 'الأسئلة', 'تخصيص التصميم', 'معاينة الورقة', 'تصدير PDF'];
+const STEPS = ['معلومات الامتحان', 'الأسئلة', 'المعاينة والتصدير'];
 
 export default function Editor({ id }: { id: string }) {
   const [exam, setExam] = useState<Exam | null>(null);
   const [missing, setMissing] = useState(false);
   const [step, setStep] = useState(0);
   const [saved, setSaved] = useState<'saved' | 'saving'>('saved');
-  const [variant, setVariant] = useState<Variant>('student');
-  const [studentLayout, setStudentLayout] = useState<LayoutInfo | null>(null);
+  const [layout, setLayout] = useState<LayoutInfo | null>(null);
   const [mobilePreview, setMobilePreview] = useState(false);
-  const [printJob, setPrintJob] = useState<{ variant: Variant; name: string; n: number } | null>(null);
+  const [printJob, setPrintJob] = useState<{ name: string; n: number } | null>(null);
   const dirty = useRef(false);
 
   useEffect(() => {
@@ -68,18 +66,13 @@ export default function Editor({ id }: { id: string }) {
     );
   if (!exam || !deferred) return <div className="center-msg">جارٍ التحميل…</div>;
 
-  const exportPdf = (v: Variant, name?: string) =>
-    setPrintJob({ variant: v, name: name || examTitle(exam), n: Date.now() });
+  const exportPdf = () => setPrintJob({ name: examTitle(exam), n: Date.now() });
 
   const panels = [
     <InfoPanel key="i" exam={exam} update={update} />,
     <QuestionsPanel key="q" exam={exam} update={update} />,
-    <DesignPanel key="d" exam={exam} update={update} layout={studentLayout} />,
-    null,
-    <ExportPanel key="e" exam={exam} update={update} onExport={exportPdf} layout={studentLayout} />,
+    <SettingsPanel key="s" exam={exam} update={update} layout={layout} onExport={exportPdf} />,
   ];
-
-  const previewStep = step === 3;
 
   return (
     <div className={'editor step-' + step + (mobilePreview ? ' show-preview' : '')}>
@@ -103,7 +96,7 @@ export default function Editor({ id }: { id: string }) {
         <button className="btn ghost sm preview-toggle" onClick={() => setMobilePreview(!mobilePreview)}>
           {mobilePreview ? <X size={16} /> : <Eye size={16} />} {mobilePreview ? 'إغلاق' : 'معاينة'}
         </button>
-        <button className="btn primary sm" onClick={() => exportPdf(variant === 'key' ? 'key' : variant)}>
+        <button className="btn primary sm" onClick={exportPdf}>
           <FileDown size={16} /> <span>تصدير PDF</span>
         </button>
       </header>
@@ -127,8 +120,7 @@ export default function Editor({ id }: { id: string }) {
       </nav>
 
       <div className="workspace">
-        {!previewStep && (
-          <div className="pane-edit">
+        <div className="pane-edit">
             {panels[step]}
             <div className="step-nav">
               {step > 0 ? (
@@ -144,17 +136,9 @@ export default function Editor({ id }: { id: string }) {
                 </button>
               )}
             </div>
-          </div>
-        )}
+        </div>
         <div className="pane-preview">
-          <Preview
-            exam={deferred}
-            variant={variant}
-            setVariant={setVariant}
-            onStudentLayout={setStudentLayout}
-            wide={previewStep}
-            onNext={previewStep ? () => setStep(4) : undefined}
-          />
+          <Preview exam={deferred} onLayout={setLayout} />
         </div>
       </div>
 
@@ -165,7 +149,7 @@ export default function Editor({ id }: { id: string }) {
 
 /* ─── Printing: the very same paper DOM, rendered unscaled for the browser's PDF engine ─── */
 
-function PrintJob({ exam, job, onDone }: { exam: Exam; job: { variant: Variant; name: string }; onDone: () => void }) {
+function PrintJob({ exam, job, onDone }: { exam: Exam; job: { name: string }; onDone: () => void }) {
   const [host] = useState(() => {
     const d = document.createElement('div');
     d.id = 'print-root';
@@ -201,8 +185,7 @@ function PrintJob({ exam, job, onDone }: { exam: Exam; job: { variant: Variant; 
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
       if (cancelled) return;
       setBusy(false);
-      const suffix = job.variant === 'teacher' ? ' - نسخة المدرس' : job.variant === 'key' ? ' - نموذج الإجابة' : '';
-      document.title = (job.name + suffix).replace(/[\\/:*?"<>|]/g, '-');
+      document.title = job.name.replace(/[\\/:*?"<>|]/g, '-');
       window.addEventListener('afterprint', after);
       window.print();
     })();
@@ -217,7 +200,7 @@ function PrintJob({ exam, job, onDone }: { exam: Exam; job: { variant: Variant; 
 
   return (
     <>
-      {createPortal(<PaperDoc exam={exam} variant={job.variant} forPrint />, host)}
+      {createPortal(<PaperDoc exam={exam} forPrint />, host)}
       {busy && (
         <div className="print-busy" role="status">
           <Loader2 size={18} className="spin" /> جارٍ تجهيز ملف PDF…
