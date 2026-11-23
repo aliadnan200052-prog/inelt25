@@ -1605,3 +1605,29 @@ button:disabled {
   padding: 0;
   flex: 1;
 }
+
+/* ─── Install help (iOS) ─── */
+.install-help {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: 16px;
+  z-index: 60;
+  max-width: 420px;
+  margin-inline: auto;
+  padding: 16px 18px;
+  box-shadow: 0 10px 40px rgba(29, 39, 37, 0.18);
+}
+.install-help .icon-btn {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+}
+.install-help ol {
+  margin: 8px 0 0;
+  padding-inline-start: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.install-help li svg {
+  vertical-align: -2px;
+}

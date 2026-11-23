@@ -1,0 +1,18 @@
+{
+  "id": "/exam",
+  "name": "مصمّم الامتحانات",
+  "short_name": "الامتحانات",
+  "description": "أنشئ ورقة امتحان وصدّرها PDF جاهزاً للطباعة.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/exam",
+  "scope": "/exam",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#0f5a47",
+  "icons": [
+    { "src": "/exam/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/exam/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/exam/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

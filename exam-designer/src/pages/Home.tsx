@@ -5,6 +5,7 @@ import { deepClone, examTitle, marksSum, newExam, normalizeExam, uid } from '../
 import { deleteExam, listExams, saveExam } from '../store';
 import { go } from '../App';
 import { Logo } from '../ui/Logo';
+import { InstallButton } from '../ui/InstallButton';
 
 const fmtDate = (t: number) =>
   new Intl.DateTimeFormat('ar', { dateStyle: 'medium', timeStyle: 'short', numberingSystem: 'latn' }).format(t);
@@ -78,6 +79,7 @@ export default function Home() {
             <button className="btn ghost" onClick={() => fileRef.current?.click()} title="فتح ملف امتحان محفوظ (.json)">
               <Upload size={16} /> فتح ملف
             </button>
+            <InstallButton />
             <input
               ref={fileRef}
               type="file"
